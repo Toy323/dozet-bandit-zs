@@ -1,0 +1,110 @@
+//////////////////////////////////////////////////////////////////////////////////
+// ZS:Bandit Warfare FGD                             							//
+// Adapted from the NoXiousNet Zombie Survival FGD                              //
+// IMPORTANT: VERY DIFFERENT FROM THE ORIGINAL! MOST ENTITIES WILL NOT WORK!!!	//
+//////////////////////////////////////////////////////////////////////////////////
+
+@include "base.fgd"
+@include "halflife2.fgd"
+@include "hl2mp.fgd"
+
+//////////////////////////////////////////////////////////////////////////////////
+// Gamemode - Brush Entities /////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+@SolidClass base(Targetname) = func_noair : "ZS: Anyone inside this brush requires air"
+[
+	// Keys
+	enabled(choices)    : "Enabled" : 0 : "Enable the brush entity." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+	
+	// Inputs
+	input enable(void)  : "Enable the entity."
+	input disable(void) : "Disable the entity."
+	input seton(integer)  : "Enable or Disable the entity."
+]
+
+
+///////////////////////////////////////////////////////////////////////////////////
+// Gamemode - Point Entities //////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+
+@BaseClass base(Targetname) = ZSSpawn
+[
+	// Keys
+	disabled(choices)   : "Disabled" : 0 : "If disabled, players cannot spawn here." =
+	[
+		1 : "Yes"
+		0 : "No"
+	]
+	
+	// Inputs
+	input enable(void)  : "Enable the spawn point."
+	input disable(void) : "Disable the spawn point."
+	input toggle(void)  : "Toggle the spawn point."
+]
+
+@PointClass base(PlayerClass, Angles, ZSSpawn) studio("models/editor/playerstart.mdl") = info_player_human       : "Survivors spawn here."
+[
+]
+@PointClass base(PlayerClass, Angles, ZSSpawn) studio("models/editor/playerstart.mdl") = info_player_bandit	     : "Bandits spawn here."
+[
+]
+@PointClass base(Targetname, Angles) studio("models/props_wasteland/medbridge_post01.mdl") = info_sigilnode  : "Manual Placement of Sigils"
+[
+]
+
+@PointClass base(Targetname, Parentname) sphere( range ) = point_worldhint : "ZS: Allows you to create 3D hints and information tags."
+[
+	// Keys
+	hint(string)             : "Hint"    : " " : "The hint to display."
+	viewer(choices)          : "Seen By" : 0   : "The team that can view us." =
+	[
+		"-1" : "Disabled"
+		"0"  : "Everyone"
+		"3"  : "Bandits"
+		"4"  : "Survivors"
+	]
+	range(integer)           : "Range" : 0 : "The range from the player's camera we must be in to see this hint. It can also be 0 for infinite."
+	
+	// Inputs
+	input sethint(string)    : "Sets the hint to display."
+	input setviewer(integer) : "Sets the team that can view us. Use 0 for everyone, -1 for no one (inactive), 3 for zombie, and 4 for human."
+	input setrange(float)    : "Sets the range from the player's camera we must be in to see this hint. It can also be 0 for infinite which is the default."
+]
+
+@PointClass base(Targetname, Parentname) = prop_playergib  : "ZS: Allows you to manually place gibs."
+[
+	// Keys
+	gibtype(choices) : "Gib Type"  : 1 : "Overrides the gib's type." =
+	[
+		1 : "Skull"        // "models/gibs/HGIBS.mdl"
+		2 : "Spine"        // "models/gibs/HGIBS_spine.mdl"
+		3 : "Rib"          // "models/gibs/HGIBS_rib.mdl"
+		4 : "Scapula"      // "models/gibs/HGIBS_scapula.mdl"
+		7 : "Small Chunk"  // "models/gibs/antlion_gib_medium_2.mdl"
+		5 : "Medium Chunk" // "models/gibs/Antlion_gib_Large_1.mdl"
+		6 : "Large Chunk"  // "models/gibs/Strider_Gib4.mdl"
+	]
+	lifetime(integer) : "Lifetime" : 0 : "Overrides how long for this gib should live. 0 for never automatically remove."
+]
+
+@PointClass base(Targetname) = logic_winlose : "BW: Outputs team wins and losses."
+[
+	// Outputs 
+	output onhwin(void)        : "Called when the survivors win."
+	output onbwin(void)        : "Called when the bandits win."
+	output onlose(void)        : "Called when both teams lose (a tie)."
+]
+
+@PointClass base(Targetname) = logic_waves : "ZS: Watches for the start of the specified wave."
+[
+	// Keys
+	wave(integer)               : "Wave" : 1 : "Any On* outputs will watch for this wave. Use -1 for all waves."
+	
+	// Outputs
+	output OnWaveStart(void)    : "Called when the specified wave has started."
+	output OnWaveEnd(void)      : "Called when the specified wave has ended."
+]
