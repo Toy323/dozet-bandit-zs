@@ -116,7 +116,7 @@ function meta:ApplyAdrenaline()
 	self:ResetSpeed() 
 	if SERVER then 
 		self:SetMaxHealth(self:GetMaxHealth()-10)
-		self:SetHealth(math.min(self:GetMaxHealth() * 0.3 + self:Health() * 0.4, self:GetMaxHealth()))
+		self:SetHealth(math.min(self:GetMaxHealth() * 0.3 + self:Health(), self:GetMaxHealth()))
 	end
 	self:EmitSound("player/suit_sprint.wav")	
 	return true
