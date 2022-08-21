@@ -23,6 +23,8 @@ function draw.SimpleTextBlur(text, font, x, y, col, xalign, yalign)
 	draw_SimpleText(text, font, x, y, col, xalign, yalign)
 end
 
+
+
 function draw.DrawTextBlur(text, font, x, y, col, xalign)
 	color_blur1.a = col.a * 0.85
 	color_blur2.a = col.a * 0.55
