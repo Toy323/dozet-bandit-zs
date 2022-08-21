@@ -98,7 +98,7 @@ function GM:CreateGibs(pos, headoffset)
 	for i = 1, 2 do
 		local ent = ents.CreateLimited("prop_playergib")
 		if ent:IsValid() then
-			ent:SetPos(headpos + VectorRand() * 5)
+			ent:SetPos(headpos + VectorRand() * 7)
 			ent:SetAngles(VectorRand():Angle())
 			ent:SetGibType(i)
 			ent:Spawn()
