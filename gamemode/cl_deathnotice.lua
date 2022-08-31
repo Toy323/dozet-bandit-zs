@@ -236,6 +236,7 @@ killicon.Add("weapon_zs_sledgehammer", "killicon/weapon_zs_sledgehammer", color_
 killicon.Add("weapon_zs_megamasher", "killicon/weapon_zs_megamasher", color_white)
 killicon.Add("weapon_zs_shovel", "killicon/weapon_zs_shovel", color_white)
 killicon.Add("weapon_zs_plank", "killicon/weapon_zs_plank", color_white)
+killicon.Add("weapon_zs_planknailed", "killicon/weapon_zs_plank", COLOR_RED)
 killicon.Add("weapon_zs_keyboard", "killicon/weapon_zs_keyboard", color_white)
 killicon.Add("weapon_zs_butcherknife", "killicon/weapon_zs_butcherknife2", color_white)
 killicon.Add("weapon_zs_energysword", "killicon/weapon_zs_energysword.png", color_white)

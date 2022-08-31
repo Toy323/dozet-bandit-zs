@@ -239,6 +239,8 @@ LANGUAGE.weapon_palliator_healing_x					= "HEALING %s"
 
 LANGUAGE.weapon_plankmelee_name						= "Plank"
 LANGUAGE.weapon_plankmelee_desc						= "A very simple melee weapon consisting of a single plank. Can be swung quickly."
+LANGUAGE.weapon_plank2melee_name						= "Plank nailed"
+LANGUAGE.weapon_plank2melee_desc						= "A very simple melee weapon consisting of a single plank and some nails. Can be swung quickly.\nBleed owner and enemy."
 LANGUAGE.weapon_podvodny_name						= "'Podvodny' Flechette rifle"
 LANGUAGE.weapon_podvodny_desc						= "A terrifying weapon that fires flechettes that will cause heavy bleeding on the target.\n 75% of its damage is dealt as bleed damage over time."
 LANGUAGE.weapon_practicion_name						= "'Practicion' Medical Rifle"

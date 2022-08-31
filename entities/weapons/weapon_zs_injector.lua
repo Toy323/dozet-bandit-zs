@@ -139,7 +139,7 @@ function SWEP:PrimaryAttack()
 			local invuln = curtgt:GetStatus("spawnbuff")
 			if not (invuln and invuln:IsValid()) then
 				local tox = curtgt:GetStatus("tox")
-				local getblock = (curtgt:GetActiveWeapon():GetBlock() or false)
+				local getblock = curtgt:GetActiveWeapon():GetBlock()
 				if (tox and tox:IsValid()) then
 					tox:AddTime(getblock and (self.ToxDuration * 0.45) or self.ToxDuration)
 					tox:SetOwner(curtgt)
