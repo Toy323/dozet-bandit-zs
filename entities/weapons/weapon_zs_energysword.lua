@@ -57,9 +57,11 @@ function SWEP:Reload()
 	if not self.BlockMode and self.NextLmao <= CurTime() then
 	    self.BlockMode = true
 		self.NextLmao = CurTime() + 0.5
+		self:SetChargeStart(0)
 	elseif self.BlockMode and self.NextLmao <= CurTime() then
 		self.BlockMode = nil
 		self.NextLmao = CurTime() + 0.5
+		self:SetChargeStart(0)
 	end
 end
 
