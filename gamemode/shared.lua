@@ -31,12 +31,14 @@ end
 include("sh_translate.lua")
 include("sh_colors.lua")
 include("sh_serialization.lua")
-
+include("vault/shared.lua")
 include("sh_globals.lua")
 include("sh_util.lua")
 include("sh_options.lua")
 include("sh_animations.lua")
 include("sh_voiceset.lua")
+
+include("skillweb/sh_skillweb.lua")
  
 include("obj_vector_extend.lua")
 include("obj_entity_extend.lua")

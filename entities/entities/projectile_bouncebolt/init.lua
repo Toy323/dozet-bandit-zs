@@ -3,6 +3,7 @@ AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 ENT.Damage = 10
+ENT.HittedLastTime = 0 
 ENT.Finished = false
 ENT.Touched = nil
 ENT.Damaged = nil
@@ -16,7 +17,7 @@ end
 local temp_me = NULL
 local myteammates = {}
 local function BounceArrowFilter(ent)
-	if ent == temp_me or table.HasValue(myteammates,ent) then
+	if ent == temp_me or table.HasValue(myteammates,ent)then
 		return false
 	end
 
@@ -59,8 +60,9 @@ function ENT:Think()
 	if self.DieTime <= CurTime() then
 		self:Remove()
 	end
-	if self.Touched and not self.Damaged then
-		local damage = (self.Damage or 100)
+	if self.Touched and not self.Damaged and self.HittedLastTime <= CurTime() then
+		self.HittedLastTime = CurTime() + 0.6
+		local damage = (self.Damage or 55)
 		local processed_dmg = math.floor((self.Damage or 25) * 1.5^(self.Bounces - (self:GetHitTime() + 0.3 > CurTime() and 1 or 0)))
 		self.Damaged = true
 		local ent = self.Touched.Entity
@@ -92,7 +94,8 @@ function ENT:Hit(vHitPos, vHitNormal, eHitEntity, vOldVelocity)
 
 	if eHitEntity:IsWorld() then
 		util.Decal("ExplosiveGunshot", vHitPos-vDirNormal, vHitPos+vDirNormal, self )
-	elseif eHitEntity:IsValid() then
+	elseif eHitEntity:IsValid() and self.HittedLastTime <= CurTime() then
+		self.HittedLastTime = CurTime() + 0.7
 		eHitEntity:TakeDamage(math.floor((self.Damage or 25) * 1.5^self.Bounces) , owner, self)
 	end
 	

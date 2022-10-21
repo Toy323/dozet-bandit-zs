@@ -152,3 +152,38 @@ function GM:_PostDrawOpaqueRenderables()
 		end
 end
 
+local CModWhiteOut = {
+	["$pp_colour_addr"] = 0,
+	["$pp_colour_addg"] = 0,
+	["$pp_colour_addb"] = 0,
+	["$pp_colour_brightness"] = 0,
+	["$pp_colour_contrast"] = 1,
+	["$pp_colour_colour"] = 1,
+	["$pp_colour_mulr"] = 0,
+	["$pp_colour_mulg"] = 0,
+	["$pp_colour_mulb"] = 0
+}
+local WhiteOutEnd
+local WhiteOutFadeTime
+local function RenderWhiteOut()
+	local dt = math_max(WhiteOutEnd - CurTime(), 0) / WhiteOutFadeTime
+	if dt <= 0 then
+		WhiteOutEnd = nil
+		WhiteOutFadeTime = nil
+		hook.Remove("RenderScreenspaceEffects", "WhiteOut")
+	else
+		local size = 5 + dt * 10
+		CModWhiteOut["$pp_colour_brightness"] = dt ^ 2
+		DrawBloom(1 - dt, dt * 3, size, size, 1, 1, 1, 1, 1)
+		DrawColorModify(CModWhiteOut)
+	end
+end
+
+function util.WhiteOut(time, fadeouttime)
+	time = time or 1
+
+	WhiteOutEnd = math_max(CurTime() + time, WhiteOutEnd or 0)
+	WhiteOutFadeTime = math_max(fadeouttime or time, WhiteOutFadeTime or 0)
+
+	hook.Add("RenderScreenspaceEffects", "WhiteOut", RenderWhiteOut)
+end

@@ -259,9 +259,12 @@ function meta:ProcessDamage(dmginfo)
 			if damage > 0 then
 	
 				local ratio = 1
-				local absorb = math.min(self:GetBloodArmor(), damage * ratio)
+				local absorb = math.min(self:GetBloodArmor(), damage* ratio)
 				dmginfo:SetDamage(damage - absorb)
 				self:SetBloodArmor(self:GetBloodArmor() - absorb)
+				if (attackweapon and attackweapon.IgnoreDamageScaling) then
+					self:SetBloodArmor(self:GetBloodArmor() + (absorb * 0.5))
+				end
 	
 	
 				if damage > 20 and damage - absorb <= 0 then

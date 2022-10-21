@@ -17,6 +17,14 @@ AddCSLuaFile("sh_options.lua")
 AddCSLuaFile("sh_animations.lua")
 AddCSLuaFile("sh_voiceset.lua")
 
+
+AddCSLuaFile("skillweb/sh_skillweb.lua")
+AddCSLuaFile("sh_colors.lua")
+AddCSLuaFile("vault/shared.lua")
+AddCSLuaFile("skillweb/cl_skillweb.lua")
+AddCSLuaFile("skillweb/registry.lua")
+
+
 AddCSLuaFile("cl_draw.lua")
 AddCSLuaFile("cl_util.lua")
 AddCSLuaFile("cl_options.lua")
@@ -67,6 +75,9 @@ include("mapeditor.lua")
 include("sv_playerspawnentities.lua")
 include("sv_profiling.lua")
 include("sv_objectives.lua")
+include("skillweb/sv_registry.lua")
+include("skillweb/sv_skillweb.lua")
+include("vault/server.lua")
 
 if file.Exists(GM.FolderName.."/gamemode/maps/"..game.GetMap()..".lua", "LUA") then
 	include("maps/"..game.GetMap()..".lua")
@@ -219,6 +230,7 @@ function GM:AddResources()
 end
 
 function GM:Initialize()
+	self:FixSkillConnections()
 	self:RegisterPlayerSpawnEntities()
 	self:AddResources()
 	self:PrecacheResources()
@@ -236,6 +248,20 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_wavestart")
 	util.AddNetworkString("zs_waveend")
 	util.AddNetworkString("zs_suddendeath")
+
+	util.AddNetworkString("zs_skills_active")
+	util.AddNetworkString("zs_skills_unlocked")
+	util.AddNetworkString("zs_skills_desired")
+	util.AddNetworkString("zs_skill_is_desired")
+	util.AddNetworkString("zs_skill_is_unlocked")
+	util.AddNetworkString("zs_skills_all_desired")
+	util.AddNetworkString("zs_skill_set_desired")
+	util.AddNetworkString("zs_skills_init")
+	util.AddNetworkString("zs_skills_reset")
+	util.AddNetworkString("zs_skills_remort")
+	util.AddNetworkString("zs_skills_nextreset")
+	util.AddNetworkString("zs_skills_notify")
+	util.AddNetworkString("zs_skills_refunded")
 
 	util.AddNetworkString("zs_gamemodecall")
 	util.AddNetworkString("zs_roundendcampos")
@@ -314,10 +340,14 @@ end
 
 function GM:ShowSpare1(pl)
 	if not self:IsRoundModeUnassigned() then
-		if pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT then
+		if pl:KeyDown(IN_SPEED) then
 			if not (pl:IsValid() and pl:IsConnected() and pl:Alive()) then return end
 			pl:DropActiveWeapon()
 		end
+	end
+	if !pl:KeyDown(IN_SPEED) then
+		if not (pl:IsValid() and pl:IsConnected()) then return end
+		pl:SendLua("GAMEMODE:ToggleSkillWeb()")
 	end
 end
 
@@ -658,8 +688,8 @@ function GM:FinishMove(pl, move)
 	if pl.LandSlow then
 		pl.LandSlow = false
 		vel = move:GetVelocity()
-		vel.x = vel.x * 0.75
-		vel.y = vel.y * 0.75
+		vel.x = vel.x * 1.05
+		vel.y = vel.y * 1.05
 		move:SetVelocity(vel)
 	end
 end
@@ -1060,6 +1090,7 @@ end
 
 function GM:EndRound(winner)
 	if self.RoundEnded then return end
+	self:SaveAllVaults()
 	self.RoundEnded = true
 	self.RoundEndedTime = CurTime()
 	ROUNDWINNER = winner
@@ -1132,6 +1163,8 @@ function GM:SetCurrentWaveWinner(winner)
 	self.CurrentWaveWinner = winner
 end
 function GM:PlayerReady(pl)
+	self:PlayerReadyVault(pl)
+
 	gamemode.Call("PlayerReadyRound", pl)
 end
 
@@ -1139,7 +1172,6 @@ function GM:PlayerReadyRound(pl)
 	if not pl:IsValid() then return end
 
 	self:FullGameUpdate(pl)
-
 	if self.RoundEnded then
 		pl:SendLua("gamemode.Call(\"EndRound\", "..tostring(ROUNDWINNER)..", \""..game.GetMapNext().."\")")
 		gamemode.Call("DoHonorableMentions", pl)
@@ -1176,7 +1208,7 @@ local function groupsort(a, b)
 end
 
 function GM:PlayerInitialSpawn(pl)
-	
+	self:InitializeVault(pl)
 	gamemode.Call("PlayerInitialSpawnRound", pl)
 end
 
@@ -1233,7 +1265,8 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.PointsSpent = 0
 	pl.CarryOverCommision = 0
 	pl.BackdoorsUsed = 0
-	
+	self:LoadVault(pl)
+
 	pl.SpawnedTime = CurTime()
 	if pl:GetInfo("zsb_spectator") == "1" then
 		pl:Flashlight(false)
@@ -1302,7 +1335,7 @@ end
 
 function GM:PlayerDisconnected(pl)
 	pl.Disconnecting = true
-
+	self:SaveVault(pl)
 	local uid = pl:SteamID64()
 
 	self.PreviousTeam[uid] = pl:Team()
@@ -2198,7 +2231,9 @@ function GM:GetNearestSpawnDistance(pos, teamid)
 
 	return -1
 end
-
+function GM:ShutDown()
+	self:SaveAllVaults()
+end
 function GM:PlayerUse(pl, ent)
 	if not pl:Alive() or pl:GetBarricadeGhosting() then return false end
 
@@ -2218,6 +2253,7 @@ function GM:PlayerUse(pl, ent)
 end
 
 function GM:PlayerDeath(pl, inflictor, attacker)
+	self:SaveVault(pl)
 	if not self:IsRoundModeUnassigned() and pl.NextSpawnTime == nil and not self:IsClassicMode() and not self.SuddenDeath then
 		local mult = 1
 		if self:IsSampleCollectMode() then
@@ -2310,11 +2346,13 @@ function GM:PlayerKilledEnemy(pl, attacker, inflictor, dmginfo, headshot, suicid
 		attacker.HighestLifeEnemyKills = attacker.LifeEnemyKills
 	end
 	attacker:AddFrags(1)
+	attacker:AddZSXP((15 * (attacker.MeleeKilled or 1)) * (attacker.LifeEnemyKills or 1))
 	if inflictor.IsMelee then
 		attacker.MeleeKilled = attacker.MeleeKilled + 1
 	end
 	if headshot then
 		attacker.HeadshotKilled = attacker.HeadshotKilled + 1
+		attacker:AddZSXP(15 * (attacker.HeadshotKilled or 1))
 	end
 	local bountymult = 	self:IsClassicMode() and 2 or 1
 	if pl.BountyModifier > 0 then
@@ -2351,6 +2389,7 @@ function GM:PostPlayerKilledEnemy(pl, attacker, inflictor, dmginfo, assistpl, as
 end
 
 function GM:DoPlayerDeath(pl, attacker, dmginfo)
+	pl.SkillUsed = false
 	pl:PurgeStatusEffects()
 	local inflictor = dmginfo:GetInflictor()
 	local plteam = pl:Team()
@@ -2607,6 +2646,8 @@ function GM:PlayerSpawn(pl)
 	pl:RemoveStatus("overridemodel", false, true)
 
 	if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) then
+
+
 		pl.HighestLifeEnemyKills = 0
 		pl.LifeBarricadeDamage = 0
 		pl.LifeEnemyDamage = 0
@@ -2619,15 +2660,20 @@ function GM:PlayerSpawn(pl)
 		pl:SetJumpPower(DEFAULT_JUMP_POWER)
 		pl:SetCrouchedWalkSpeed(0.65)
 		pl:DoHulls()
+
+		
 		
 		pl:SetNoTarget(false)
 		
 		pl:SetMaxHealth(100)
+		pl.SkillUsed = false
+		pl:ApplySkills()
 
 		local nosend = not pl.DidInitPostEntity
 		pl.HumanRepairMultiplier = nil
 		pl.HumanHealMultiplier = nil
 		pl.HumanSpeedAdder = 0
+		pl.HealthDead = 0
 		
 		pl.NoObjectPickup = nil
 		pl.DamageVulnerability = nil
@@ -2663,8 +2709,14 @@ end
 function GM:WaveStarted()
 	local players = player.GetAllActive()
 	for _, pl in pairs(players) do
+		pl:ApplySkills()
+		pl:GodDisable()
 		if not pl:Alive() then
 			local teamspawns = {}
+			pl:GodDisable()
+			timer.Simple(2,	function() pl:ApplySkills() end)
+
+			
 			teamspawns = team.GetValidSpawnPoint(pl:Team())
 			pl:SetPos(teamspawns[ math.random(#teamspawns) ]:GetPos())
 			pl:SetAbsVelocity(Vector(0,0,0))
@@ -2719,36 +2771,36 @@ function GM:WaveEnded()
 		elseif self:GetCurrentWaveWinner() == nil then
 			self:SetTieScore(self:GetTieScore()+1)
 		end
-		if self:GetHumanScore() == self:GetBanditScore() then
-	
-		elseif (self:GetHumanScore() >= math.ceil((self:GetNumberOfWaves()-self:GetTieScore()+1)/2)) then
-			gamemode.Call("EndRound", TEAM_HUMAN)
-			return
-		elseif (self:GetBanditScore() >= math.ceil((self:GetNumberOfWaves()-self:GetTieScore()+1)/2))then
-			gamemode.Call("EndRound", TEAM_BANDIT)
-			return
-		end
-		if self:GetWave() >= self:GetNumberOfWaves() then -- Last wave is over
-			if self:GetHumanScore() > self:GetBanditScore() then
-				gamemode.Call("EndRound", TEAM_HUMAN)
-			elseif self:GetHumanScore() < self:GetBanditScore() then
-				gamemode.Call("EndRound", TEAM_BANDIT)
-			elseif self:GetWave() > self:GetNumberOfWaves() then
-				gamemode.Call("EndRound", nil)
-			else	
-				self.SuddenDeath = true
-				self:SetCurrentWaveWinner(nil)
-				net.Start("zs_suddendeath")
-					net.WriteBool( true )
-				net.Broadcast()
-			end
-			local curwave = self:GetWave()
-			for _, ent in pairs(ents.FindByClass("logic_waves")) do
-				if ent.Wave == curwave or ent.Wave == -1 then
-					ent:Input("onwaveend", ent, ent, curwave)
+			if self:GetHumanScore() == self:GetBanditScore() then
+		
+				elseif (self:GetHumanScore() >= math.ceil((self:GetNumberOfWaves()-self:GetTieScore()+1)/2)) then
+					gamemode.Call("EndRound", TEAM_HUMAN)
+					return
+				elseif (self:GetBanditScore() >= math.ceil((self:GetNumberOfWaves()-self:GetTieScore()+1)/2))then
+					gamemode.Call("EndRound", TEAM_BANDIT)
+					return
 				end
+				if self:GetWave() >= self:GetNumberOfWaves() then -- Last wave is over
+					if self:GetHumanScore() > self:GetBanditScore() then
+						gamemode.Call("EndRound", TEAM_HUMAN)
+					elseif self:GetHumanScore() < self:GetBanditScore() then
+						gamemode.Call("EndRound", TEAM_BANDIT)
+					elseif self:GetWave() > self:GetNumberOfWaves() then
+						gamemode.Call("EndRound", nil)
+					else	
+						self.SuddenDeath = true
+						self:SetCurrentWaveWinner(nil)
+						net.Start("zs_suddendeath")
+							net.WriteBool( true )
+						net.Broadcast()
+					end
+					local curwave = self:GetWave()
+					for _, ent in pairs(ents.FindByClass("logic_waves")) do
+						if ent.Wave == curwave or ent.Wave == -1 then
+							ent:Input("onwaveend", ent, ent, curwave)
+						end
+					end
 			end
-		end
 	else
 		if self:GetCurrentWaveWinner() == nil then
 			gamemode.Call("EndRound", nil)
@@ -2758,7 +2810,7 @@ function GM:WaveEnded()
 	--self.SuddenDeath = false
 	gamemode.Call("SetWaveStart", CurTime() + self.WaveIntermissionLength)
 	for _, pl in ipairs(player.GetAll()) do
-		
+		timer.Simple(6,function()pl:GodEnable()end)
 		if self.SuddenDeath or self:IsClassicMode() then
 			pl:RemoveStatus("spawnbuff", false, true)
 		end
@@ -2808,7 +2860,7 @@ function GM:WaveEnded()
 		pl:PurgeStatusEffects()
 		pl:SetSamples(0)
 		pl:SetHealth(pl:GetMaxHealth())
-		local toadd = 10*(1+self:GetWave())
+		local toadd = 6*(1+self:GetWave())
 		if (self:GetCurrentWaveWinner() == TEAM_HUMAN and pl:Team() == TEAM_BANDIT) or (self:GetCurrentWaveWinner() == TEAM_BANDIT and pl:Team() == TEAM_HUMAN) then
 			pl:AddPoints(toadd)
 			pl:PrintTranslatedMessage(HUD_PRINTTALK, "loser_points_added", toadd)

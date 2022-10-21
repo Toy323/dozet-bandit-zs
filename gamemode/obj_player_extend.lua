@@ -115,7 +115,9 @@ function meta:ApplyAdrenaline()
 	self.HumanSpeedAdder = (self.HumanSpeedAdder or 0) +20
 	self:ResetSpeed() 
 	if SERVER then 
-		self:SetMaxHealth(self:GetMaxHealth()-10)
+		self:SetBloodArmor(self:GetBloodArmor() + 15)
+		self.HealthDead = (self.HealthDead or 0) + 10
+		self:SetMaxHealth(self.HealthForADR-self.HealthDead)
 		self:SetHealth(math.min(self:GetMaxHealth() * 0.3 + self:Health(), self:GetMaxHealth()))
 	end
 	self:EmitSound("player/suit_sprint.wav")	
@@ -392,6 +394,9 @@ function meta:ResetSpeed(noset)
 	if self:GetBodyArmor() > 0 then
 		speed = speed - 25
 	end
+	if self.SkillSpeedAdd then
+		speed = speed + self.SkillSpeedAdd
+	end
 	
 	if self.HumanSpeedAdder and (self:Team() == TEAM_HUMAN or self:Team() == TEAM_BANDIT) and 32 < speed then
 		speed = speed + self.HumanSpeedAdder
@@ -403,6 +408,7 @@ function meta:ResetSpeed(noset)
 
 	return speed
 end
+
 
 function meta:ResetJumpPower(noset)
 	local power = DEFAULT_JUMP_POWER

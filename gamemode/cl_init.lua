@@ -42,6 +42,7 @@ include("cl_dermaskin.lua")
 include("cl_deathnotice.lua")
 include("cl_floatingscore.lua")
 include("cl_hint.lua")
+include("skillweb/cl_skillweb.lua")
 
 w, h = ScrW(), ScrH()
 
@@ -52,6 +53,8 @@ hook.Add("InitPostEntity", "GetLocal", function()
 	GAMEMODE.HookGetLocal = GAMEMODE.HookGetLocal or (function(g) end)
 	gamemode.Call("HookGetLocal", MySelf)
 	RunConsoleCommand("initpostentity")
+
+	MySelf:ApplySkills()
 end)
 
 -- Remove when model decal crash is fixed.
@@ -790,6 +793,7 @@ function GM:CreateVGUI()
 end
 
 function GM:Initialize()
+	self:FixSkillConnections()
 	self:CreateFonts()
 	self:PrecacheResources()
 	self:CreateVGUI()

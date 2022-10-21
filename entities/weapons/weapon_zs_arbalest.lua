@@ -52,7 +52,7 @@ SWEP.ViewModel = "models/weapons/cstrike/c_smg_ump45.mdl"
 SWEP.WorldModel = "models/weapons/w_smg_ump45.mdl"
 SWEP.UseHands = true
 
-SWEP.Primary.Damage = 30
+SWEP.Primary.Damage = 25
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 0.45
 SWEP.ReloadDelay = SWEP.Primary.Delay

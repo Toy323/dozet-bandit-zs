@@ -23,6 +23,9 @@ SWEP.BlockVsBullet = 0.6
 SWEP.BlockVsMelee = 0.3
 SWEP.BlockVsDissolve = 0.5
 
+SWEP.SpeedInBlock = 0.45
+SWEP.DamageMulBlock = 0.4
+
 
 SWEP.Secondary.ClipSize = 1
 SWEP.Secondary.DefaultClip = 1
@@ -108,9 +111,9 @@ function SWEP:Think()
 end
 function SWEP:Move(mv)
 	if self:GetBlock() and mv:KeyDown(IN_ATTACK2) and not self:GetOwner():GetBarricadeGhosting() then
-		mv:SetMaxSpeed(self.WalkSpeed*0.45)
-		mv:SetMaxClientSpeed(self.WalkSpeed*0.45)	
-		mv:SetSideSpeed(mv:GetSideSpeed() * 0.45)
+		mv:SetMaxSpeed(self.WalkSpeed*(self.SpeedInBlock or 0.45))
+		mv:SetMaxClientSpeed(self.WalkSpeed*(self.SpeedInBlock or 0.45))	
+		mv:SetSideSpeed(mv:GetSideSpeed()*(self.SpeedInBlock or 0.45))
 	end
 end
 function SWEP:ProcessDamage(dmginfo)
@@ -147,13 +150,13 @@ end
 
 function SWEP:SecondaryAttack()
 	if self.CanBlock then
-	if self:GetNextSecondaryFire() <= CurTime() and not self:GetOwner():IsHolding() then
-		self:SetBlock(true)
-		self:SetHoldType("revolver")
-		self:SetWeaponSwingHoldType("revolver")
-		self:SetChargeBlock(true) 
+		if self:GetNextSecondaryFire() <= CurTime() and not self:GetOwner():IsHolding() then
+			self:SetBlock(true)
+			self:SetHoldType("revolver")
+			self:SetWeaponSwingHoldType("revolver")
+			self:SetChargeBlock(true) 
+		end
 	end
-end
 end
 
 
@@ -230,8 +233,8 @@ function SWEP:MeleeSwing()
 		return
 	end
 
-	local damagemultiplier = 1
-	local damage = self:GetBlock() and self.MeleeDamage * 0.4 or self.MeleeDamage * damagemultiplier 
+	local damagemultiplier = (owner.MeleeDamageMultiplier or 1)
+	local damage = (self:GetBlock() and self.MeleeDamage * (self.DamageMulBlock or 0.4) or self.MeleeDamage) * damagemultiplier 
 	local hitent = tr.Entity
 	local hitflesh = tr.MatType == MAT_FLESH or tr.MatType == MAT_BLOODYFLESH or tr.MatType == MAT_ANTLION or tr.MatType == MAT_ALIENFLESH
 
@@ -245,7 +248,7 @@ function SWEP:MeleeSwing()
 		self:PlayHitFleshSound()
 
 		if SERVER then
-			util.Blood(tr.HitPos, math.Rand(damage * 0.25, damage * 0.6), (tr.HitPos - owner:GetShootPos()):GetNormalized(), math.min(400, math.Rand(damage * 6, damage * 12)), true)
+			util.Blood(tr.HitPos, math.Rand(damage * 0.15, damage * 0.3), (tr.HitPos - owner:GetShootPos()):GetNormalized(), math.min(400, math.Rand(damage * 2, damage * 6)), true)
 		end
 
 		if not self.NoHitSoundFlesh then
@@ -277,7 +280,7 @@ function SWEP:MeleeHitEntity(tr, hitent, damagemultiplier)
 	if self.MeleeFlagged then self.IsMelee = true end
 	
 	local owner = self:GetOwner()
-	local damage = self:GetBlock() and self.MeleeDamage * 0.4 or self.MeleeDamage * damagemultiplier
+	local damage = (self:GetBlock() and self.MeleeDamage * 0.4 or self.MeleeDamage) * damagemultiplier
 	local dmginfo = DamageInfo()
 	dmginfo:SetDamagePosition(tr.HitPos)
 	dmginfo:SetAttacker(owner)

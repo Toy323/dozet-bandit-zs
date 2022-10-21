@@ -225,7 +225,7 @@ function SWEP:SendReloadAnimation()
 end
 
 function SWEP:ProcessReloadEndTime()
-	local reloadspeed = self.ReloadSpeed
+	local reloadspeed = self.ReloadSpeed * (self:GetOwner().ReloadSpeedMultiplier or 1)
 	self:SetReloadFinish(CurTime() + self:SequenceDuration() / reloadspeed)
 	if not self.DontScaleReloadSpeed then
 		self:GetOwner():GetViewModel():SetPlaybackRate(reloadspeed)

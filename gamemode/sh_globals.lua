@@ -82,7 +82,10 @@ SPEED_SLOW = SPEED_NORMAL - 8
 SPEED_FAST = SPEED_NORMAL + 7
 SPEED_FASTER = SPEED_NORMAL + 14
 SPEED_FASTEST = SPEED_NORMAL + 20
-DT_PLAYER_INT_BLOODARMOR = 9
+DT_PLAYER_INT_BLOODARMOR = 3
+DT_PLAYER_INT_XP = 6
+DT_PLAYER_INT_REMORTLEVEL = 5
+
 
 MASK_HOVER = bit.bor(CONTENTS_OPAQUE, CONTENTS_GRATE, CONTENTS_HITBOX, CONTENTS_DEBRIS, CONTENTS_SOLID, CONTENTS_WATER, CONTENTS_SLIME, CONTENTS_WINDOW, CONTENTS_LADDER, CONTENTS_PLAYERCLIP, CONTENTS_MOVEABLE, CONTENTS_DETAIL, CONTENTS_TRANSLUCENT)
 
@@ -92,7 +95,7 @@ GM.BarricadeHealthMassFactor = 2
 GM.BarricadeHealthVolumeFactor = 2.5
 
 
-GM.PointsPerKill = 5
+GM.PointsPerKill = 15
 GM.HumanGibs = {
 Model("models/gibs/HGIBS.mdl"),
 Model("models/gibs/HGIBS_spine.mdl"),
@@ -115,6 +118,8 @@ GM.PropHealthMultipliers = {
 GM.CleanupFilter = {
 	"zs_hands"
 }
+GM.CartFile = "zscarts.txt"
+GM.SkillLoadoutsFile = "zsskloadouts.txt"
 
 GM.AmmoTranslations = {}
 GM.AmmoTranslations["weapon_physcannon"] = "pistol"

@@ -19,7 +19,7 @@ SWEP.WorldModel = "models/weapons/w_medkit.mdl"
 SWEP.ViewModel = "models/weapons/c_medkit.mdl"
 SWEP.UseHands = true
 
-SWEP.Primary.Delay = 0.5
+SWEP.Primary.Delay = 0.76
 SWEP.Primary.Heal = 10
 SWEP.Primary.Automatic = true
 
@@ -71,7 +71,7 @@ function SWEP:PrimaryAttack()
 		local toheal = math.min(self:GetPrimaryAmmoCount(), math.ceil(math.min(self.Primary.Heal * multiplier, maxhealth - health)))
 		local totake = math.ceil(toheal / multiplier)
 		if toheal > 0 then
-			self:SetNextCharge(CurTime() + self.Primary.Delay * math.min(1, toheal / self.Primary.Heal))
+			self:SetNextCharge(CurTime() + (self.Primary.Delay * math.min(1, toheal / self.Primary.Heal)) * (owner.MedicCooldownMul or 1))
 			owner.NextMedKitUse = self:GetNextCharge()
 
 			self:TakeCombinedPrimaryAmmo(totake)
@@ -95,7 +95,7 @@ function SWEP:SecondaryAttack()
 	local toheal = math.min(self:GetPrimaryAmmoCount(), math.ceil(math.min(self.Secondary.Heal * multiplier, maxhealth - health)))
 	local totake = math.ceil(toheal / multiplier)
 	if toheal > 0 then
-		self:SetNextCharge(CurTime() + self.Secondary.Delay * math.min(1, toheal / self.Secondary.Heal))
+		self:SetNextCharge(CurTime() + (self.Secondary.Delay * math.min(1, toheal / self.Secondary.Heal)) * (owner.MedicCooldownMul or 1))
 		owner.NextMedKitUse = self:GetNextCharge()
 
 		self:TakeCombinedPrimaryAmmo(totake)
