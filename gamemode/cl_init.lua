@@ -699,6 +699,9 @@ function GM:CreateFonts()
 	surface.CreateLegacyFont("csd", screenscale * 76, 100, true, false, "zsdeathnoticecsps", false, false)
 	surface.CreateLegacyFont("HL2MP", screenscale * 76, 100, true, false, "zsdeathnoticeps", false, false)
 	
+	surface.CreateLegacyFont(fontfamily, screenscale * 5 , fontweight, fontaa, false, "ZSHUDFontTiniestStatus2", fontshadow, fontoutline, nil, true)
+	surface.CreateLegacyFont(fontfamily, screenscale * 10 , fontweight, fontaa, false, "ZSHUDFontTiniestStatus", fontshadow, fontoutline, nil, true)
+	surface.CreateLegacyFont(fontfamily, screenscale * (16), fontweight, fontaa, false, "ZSHUDFontTiniest", fontshadow, fontoutline, nil, true)
 	surface.CreateLegacyFont(fontfamily, screenscale * 16, fontweight, fontaa, false, "ZSHUDFontTiny", fontshadow, fontoutline, false, fontextended)
 	surface.CreateLegacyFont(fontfamily, screenscale * 20, fontweight, fontaa, false, "ZSHUDFontSmallest", fontshadow, fontoutline, false, fontextended)
 	surface.CreateLegacyFont(fontfamily, screenscale * 22, fontweight, fontaa, false, "ZSHUDFontSmaller", fontshadow, fontoutline, false, fontextended)
@@ -738,6 +741,7 @@ function GM:CreateFonts()
 	surface.CreateFont("DefaultFont", {font = "tahoma", size = 13, weight = 500, antialias = false})
 	surface.CreateFont("DefaultFontBold", {font = "tahoma", size = 13, weight = 1000, antialias = false})
 	surface.CreateFont("DefaultFontLarge", {font = "tahoma", size = 16, weight = 0, antialias = false})
+	surface.CreateFont("ZSXPBar", {font = "tahoma", size = screenscale * 14, weight = 500, antialias = false, shadow = true})
 end
 
 function GM:EvaluateFilmMode()
@@ -1458,11 +1462,13 @@ end)
 
 net.Receive("zs_dmg", function(length)
 	local damage = net.ReadUInt(16)
+	local bool = net.ReadBool()
 	local pos = net.ReadVector()
 
 	if DamageFloaters then
 		local effectdata = EffectData()
 			effectdata:SetOrigin(pos)
+			effectdata:SetAttachment((bool and 1 or 2))
 			effectdata:SetMagnitude(damage)
 			effectdata:SetScale(0)
 		util.Effect("damagenumber", effectdata)
@@ -1471,6 +1477,7 @@ end)
 
 net.Receive("zs_dmg_prop", function(length)
 	local damage = net.ReadUInt(16)
+	local bool = net.ReadBool()
 	local pos = net.ReadVector()
 
 	if DamageFloaters then

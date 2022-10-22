@@ -219,12 +219,12 @@ PANEL.ShadeAlpha = 0
 PANEL.ShadeVelocity = 0
 
 local offsets = {
-	[TREE_HEALTHTREE] = {0, 16},
-	[TREE_SPEEDTREE] = {0, -14},
+	[TREE_HEALTHTREE] = {0, 5},
+	[TREE_SPEEDTREE] = {2, -6},
 	[TREE_GUNTREE] = {13, -7},
-	[TREE_MELEETREE] = {13, 8},
-	[TREE_BUILDINGTREE] = {-14, 9},
-	[TREE_SUPPORTTREE] = {-11, -7},
+	[TREE_MELEETREE] = {5, 8},
+	[TREE_BUILDINGTREE] = {-0, 9},
+	[TREE_SUPPORTTREE] = {5, -7},
 	[TREE_POINTTREE] = {-20, 0},
 	[TREE_ANCIENTTREE] = {-17, -10},
 	[TREE_DEFENSETREE] = {0, -1},

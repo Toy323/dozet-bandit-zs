@@ -673,6 +673,7 @@ function SWEP:ShootBullets(dmg, numbul, cone)
 		self:StartBulletKnockback()
 		if IsFirstTimePredicted() then
 			owner:FireBullets({Num = numbul, Src = owner:GetShootPos(), Dir = owner:GetAimVector(), Spread = Vector(cone, cone, 0), Tracer = 1, TracerName = self.TracerName, Force = dmg * 0.1, Damage = dmg, Callback = self.BulletCallback})
+			self:ShootCSBullets(owner, dmg, numbul, cone)
 		end
 		self:DoBulletKnockback(self.Primary.KnockbackScale * 0.05)
 		self:EndBulletKnockback()

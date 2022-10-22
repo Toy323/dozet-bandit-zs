@@ -251,7 +251,6 @@ GM:AddWeaponPrerequisite(item,"classic")
 
 
 local item = GM:AddPointShopWeapon(0,"crphmr", ITEMCAT_MELEE, 35, "weapon_zs_hammer")
-item.NoClassicMode = true
 local item = GM:AddPointShopWeapon(0,"wrench", ITEMCAT_MELEE, 40, "weapon_zs_wrench")
 item.NoClassicMode = true
 item.NoSampleCollectMode = true
@@ -333,6 +332,7 @@ item.Countables = {"prop_gunturret"}
 --item.NoClassicMode = true
 
 local item = GM:AddPointShopWeapon(nil,"manhack", ITEMCAT_TOOLS, 55, "weapon_zs_manhack")
+item.SkillRequirement = SKILL_HANDY3
 item.Countables = {"prop_manhack","weapon_zs_manhackcontrol"}
 item.ControllerWep = "weapon_zs_manhackcontrol"
 --item.NoClassicMode = true

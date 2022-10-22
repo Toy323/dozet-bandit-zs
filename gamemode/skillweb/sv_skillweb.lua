@@ -70,16 +70,6 @@ net.Receive("zs_skills_remort", function(length, pl)
 end)
 
 net.Receive("zs_skills_reset", function(length, pl)
-	if pl:GetZSLevel() < 10 then
-		pl:SkillNotify("You must be level 10 to reset your skills.")
-		return
-	end
-
-	local time = os.time()
-	if pl.NextSkillReset and time < pl.NextSkillReset then
-		pl:SkillNotify("You must wait before resetting your skills again.")
-		return
-	end
 
 	pl:SkillsReset()
 

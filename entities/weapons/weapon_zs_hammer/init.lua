@@ -86,10 +86,6 @@ end
 function SWEP:SecondaryAttack()
 	if self:GetPrimaryAmmoCount() <= 0 or CurTime() < self:GetNextPrimaryFire() or self:GetOwner():GetBarricadeGhosting() then return end
 	local owner = self:GetOwner()
-	if GAMEMODE:IsClassicMode() then
-		owner:PrintTranslatedMessage(HUD_PRINTCENTER, "cant_do_that_in_classic_mode")
-		return
-	end
 	local tr = owner:CompensatedMeleeTrace(64, self.MeleeSize, nil, nil)
 	if owner:AttemptNail(tr,true) then
 		self:SendWeaponAnim(self.Alternate and ACT_VM_HITCENTER or ACT_VM_MISSCENTER)

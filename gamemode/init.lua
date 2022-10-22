@@ -774,6 +774,10 @@ function GM:Think()
 		if pl:GetBarricadeGhosting() then
 			pl:BarricadeGhostingThink()
 		end
+		if pl:IsSkillActive(SKILL_GENERATOR) and pl.BloodRegen <=  CurTime() then
+			pl.BloodRegen = CurTime() + 5
+			pl:SetBloodArmor(math.min(100,pl:GetBloodArmor() + 3))
+		end
 		if pl:IsSpectator() then
 			self:SpectatorThink(pl)
 		elseif not self.RoundEnded and not self:GetWaveActive() and not self:GetWaveStart() ~= -1 and self:GetWaveStart() > time then
@@ -1224,7 +1228,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl:SetNoCollideWithTeammates(true)
 	pl:SetCustomCollisionCheck(true)
 	pl:DoHulls()
-
+	pl.BloodDead = 0
 	pl.BountyModifier = 0
 	pl.EnemyKilledAssists = 0
 	pl.MeleeKilled = 0
@@ -1237,6 +1241,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	
 	pl.WaveJoined = self:GetWave()
 	
+	pl.BloodRegen = 0
 	pl.BarricadeDamage = 0
 
 	pl.NextPainSound = 0
@@ -1265,6 +1270,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.PointsSpent = 0
 	pl.CarryOverCommision = 0
 	pl.BackdoorsUsed = 0
+	pl:ApplySkills()
 	self:LoadVault(pl)
 
 	pl.SpawnedTime = CurTime()
@@ -1682,13 +1688,22 @@ concommand.Add("zsb_dropactiveweapon", function(sender, command)
 		sender:DropActiveWeapon()
 	end
 end)
-
+function GM:ConCommandErrorMessage(pl, message)
+	pl:CenterNotify(COLOR_RED, message)
+	pl:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+end
 concommand.Add("zsb_pointsshopbuy", function(sender, command, arguments)
 	if not (sender:IsValid() and sender:IsConnected()) or #arguments == 0 then return end
+	
 	
 	local id = arguments[1]
 	local slot = tonumber(arguments[2])
 	local itemtab = FindItem(id)
+	if itemtab.SkillRequirement and not sender:IsSkillActive(itemtab.SkillRequirement) then
+		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientFormat(sender, "x_requires_a_skill_you_dont_have", itemtab.Name))
+		return
+	end
+
 	if not GAMEMODE:IsRoundModeUnassigned() then
 		gamemode.Call("PlayerPurchasePointshopItem",sender,itemtab,slot)
 	end
@@ -2052,17 +2067,17 @@ function GM:EntityTakeDamage(ent, dmginfo)
 	elseif ent:IsBarricadeProp() and attacker:IsPlayer() and not ent.NoDamageNumbers and not ent:IsSameTeam(attacker)then
 		dispatchdamagedisplay = true
 	end
-	if dmginfo:GetDamage() > 0 then
+	if dmginfo:GetDamage() > 0 or (ent:IsPlayer() and ent:GetBloodArmor() >= 1) then
 		local holder, status = ent:GetHolder()
 		if holder then status:Remove() end
 
 		if attacker:IsPlayer() and dispatchdamagedisplay then
-			self:DamageFloater(attacker, ent, dmginfo)
+			self:DamageFloater(attacker, ent, dmginfo, (ent:IsPlayer() and ent:GetBloodArmor() >= 1))
 		end
 	end
 end
 
-function GM:DamageFloater(attacker, victim, dmginfo)
+function GM:DamageFloater(attacker, victim, dmginfo, bool)
 	local dmgpos = dmginfo:GetDamagePosition()
 	if dmgpos == vector_origin then dmgpos = victim:NearestPoint(attacker:EyePos()) end
 
@@ -2071,7 +2086,13 @@ function GM:DamageFloater(attacker, victim, dmginfo)
 			INFDAMAGEFLOATER = nil
 			net.WriteUInt(9999, 16)
 		else
-			net.WriteUInt(math.ceil(dmginfo:GetDamage()), 16)
+			if bool then
+				bool = true
+			else
+				bool = false
+			end
+			net.WriteUInt((math.ceil(dmginfo:GetDamage()) ~= 0 and math.ceil(dmginfo:GetDamage()) or victim:IsPlayer() and math.ceil(victim.BloodDead)), 16)
+			net.WriteBool(bool)
 		end
 		net.WriteVector(dmgpos)
 	net.Send(attacker)
@@ -2654,6 +2675,7 @@ function GM:PlayerSpawn(pl)
 		pl.LifeEnemyKills = 0
 		pl.DamagedBy = {}
 		pl.m_PointQueue = 0
+		pl.BloodRegen = 0
 		pl.PackedItems = {}
 		pl:RefreshPlayerModel()
 		pl:ResetSpeed()
@@ -2714,9 +2736,9 @@ function GM:WaveStarted()
 		if not pl:Alive() then
 			local teamspawns = {}
 			pl:GodDisable()
-			timer.Simple(2,	function() pl:ApplySkills() end)
+			timer.Simple(4,	function() pl:ApplySkills() end)
 
-			
+			pl:SetHealth(pl:GetMaxHealth())
 			teamspawns = team.GetValidSpawnPoint(pl:Team())
 			pl:SetPos(teamspawns[ math.random(#teamspawns) ]:GetPos())
 			pl:SetAbsVelocity(Vector(0,0,0))
@@ -2810,7 +2832,7 @@ function GM:WaveEnded()
 	--self.SuddenDeath = false
 	gamemode.Call("SetWaveStart", CurTime() + self.WaveIntermissionLength)
 	for _, pl in ipairs(player.GetAll()) do
-		timer.Simple(6,function()pl:GodEnable()end)
+		timer.Simple(6,function()pl:GodEnable()	pl:ApplySkills()end)
 		if self.SuddenDeath or self:IsClassicMode() then
 			pl:RemoveStatus("spawnbuff", false, true)
 		end

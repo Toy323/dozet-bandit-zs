@@ -167,7 +167,7 @@ function meta:ApplySkills(override)
 
 	-- Store and sync with client.
 	self:SetActiveSkills(desired_assoc, not self.PlayerReady)
-	self.SkillUsed = true
+	--self.SkillUsed = true
 end
 
 -- For trinkets, these apply after your skills, and they need to work differently so they can't be used to "update" your skills midgame.

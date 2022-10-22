@@ -128,7 +128,13 @@ SKILL_BATTLER2 = 18
 SKILL_BATTLER3 = 19
 SKILL_BATTLER4 = 20
 SKILL_BATTLER5 = 21
-
+SKILL_GENERATOR = 22
+SKILL_RELOAD1 = 23
+SKILL_RELOAD2 = 24
+SKILL_RELOAD3  = 25
+SKILL_RELOAD4 = 26
+SKILL_RELOAD5 = 27
+SKILL_ULTRADEFENCE = 28
 
 SKILLMOD_HEALTH = 1
 SKILLMOD_SPEED = 2
@@ -246,7 +252,17 @@ local BAD = "^"..COLORID_RED
 local NEUTRAL = "^"..COLORID_GRAY
 local PURPLE = "^"..COLORID_PURPLE
 --
+GM:AddSkill(SKILL_RELOAD1, translate.Get("skill_q_r").."I", BAD.."-1%"..translate.Get("meleedamage")..GOOD.."+7%"..translate.Get("r_speed"),
+																-4,			6,					{SKILL_NONE, SKILL_RELOAD2}, TREE_GUNTREE)
 
+GM:AddSkill(SKILL_RELOAD2, translate.Get("skill_q_r").."II", BAD.."-2%"..translate.Get("meleedamage")..GOOD.."+8%"..translate.Get("r_speed"),
+																-4,			4,					{SKILL_RELOAD3}, TREE_GUNTREE)
+GM:AddSkill(SKILL_RELOAD3, translate.Get("skill_q_r").."III", BAD.."-4%"..translate.Get("meleedamage")..GOOD.."+9%"..translate.Get("r_speed"),
+																-4,			2,					{SKILL_RELOAD4}, TREE_GUNTREE)
+GM:AddSkill(SKILL_RELOAD4, translate.Get("skill_q_r").."IV", BAD.."-9%"..translate.Get("meleedamage")..GOOD.."+12%"..translate.Get("r_speed"),
+																-4,			0,					{SKILL_RELOAD5}, TREE_GUNTREE)
+GM:AddSkill(SKILL_RELOAD5, translate.Get("skill_q_r").."V", BAD.."-12%"..translate.Get("meleedamage")..GOOD.."+14%"..translate.Get("r_speed"),
+																-4,			-2,					{SKILL_RELOAD4}, TREE_GUNTREE)
 -- Health Tree
 GM:AddSkill(SKILL_STOIC1, translate.Get("skill_stoici_0"), GOOD..translate.Get("skill_stoici_d1")..BAD.."-7"..translate.Get("speed"),
 																-4,			-6,					{SKILL_NONE, SKILL_STOIC2}, TREE_HEALTHTREE)
@@ -257,7 +273,9 @@ GM:AddSkill(SKILL_STOIC3, translate.Get("skill_stoiciii_0"), GOOD..translate.Get
 GM:AddSkill(SKILL_STOIC4, translate.Get("skill_stoiciv_0"), GOOD..translate.Get("skill_stoiciv_d1")..BAD.."-11"..translate.Get("speed"),
 																-3,			0,					{SKILL_STOIC5}, TREE_HEALTHTREE)
 GM:AddSkill(SKILL_STOIC5, translate.Get("skill_stoicv_0"), GOOD..translate.Get("skill_stoicv_d1")..BAD.."-15"..translate.Get("speed"),
-																-3,			2,					{SKILL_BLOODARMOR, SKILL_TANKER}, TREE_HEALTHTREE)
+																-3,			2,					{SKILL_BLOODARMOR, SKILL_ULTRADEFENCE}, TREE_HEALTHTREE)
+GM:AddSkill(SKILL_ULTRADEFENCE, translate.Get("skill_ultradefence"), GOOD..translate.Get("skill_ultradefence_d1")..BAD.."-70"..translate.Get("speed"),
+																-2,			4,					{SKILL_STOIC5}, TREE_HEALTHTREE)
 
 -- Speed Tree
 GM:AddSkill(SKILL_SPEED1, translate.Get("skill_speed").."I", GOOD.."+7"..translate.Get("speed")..BAD.."-4"..translate.Get("health"),
@@ -296,13 +314,16 @@ GM:AddSkill(SKILL_HANDY3, translate.Get("skill_handy").."III", GOOD.."+8%"..tran
 GM:AddSkill(SKILL_BATTLER1, translate.Get("skill_battler").."I", GOOD.."+3%"..translate.Get("meleedamage")..BAD.."-2%"..translate.Get("r_speed"),
 																-6,			-6,					{SKILL_BATTLER2, SKILL_NONE}, TREE_MELEETREE)
 GM:AddSkill(SKILL_BATTLER2, translate.Get("skill_battler").."II", GOOD.."+6%"..translate.Get("meleedamage")..BAD.."-4%"..translate.Get("r_speed"),
-																-6,			-4,					{SKILL_BATTLER3, SKILL_LIGHTWEIGHT}, TREE_MELEETREE)
+																-6,			-4,					{SKILL_BATTLER3}, TREE_MELEETREE)
 GM:AddSkill(SKILL_BATTLER3, translate.Get("skill_battler").."III", GOOD.."+8%"..translate.Get("meleedamage")..BAD.."-9%"..translate.Get("r_speed"),
-																-4,			-2,					{SKILL_BATTLER4, SKILL_LANKY, SKILL_FOUR_IN_ONE}, TREE_MELEETREE)
+																-4,			-2,					{SKILL_BATTLER4}, TREE_MELEETREE)
 GM:AddSkill(SKILL_BATTLER4, translate.Get("skill_battler").."IV", GOOD.."+9%"..translate.Get("meleedamage")..BAD.."-13%"..translate.Get("r_speed"),
-																-2,			0,					{SKILL_BATTLER5, SKILL_MASTERCHEF, SKILL_D_CLUMSY}, TREE_MELEETREE)
+																-2,			0,					{SKILL_BATTLER5}, TREE_MELEETREE)
 GM:AddSkill(SKILL_BATTLER5, translate.Get("skill_battler").."V", GOOD.."+13%"..translate.Get("meleedamage")..BAD.."-16%"..translate.Get("r_speed"),
-																0,			2,					{SKILL_GLASSWEAPONS, SKILL_BLOODLUST}, TREE_MELEETREE)
+																0,			2,					{SKILL_GENERATOR}, TREE_MELEETREE)
+GM:AddSkill(SKILL_GENERATOR, translate.Get("skill_generator"), BAD.."-10%"..translate.Get("meleedamage")..GOOD..translate.Get("skill_generator_d1").."-30"..translate.Get("health"),
+																0,			1,					{}, TREE_MELEETREE)
+
 
 
 
@@ -700,6 +721,10 @@ GM:AddSkillModifier(SKILL_BATTLER3, SKILLMOD_MELEE_DAMAGE_MUL, 0.08)
 GM:AddSkillModifier(SKILL_BATTLER4, SKILLMOD_MELEE_DAMAGE_MUL, 0.09)
 GM:AddSkillModifier(SKILL_BATTLER5, SKILLMOD_MELEE_DAMAGE_MUL, 0.13)
 
+GM:AddSkillModifier(SKILL_GENERATOR, SKILLMOD_MELEE_DAMAGE_MUL, -0.10)
+GM:AddSkillModifier(SKILL_GENERATOR, SKILLMOD_HEALTH, 30)
+
+
 
 GM:AddSkillModifier(SKILL_BATTLER1, SKILLMOD_RELOADSPEED_MUL, -0.02)
 GM:AddSkillModifier(SKILL_BATTLER2, SKILLMOD_RELOADSPEED_MUL, -0.04)
@@ -707,3 +732,18 @@ GM:AddSkillModifier(SKILL_BATTLER3, SKILLMOD_RELOADSPEED_MUL, -0.09)
 GM:AddSkillModifier(SKILL_BATTLER4, SKILLMOD_RELOADSPEED_MUL, -0.13)
 GM:AddSkillModifier(SKILL_BATTLER5, SKILLMOD_RELOADSPEED_MUL, -0.16)
 
+GM:AddSkillModifier(SKILL_RELOAD1, SKILLMOD_MELEE_DAMAGE_MUL, -0.01)
+GM:AddSkillModifier(SKILL_RELOAD2, SKILLMOD_MELEE_DAMAGE_MUL, -0.02)
+GM:AddSkillModifier(SKILL_RELOAD3, SKILLMOD_MELEE_DAMAGE_MUL, -0.04)
+GM:AddSkillModifier(SKILL_RELOAD4, SKILLMOD_MELEE_DAMAGE_MUL, -0.09)
+GM:AddSkillModifier(SKILL_RELOAD5, SKILLMOD_MELEE_DAMAGE_MUL, -0.12)
+
+
+
+GM:AddSkillModifier(SKILL_RELOAD1, SKILLMOD_RELOADSPEED_MUL, 0.07)
+GM:AddSkillModifier(SKILL_RELOAD2, SKILLMOD_RELOADSPEED_MUL, 0.08)
+GM:AddSkillModifier(SKILL_RELOAD3, SKILLMOD_RELOADSPEED_MUL, 0.09)
+GM:AddSkillModifier(SKILL_RELOAD4, SKILLMOD_RELOADSPEED_MUL, 0.12)
+GM:AddSkillModifier(SKILL_RELOAD5, SKILLMOD_RELOADSPEED_MUL, 0.14)
+
+GM:AddSkillModifier(SKILL_ULTRADEFENCE, SKILLMOD_SPEED, -70)

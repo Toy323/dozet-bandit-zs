@@ -44,14 +44,14 @@ SWEP.WorldModel = "models/weapons/w_smg1.mdl"
 SWEP.UseHands = true
 SWEP.ReloadSound = Sound("Weapon_Alyx_Gun.Reload")
 SWEP.Primary.Sound = Sound("weapons/smg1/smg1_fire1.wav")
-SWEP.Primary.Damage = 6
+SWEP.Primary.Damage = 5
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 0.07
+SWEP.Primary.Delay = 0.1
 
-SWEP.Primary.ClipSize = 20
+SWEP.Primary.ClipSize = 12
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "autocharging"
-SWEP.Primary.DefaultClip = 20
+SWEP.Primary.DefaultClip = 12
 
 SWEP.Primary.Gesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_SHOTGUN
 SWEP.ReloadGesture = ACT_HL2MP_GESTURE_RELOAD_SMG1

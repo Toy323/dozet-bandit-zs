@@ -595,13 +595,6 @@ function LightVisible(posa, posb, ...)
 	return not util.TraceLine(LightVisibleTrace).Hit
 end
 
-local WorldVisibleTrace = {mask = MASK_SOLID_BRUSHONLY}
-function WorldVisible(posa, posb)
-	WorldVisibleTrace.start = posa
-	WorldVisibleTrace.endpos = posb
-	return not util.TraceLine(WorldVisibleTrace).Hit
-end
-
 function CosineInterpolation(y1, y2, mu)
 	local mu2 = (1 - math.cos(mu * math.pi)) / 2
 	return y1 * (1 - mu2) + y2 * mu2
@@ -679,25 +672,7 @@ function util.BlastDamagePlayer(inf, att, center, radius, damage, damagetype, ta
 end
 
 -- I had to make this since the default function checks visibility vs. the entitiy's center and not the nearest position.
-function util.BlastDamageEx(inflictor, attacker, epicenter, radius, damage, damagetype, taperfactor)
-	local basedmg = damage
 
-	for _, ent in pairs(ents.FindInSphere(epicenter, radius)) do
-		if ent:IsValid() then
-			local nearest = ent:NearestPoint(epicenter)
-			if TrueVisibleFilters(epicenter, nearest, inflictor, attacker, ent)
-				or TrueVisibleFilters(epicenter, ent:EyePos(), inflictor, attacker, ent)
-				or TrueVisibleFilters(epicenter, ent:WorldSpaceCenter(), inflictor, attacker, ent) then
-
-				ent:TakeSpecialDamage((((radius - nearest:Distance(epicenter)) / radius) * basedmg) * (ent:IsValidLivingZombie() and ent:GetZombieClassTable().Skeletal and 0.1 or	ent:IsValidLivingHuman() and ent.ClanAvanguard and 0.44 or 1), damagetype, attacker, inflictor, nearest)
-
-				if taperfactor and ent:IsPlayer() then
-					basedmg = basedmg * taperfactor
-				end
-			end
-		end
-	end
-end
 
 function util.BlastDamageExAlloc(inflictor, attacker, epicenter, radius, damage, damagetype)
 	local dmg
@@ -738,17 +713,6 @@ function util.BlastAlloc(inflictor, attacker, epicenter, radius)
 	return t
 end
 
-function util.FindValidInSphere(pos, radius)
-	local ret = {}
-
-	for _, ent in pairs(util.FindInSphere(pos, radius)) do
-		if ent:IsValid() then
-			ret[#ret + 1] = ent
-		end
-	end
-
-	return ret
-end
 
 function util.PoisonBlastDamage(inflictor, attacker, epicenter, radius, damage, noreduce, instant)
 	for _, ent in pairs(ents.FindInSphere(epicenter, radius)) do

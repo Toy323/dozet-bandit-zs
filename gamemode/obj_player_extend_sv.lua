@@ -239,6 +239,9 @@ function meta:ProcessDamage(dmginfo)
 		if attacker:LessPlayersOnTeam() and attackweapon and not attackweapon.NoScaleToLessPlayers and not attackweapon.IgnoreDamageScaling then
 			dmginfo:ScaleDamage(1.25)
 		end
+		if self:IsSkillActive(SKILL_ULTRADEFENCE) then
+			dmginfo:ScaleDamage(0.75)
+		end
 		if self:GetBodyArmor() and self:GetBodyArmor() > 0 then
 			local ratio = 0.75
 			if dmginfo:IsDamageType(DMG_BLAST) then
@@ -256,6 +259,7 @@ function meta:ProcessDamage(dmginfo)
 		end
 		if self:GetBloodArmor() > 0 then
 			local damage = dmginfo:GetDamage()
+			self.BloodDead = damage
 			if damage > 0 then
 	
 				local ratio = 1

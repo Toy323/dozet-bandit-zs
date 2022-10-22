@@ -8,6 +8,7 @@ local cam = cam
 local Particles = {}
 
 local col = Color(220, 0, 0)
+local col2 = Color(59, 8, 177)
 local colprop = Color(220, 220, 0)
 hook.Add("PostDrawTranslucentRenderables", "DrawDamage", function()
 	if #Particles == 0 then return end
@@ -24,7 +25,7 @@ hook.Add("PostDrawTranslucentRenderables", "DrawDamage", function()
 
 	for _, particle in pairs(Particles) do
 		if particle and curtime < particle.DieTime then
-			local c = particle.Type == 1 and colprop or col
+			local c = (particle.Type == 1 and not particle.Bool and colprop or not particle.Bool and col or col2)
 
 			done = false
 
@@ -47,6 +48,7 @@ local gravity = Vector(0, 0, -100)
 
 function EFFECT:Init(data)
 	local pos = data:GetOrigin()
+	local bool = data:GetAttachment()
 	local amount = data:GetMagnitude()
 	local Type = data:GetScale()
 
@@ -67,6 +69,7 @@ function EFFECT:Init(data)
 	particle:SetGravity(gravity)
 	particle:SetVelocity(math.Clamp(amount, 5, 50) * 4 * vel)
 
+	particle.Bool = bool == 1
 	particle.Amount = amount
 	particle.DieTime = CurTime() + 2
 	particle.Type = Type

@@ -79,8 +79,15 @@ local function ItemButtonThink(self)
 	if itemtab then 
 		local newcost = GetItemCost(itemtab)
 		if newcost ~= self.m_LastPrice then
-			self.PriceLabel:SetText(translate.Format("x_points_abbreviated",tostring(math.ceil(newcost))))
-			self.m_LastPrice = newcost
+			local missing_skill = itemtab.SkillRequirement and not MySelf:IsSkillActive(itemtab.SkillRequirement)
+			if missing_skill then
+				self.PriceLabel:SetTextColor(COLOR_RED)
+				self.PriceLabel:SetText(GAMEMODE.Skills[itemtab.SkillRequirement].PrintName)
+				self.m_LastPrice = newcost
+			else
+				self.PriceLabel:SetText(translate.Format("x_points_abbreviated",tostring(math.ceil(newcost))))
+				self.m_LastPrice = newcost
+			end
 		end
 		if self:IsHovered() or self.ID == GAMEMODE.m_PointsShop.CurrentID then
 			local slot = GAMEMODE.m_PointsShop.m_LoadoutSlot
@@ -206,9 +213,9 @@ function PANEL:SetupItemButton(id,slot)
 		local sweptable = weapons.GetStored(tab.SWEP)
 		if sweptable then 
 			nametext = sweptable.TranslateName and translate.Get(sweptable.TranslateName) or tab.SWEP
-			--[[if sweptable.Primary and sweptable.Base == "weapon_zs_base" and sweptable.Primary.Damage then
-				nametext = " DPS: "..math.floor(sweptable.Primary.Damage*(sweptable.Primary.NumShots or 1)/sweptable.Primary.Delay)
-			end]]
+			if sweptable.Primary and sweptable.Base == "weapon_zs_base" and sweptable.Primary.Damage then
+				nametext = nametext.." DPS: "..math.floor(sweptable.Primary.Damage*(sweptable.Primary.NumShots or 1)/sweptable.Primary.Delay)
+			end
 		end
 	else
 		self.IconFrame = nil
@@ -259,9 +266,12 @@ local function PurchaseButtonThink(self)
 		end
 		local canupgrade_combined = canupgrade and ispurchasedweapon
 		if self.m_LastIsUpgradeBtn ~= canupgrade or canpurchase ~= self.m_LastAbleToBuy then
-			self.BuyLabel:SetText(canupgrade and translate.Get("upgrade_item") or translate.Get("purchase_item"))
-			self.m_LastIsUpgradeBtn = canupgrade
-			self.m_LastAbleToBuy = canpurchase
+			local missing_skill = itemtab.SkillRequirement and not MySelf:IsSkillActive(itemtab.SkillRequirement)
+			self.BuyLabel:SetText( !missing_skill and (canupgrade and translate.Get("upgrade_item") or translate.Get("purchase_item")) or translate.ClientFormat("need_x_for_buy",GAMEMODE.Skills[itemtab.SkillRequirement].Name))
+			if not missing_skill then
+				self.m_LastIsUpgradeBtn = canupgrade
+				self.m_LastAbleToBuy = canpurchase
+			end
 			if canupgrade_combined or canpurchase then
 				self:AlphaTo(255, 0.5, 0)
 			else
@@ -369,9 +379,17 @@ local function costcounterThink(self)
 	if itemtab then
 		local cost = GetItemCost(itemtab)
 		if self.m_LastCost ~= cost then
-			self.m_LastCost = cost
-			self:SetText("-"..cost)
-			self:SizeToContents()
+			local missing_skill = itemtab.SkillRequirement and not MySelf:IsSkillActive(itemtab.SkillRequirement)
+			if missing_skill then
+				self:SetTextColor(COLOR_RED)
+				self.m_LastCost = cost
+				self:SetText("NEED "..GAMEMODE.Skills[itemtab.SkillRequirement].PrintName)
+				self:SizeToContents()
+			else
+				self.m_LastCost = cost
+				self:SetText("-"..cost)
+				self:SizeToContents()
+			end
 		end
 	elseif self.m_LastCost then
 		self.m_LastCost = nil

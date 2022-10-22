@@ -58,12 +58,12 @@ function SWEP:PlayerHitUtil(owner, damage, hitent, dmginfo)
 		end
 		local bleedowner = owner:GetStatus("bleed")
 		if bleedowner and bleedowner:IsValid() then
-			bleedowner:AddDamage(damage)
+			bleedowner:AddDamage(damage * 0.4)
 			bleedowner.Damager = hitent
 		else
 			local stat = owner:GiveStatus("bleed")
 			if stat and stat:IsValid() then
-				stat:SetDamage(damage)
+				stat:SetDamage(damage  * 0.4)
 				stat.Damager = owner
 			end
 		end
