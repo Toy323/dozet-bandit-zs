@@ -2275,6 +2275,13 @@ end
 
 function GM:PlayerDeath(pl, inflictor, attacker)
 	self:SaveVault(pl)
+	if pl:IsSkillActive(SKILL_KAMIKAZE) then
+		util.BlastDamage2(pl, pl, pl:GetPos(), 356, 310)
+		pl:EmitSound("c4.explode")
+		local effectdata = EffectData()
+			effectdata:SetOrigin(pl:GetPos())
+		util.Effect("Explosion", effectdata)
+	end
 	if not self:IsRoundModeUnassigned() and pl.NextSpawnTime == nil and not self:IsClassicMode() and not self.SuddenDeath then
 		local mult = 1
 		if self:IsSampleCollectMode() then
@@ -2665,7 +2672,7 @@ function GM:PlayerSpawn(pl)
 		end
 	end
 	pl:RemoveStatus("overridemodel", false, true)
-
+	pl.HealthDead = 0
 	if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) then
 
 
@@ -2686,16 +2693,18 @@ function GM:PlayerSpawn(pl)
 		
 		
 		pl:SetNoTarget(false)
-		
-		pl:SetMaxHealth(100)
 		pl.SkillUsed = false
 		pl:ApplySkills()
+		local current = pl:GetMaxHealth()
+		local new = 100 + math.Clamp(pl.HealthForADR - 100, -99, 1000)
+		pl:SetMaxHealth(new)
+		pl:SetHealth(math.max(1, pl:Health() / current * new))
+
 
 		local nosend = not pl.DidInitPostEntity
 		pl.HumanRepairMultiplier = nil
 		pl.HumanHealMultiplier = nil
 		pl.HumanSpeedAdder = 0
-		pl.HealthDead = 0
 		
 		pl.NoObjectPickup = nil
 		pl.DamageVulnerability = nil
@@ -2736,9 +2745,7 @@ function GM:WaveStarted()
 		if not pl:Alive() then
 			local teamspawns = {}
 			pl:GodDisable()
-			timer.Simple(4,	function() pl:ApplySkills() end)
-
-			pl:SetHealth(pl:GetMaxHealth())
+			timer.Simple(2,	function() pl:ApplySkills() end)
 			teamspawns = team.GetValidSpawnPoint(pl:Team())
 			pl:SetPos(teamspawns[ math.random(#teamspawns) ]:GetPos())
 			pl:SetAbsVelocity(Vector(0,0,0))
@@ -2832,6 +2839,7 @@ function GM:WaveEnded()
 	--self.SuddenDeath = false
 	gamemode.Call("SetWaveStart", CurTime() + self.WaveIntermissionLength)
 	for _, pl in ipairs(player.GetAll()) do
+		pl:SetHealth(pl:GetMaxHealth())
 		timer.Simple(6,function()pl:GodEnable()	pl:ApplySkills()end)
 		if self.SuddenDeath or self:IsClassicMode() then
 			pl:RemoveStatus("spawnbuff", false, true)
@@ -2881,7 +2889,7 @@ function GM:WaveEnded()
 		end
 		pl:PurgeStatusEffects()
 		pl:SetSamples(0)
-		pl:SetHealth(pl:GetMaxHealth())
+
 		local toadd = 6*(1+self:GetWave())
 		if (self:GetCurrentWaveWinner() == TEAM_HUMAN and pl:Team() == TEAM_BANDIT) or (self:GetCurrentWaveWinner() == TEAM_BANDIT and pl:Team() == TEAM_HUMAN) then
 			pl:AddPoints(toadd)

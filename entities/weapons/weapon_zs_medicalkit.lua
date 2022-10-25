@@ -67,7 +67,7 @@ function SWEP:PrimaryAttack()
 
 	if ent and ent:IsValid() and ent:IsPlayer() and ent:Team() == owner:Team() and ent:Alive() and gamemode.Call("PlayerCanBeHealed", ent) then
 		local health, maxhealth = ent:Health(), ent:GetMaxHealth()
-		local multiplier = owner.HumanHealMultiplier or 1
+		local multiplier = owner.MedicHealMul or 1
 		local toheal = math.min(self:GetPrimaryAmmoCount(), math.ceil(math.min(self.Primary.Heal * multiplier, maxhealth - health)))
 		local totake = math.ceil(toheal / multiplier)
 		if toheal > 0 then
@@ -91,7 +91,7 @@ function SWEP:SecondaryAttack()
 	if not self:CanPrimaryAttack() or not gamemode.Call("PlayerCanBeHealed", owner) then return end
 
 	local health, maxhealth = owner:Health(), owner:GetMaxHealth()
-	local multiplier = owner.HumanHealMultiplier or 1
+	local multiplier = owner.MedicHealMul or 1
 	local toheal = math.min(self:GetPrimaryAmmoCount(), math.ceil(math.min(self.Secondary.Heal * multiplier, maxhealth - health)))
 	local totake = math.ceil(toheal / multiplier)
 	if toheal > 0 then

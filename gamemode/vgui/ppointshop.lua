@@ -279,7 +279,7 @@ local function PurchaseButtonThink(self)
 			end
 		end
 		local refusalreasons = ""
-		if canupgrade then
+		if canupgrade thenВ
 			if !ispurchasedweapon then
 				refusalreasons = translate.Get("weapon_is_not_owned")
 			end

@@ -681,7 +681,7 @@ function PANEL:UpdateQuickStats()
 
 	for i=1,3 do
 		local prefix = i == 1 and translate.Get("skill_add_health") or i == 2 and translate.Get("skill_add_speed") or i == 3 and translate.Get("skill_add_bloodarmor")
-		local val = i == 2 and SPEED_NORMAL or i == 1 and 100 or i == 3 and 25
+		local val = i == 2 and SPEED_NORMAL or 100
 		self.QuickStats[i]:SetText(prefix .. " : " .. (val + (skillmodifiers[i] or 0)))
 	end
 end

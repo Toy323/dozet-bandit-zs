@@ -49,7 +49,7 @@ SWEP.UseHands = true
 SWEP.Primary.Sound = Sound("Weapon_Glock.Single")
 SWEP.Primary.Damage = 30
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 0.3
+SWEP.Primary.Delay = 0.12
 SWEP.Recoil = 0.96
 SWEP.Primary.Automatic = false
 SWEP.Primary.ClipSize = 30
@@ -105,7 +105,7 @@ function SWEP:PrimaryAttack()
 	local curtgt = self:GetCurrentLookTarget()
 	if not (curtgt and curtgt:IsValid()) or not self:CheckValidTarget(curtgt) then 
 		self:EmitSound("items/suitchargeno1.wav", 75, 110)
-		self:SetNextPrimaryFire(CurTime() + 0.5)
+		self:SetNextPrimaryFire(CurTime() + 0.12)
 		return
 	end
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
@@ -140,22 +140,24 @@ function SWEP:PrimaryAttack()
 			if not (invuln and invuln:IsValid()) then
 				local tox = curtgt:GetStatus("tox")
 				local getblock = (curtgt:GetActiveWeapon().IsMelee and curtgt:GetActiveWeapon():GetBlock() or curtgt:GetActiveWeapon().IsMelee)
+				local ultra = owner:IsSkillActive(SKILL_INJECTOR)
+				local time = (ultra and 5 or (getblock and (self.ToxDuration * 0.45) or self.ToxDuration))
 				if (tox and tox:IsValid()) then
-					tox:AddTime(getblock and (self.ToxDuration * 0.45) or self.ToxDuration)
+					tox:AddTime(time)
 					tox:SetOwner(curtgt)
-					tox.Damage = self.ToxicDamage
+					tox.Damage = (ultra and 0.1 or self.ToxicDamage)
 					tox.Damager = owner
-					tox.TimeInterval = self.ToxicTick
+					tox.TimeInterval = (ultra and 2 or self.ToxicTick)
 				else
 					stat = curtgt:GiveStatus("tox")
-					stat:SetTime(self.ToxDuration)
+					stat:SetTime(time)
 					stat:SetOwner(curtgt)
-					stat.Damage = self.ToxicDamage
+					stat.Damage = (ultra and 1 or self.ToxicDamage)
 					stat.Damager = owner
-					stat.TimeInterval = self.ToxicTick
+					stat.TimeInterval = (ultra and 1 or self.ToxicTick)
 				end
 				curtgt:AddLegDamage(dmg*2)
-				curtgt:GiveStatus("knockdown", getblock and 0.5 or 2)
+				curtgt:GiveStatus("knockdown", (ultra and 5 or (getblock and 0.5 or 2)))
 			end
 		end
 	end	

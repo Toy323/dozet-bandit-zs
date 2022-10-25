@@ -57,7 +57,7 @@ end
 
 function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 	if hitent:IsValid() then
-		local healstrength = GAMEMODE.NailHealthPerRepair * (self:GetOwner().HumanRepairMultiplier or 1) * (self.HealStrength or 1)
+		local healstrength = GAMEMODE.NailHealthPerRepair * (self:GetOwner().RepairRateMul or 1) * (self.HealStrength or 1)
 		local didrepair = false
 		if hitent.HitByHammer and hitent:HitByHammer(self, self:GetOwner(), tr) then
 			didrepair = true

@@ -135,6 +135,14 @@ SKILL_RELOAD3  = 25
 SKILL_RELOAD4 = 26
 SKILL_RELOAD5 = 27
 SKILL_ULTRADEFENCE = 28
+SKILL_BIO1 = 29
+SKILL_BIO2 = 30
+SKILL_BIO3 = 31
+SKILL_BLOODHELL = 32
+SKILL_KAMIKAZE = 33
+SKILL_QUALITY = 34
+SKILL_INJECTOR = 35
+SKILL_TURRET_BUFF = 36
 
 SKILLMOD_HEALTH = 1
 SKILLMOD_SPEED = 2
@@ -263,6 +271,8 @@ GM:AddSkill(SKILL_RELOAD4, translate.Get("skill_q_r").."IV", BAD.."-9%"..transla
 																-4,			0,					{SKILL_RELOAD5}, TREE_GUNTREE)
 GM:AddSkill(SKILL_RELOAD5, translate.Get("skill_q_r").."V", BAD.."-12%"..translate.Get("meleedamage")..GOOD.."+14%"..translate.Get("r_speed"),
 																-4,			-2,					{SKILL_RELOAD4}, TREE_GUNTREE)
+GM:AddSkill(SKILL_QUALITY, translate.Get("skill_quality"), BAD.."-50%"..translate.Get("meleedamage")..GOOD.."+50%"..translate.Get("w_ac"),
+																-2,			-0,					{SKILL_RELOAD5}, TREE_GUNTREE)
 -- Health Tree
 GM:AddSkill(SKILL_STOIC1, translate.Get("skill_stoici_0"), GOOD..translate.Get("skill_stoici_d1")..BAD.."-7"..translate.Get("speed"),
 																-4,			-6,					{SKILL_NONE, SKILL_STOIC2}, TREE_HEALTHTREE)
@@ -289,6 +299,10 @@ GM:AddSkill(SKILL_SPEED4, translate.Get("skill_speed").."IV", GOOD.."+11"..trans
 																-4,			0,					{SKILL_SPEED5, SKILL_SAFEFALL}, TREE_SPEEDTREE)
 GM:AddSkill(SKILL_SPEED5, translate.Get("skill_speed").."V", GOOD.."+15"..translate.Get("speed")..BAD.."-11"..translate.Get("health"),
 																-4,			-2,					{SKILL_ULTRANIMBLE, SKILL_BACKPEDDLER, SKILL_MOTIONI, SKILL_CARDIOTONIC, SKILL_UNBOUND}, TREE_SPEEDTREE)
+GM:AddSkill(SKILL_BLOODHELL, translate.Get("skill_bloodyman"), GOOD..translate.Get("skill_bloodyman_d1")..BAD.."-45"..translate.Get("health"),
+																-6,			-3,					{SKILL_SPEED5}, TREE_SPEEDTREE)
+GM:AddSkill(SKILL_KAMIKAZE, translate.Get("skill_kamikaze"), GOOD..translate.Get("skill_kamikaze_d1")..BAD..translate.Get("skill_kamikaze_d2")..GOOD.."+66"..translate.Get("speed"),
+																-2,			-3,					{SKILL_SPEED5}, TREE_SPEEDTREE)
 
 
 
@@ -302,14 +316,24 @@ GM:AddSkill(SKILL_SURGEON1, translate.Get("skill_surg").."I", GOOD.."-6%"..trans
 GM:AddSkill(SKILL_SURGEON2, translate.Get("skill_surg").."II", GOOD.."-9%"..translate.Get("med_cool"),
 																-3,			3,					{SKILL_WORTHINESS4, SKILL_SURGEON3}, TREE_SUPPORTTREE)
 GM:AddSkill(SKILL_SURGEON3, translate.Get("skill_surg").."III", GOOD.."-11%"..translate.Get("med_cool"),
-																-2,			0,					{SKILL_U_MEDICCLOUD, SKILL_D_FRAIL, SKILL_SURGEONIV}, TREE_SUPPORTTREE)
+																-2,			0,					{}, TREE_SUPPORTTREE)
+GM:AddSkill(SKILL_BIO1, translate.Get("skill_bio").."I", GOOD.."+6%"..translate.Get("med_effect"),
+																-3,			-1,					{SKILL_NONE,SKILL_BIO2}, TREE_SUPPORTTREE)
+GM:AddSkill(SKILL_BIO2, translate.Get("skill_bio").."II", GOOD.."+7%"..translate.Get("med_effect"),
+																-4,			1,					{SKILL_BIO1,SKILL_BIO3}, TREE_SUPPORTTREE)
+GM:AddSkill(SKILL_BIO3, translate.Get("skill_bio").."III", GOOD.."+15%"..translate.Get("med_effect"),
+																-4,			4,					{SKILL_INJECTOR}, TREE_SUPPORTTREE)
+GM:AddSkill(SKILL_INJECTOR, translate.Get("skill_inj"), GOOD..translate.Get("skill_inj_d1")..BAD..translate.Get("skill_inj_d2"),
+																-4,			5,					{SKILL_BIO3}, TREE_SUPPORTTREE)
 -- Defence Tree
 GM:AddSkill(SKILL_HANDY1, translate.Get("skill_handy").."I", GOOD.."+5%"..translate.Get("repair"),
 																-5,			-6,					{SKILL_NONE, SKILL_HANDY2}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_HANDY2, translate.Get("skill_handy").."II", GOOD.."+6%"..translate.Get("repair"),
-																-5,			-4,					{SKILL_HANDY3, SKILL_U_BLASTTURRET, SKILL_LOADEDHULL}, TREE_BUILDINGTREE)
+																-5,			-4,					{SKILL_HANDY3}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_HANDY3, translate.Get("skill_handy").."III", GOOD.."+8%"..translate.Get("repair"),
-																-5,			-1,					{SKILL_TAUT, SKILL_HAMMERDISCIPLINE, SKILL_D_NOODLEARMS, SKILL_HANDY4}, TREE_BUILDINGTREE)
+																-5,			-1,					{SKILL_TURRET_BUFF}, TREE_BUILDINGTREE)
+GM:AddSkill(SKILL_TURRET_BUFF, translate.Get("skill_t_buff"), GOOD..translate.Get("skill_t_buff_d1"),
+																-6,			-3,					{}, TREE_BUILDINGTREE)
 
 GM:AddSkill(SKILL_BATTLER1, translate.Get("skill_battler").."I", GOOD.."+3%"..translate.Get("meleedamage")..BAD.."-2%"..translate.Get("r_speed"),
 																-6,			-6,					{SKILL_BATTLER2, SKILL_NONE}, TREE_MELEETREE)
@@ -393,8 +417,8 @@ end)
 
 GM:SetSkillModifierFunction(SKILLMOD_BLOODARMOR, function(pl, amount)
 	local oldarmor = pl:GetBloodArmor()
-	local oldcap = pl.MaxBloodArmor or 20
-	local new = 20 + math.Clamp(amount, 0, 1000)
+	local oldcap = pl.MaxBloodArmor or 100
+	local new = 100 + math.Clamp(amount, 0, 1000)
 
 	pl.MaxBloodArmor = new
 
@@ -671,6 +695,9 @@ GM:SetSkillModifierFunction(SKILLMOD_PROJECTILE_DAMAGE_MUL, GM:MkGenericMod("Pro
 GM:SetSkillModifierFunction(SKILLMOD_TURRET_RANGE_MUL, GM:MkGenericMod("TurretRangeMul"))
 GM:SetSkillModifierFunction(SKILLMOD_AIM_SHAKE_MUL, GM:MkGenericMod("AimShakeMul"))
 
+
+GM:AddSkillModifier(SKILL_KAMIKAZE, SKILLMOD_SPEED, 66)
+
 GM:AddSkillModifier(SKILL_SPEED1, SKILLMOD_SPEED, 7)
 GM:AddSkillModifier(SKILL_SPEED1, SKILLMOD_HEALTH, -4)
 
@@ -700,11 +727,16 @@ GM:AddSkillModifier(SKILL_STOIC4, SKILLMOD_SPEED, -11)
 
 GM:AddSkillModifier(SKILL_STOIC5, SKILLMOD_HEALTH, 11)
 GM:AddSkillModifier(SKILL_STOIC5, SKILLMOD_SPEED, -15)
-
+GM:AddSkillModifier(SKILL_BLOODHELL, SKILLMOD_HEALTH, -45)
 
 GM:AddSkillModifier(SKILL_SURGEON1, SKILLMOD_MEDKIT_COOLDOWN_MUL, -0.06)
 GM:AddSkillModifier(SKILL_SURGEON2, SKILLMOD_MEDKIT_COOLDOWN_MUL, -0.09)
 GM:AddSkillModifier(SKILL_SURGEON3, SKILLMOD_MEDKIT_COOLDOWN_MUL, -0.11)
+
+
+GM:AddSkillModifier(SKILL_BIO1, SKILLMOD_MEDKIT_EFFECTIVENESS_MUL, 0.06)
+GM:AddSkillModifier(SKILL_BIO2, SKILLMOD_MEDKIT_COOLDOWN_MUL, 0.07)
+GM:AddSkillModifier(SKILL_BIO3, SKILLMOD_MEDKIT_COOLDOWN_MUL, 0.15)
 
 
 
@@ -724,6 +756,8 @@ GM:AddSkillModifier(SKILL_BATTLER5, SKILLMOD_MELEE_DAMAGE_MUL, 0.13)
 GM:AddSkillModifier(SKILL_GENERATOR, SKILLMOD_MELEE_DAMAGE_MUL, -0.10)
 GM:AddSkillModifier(SKILL_GENERATOR, SKILLMOD_HEALTH, 30)
 
+GM:AddSkillModifier(SKILL_QUALITY, SKILLMOD_MELEE_DAMAGE_MUL, -0.50)
+GM:AddSkillModifier(SKILL_QUALITY, SKILLMOD_AIMSPREAD_MUL, -0.50)
 
 
 GM:AddSkillModifier(SKILL_BATTLER1, SKILLMOD_RELOADSPEED_MUL, -0.02)

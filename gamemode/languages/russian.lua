@@ -1391,7 +1391,7 @@ LANGUAGE.hud_uu_sp = "Неиспользованных Скилл Поинтов
 
 LANGUAGE.hud_lvl_max = "Уровень МАКСИМАЛЬНЫЙ // Реморт "
 LANGUAGE.hud_r_lvl = "Уровень %d "
-LANGUAGE.skill_add_bloodarmor = "Кровавая Броня"
+LANGUAGE.skill_add_bloodarmor = "Кров.Брони"
 LANGUAGE.skill_add_speed = "Скорость"
 LANGUAGE.skill_add_health = "Здоровья"
 

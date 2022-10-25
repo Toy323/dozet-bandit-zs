@@ -70,12 +70,7 @@ net.Receive("zs_skills_remort", function(length, pl)
 end)
 
 net.Receive("zs_skills_reset", function(length, pl)
-
 	pl:SkillsReset()
-
-	net.Start("zs_skills_nextreset")
-		net.WriteUInt(pl.NextSkillReset - time, 32)
-	net.Send(pl)
 end)
 
 net.Receive("zs_skills_refunded", function(length, pl)

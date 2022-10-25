@@ -43,19 +43,7 @@ end
 function GM:SkillCanUnlock(pl, skillid, skilllist)
 	local skill = self.Skills[skillid]
 	if skill then
-		if skill.Amulet then
-			return true
-		end
-		if skill.RemortLevel and pl:GetZSRemortLevel() < skill.RemortLevel then
-			return false
-		end
 
-		if skill.LevelReq and pl:GetZSLevel() < skill.LevelReq then
-			return false
-		end
-		if skill.RemortReq and pl:GetZSRemortLevel() < skill.RemortReq then
-			return false
-		end
 
 		local connections = skill.Connections
 
@@ -129,7 +117,6 @@ end
 -- These are done on human spawn.
 function meta:ApplySkills(override)
 	if GAMEMODE.ZombieEscape or GAMEMODE.ClassicMode then return end -- Skills not used on these modes
-	if self.SkillUsed then return end
 	local allskills = GAMEMODE.Skills
 	local desired = override or self:Alive() and self:Team() == TEAM_HUMAN and self:GetDesiredActiveSkills() or {}
 	local current_active = self:GetActiveSkills()

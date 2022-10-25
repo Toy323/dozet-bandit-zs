@@ -115,6 +115,7 @@ function SWEP:GetCone()
 	if self:GetIronsights() then 
 		multiplier = multiplier - 0.1 
 	end
+	local multiplier = multiplier * (self:GetOwner().AimSpreadMul or 1)
 
 	return (basecone + self:GetConeAdder()) + conediff*math.max(multiplier,0)
 end

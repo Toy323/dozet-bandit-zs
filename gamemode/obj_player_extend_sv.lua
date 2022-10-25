@@ -242,6 +242,12 @@ function meta:ProcessDamage(dmginfo)
 		if self:IsSkillActive(SKILL_ULTRADEFENCE) then
 			dmginfo:ScaleDamage(0.75)
 		end
+		if attacker:IsSkillActive(SKILL_KAMIKAZE) then
+			dmginfo:ScaleDamage(0.40)
+		end
+		if self:IsSkillActive(SKILL_KAMIKAZE) then
+			dmginfo:ScaleDamage(2)
+		end
 		if self:GetBodyArmor() and self:GetBodyArmor() > 0 then
 			local ratio = 0.75
 			if dmginfo:IsDamageType(DMG_BLAST) then

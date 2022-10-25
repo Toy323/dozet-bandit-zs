@@ -121,7 +121,7 @@ function ENT:FireTurret(src, dir)
 		local curammo = self:GetAmmo()
 		if curammo > 0 then
 			self:UpdateCone()
-			self:SetNextFire(CurTime() + 0.03)
+			self:SetNextFire(CurTime() + (self:GetObjectOwner():IsSkillActive(SKILL_TURRET_BUFF) and 0.01 or 0.12))
 			self:SetAmmo(curammo - 1)
 			self:StartBulletKnockback()
 			self:PlayShootSound()
