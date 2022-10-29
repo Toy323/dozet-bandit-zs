@@ -317,7 +317,7 @@ LANGUAGE.shopitem_bodyarmor_desc					= "On purchase, wear additional military gr
 LANGUAGE.shopitem_bodyarmor_alreadyhave				= "You are already wearing full body armor."
 
 LANGUAGE.shopitem_adrenaline_name					= "Adrenaline"
-LANGUAGE.shopitem_adrenaline_desc					= "On purchase, inject adrenaline that increases movement speed by 20, while lowering maximum health by 10.\nThis thing heal!"
+LANGUAGE.shopitem_adrenaline_desc					= "On purchase, inject adrenaline that increases movement speed by 5, while lowering maximum health by 10.\nThis thing heal!"
 LANGUAGE.shopitem_adrenaline_toomuch				= "Further adrenaline usage is fatal."
 
 LANGUAGE.shopitem_ammo_name							= "Ammunition"

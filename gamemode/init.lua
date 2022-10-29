@@ -1270,8 +1270,8 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.PointsSpent = 0
 	pl.CarryOverCommision = 0
 	pl.BackdoorsUsed = 0
-	pl:ApplySkills()
 	self:LoadVault(pl)
+	pl:ApplySkills()
 
 	pl.SpawnedTime = CurTime()
 	if pl:GetInfo("zsb_spectator") == "1" then

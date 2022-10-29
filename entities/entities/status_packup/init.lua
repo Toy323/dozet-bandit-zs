@@ -19,6 +19,7 @@ function ENT:Think()
 	local packer = self:GetOwner()
 	local owner = packer
 	local pack = self:GetPackUpEntity()
+	if !pack:IsValid() then return self:Remove() end
 	local eyepos = owner:EyePos()
 	local aimvec = owner:GetAimVector()
 	local point = pack:NearestPoint(eyepos)

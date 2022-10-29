@@ -174,7 +174,7 @@ function SWEP:Reload()
 
 		self:GetOwner():DoReloadEvent()
 		self.IdleAnimation = CurTime() + self:SequenceDuration()
-		self:SetNextReload(self.IdleAnimation)
+		self:SetNextReload(self.IdleAnimation * self:GetOwner().ReloadSpeedMultiplier)
 		self:EmitReloadSound()
 	end
 end

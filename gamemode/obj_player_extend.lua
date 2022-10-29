@@ -112,7 +112,7 @@ function meta:Dismember(dismembermenttype)
 end
 
 function meta:ApplyAdrenaline()
-	self.HumanSpeedAdder = (self.HumanSpeedAdder or 0) +20
+	self.HumanSpeedAdder = (self.HumanSpeedAdder or 0) +5
 	self:ResetSpeed() 
 	if SERVER then 
 		self:SetBloodArmor(self:GetBloodArmor() + 15)
@@ -126,7 +126,7 @@ end
 
 function meta:WearBodyArmor()
 	if self:GetBodyArmor() == 0 then
-		self.HumanSpeedAdder = (self.HumanSpeedAdder or 0) -25
+		self.HumanSpeedAdder = (self.HumanSpeedAdder or 0) -15
 	end
 	self:ResetSpeed() 
 	self:SetBodyArmor((self:GetBodyArmor() or 0)+100 - self:GetBloodArmor())

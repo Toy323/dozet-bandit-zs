@@ -47,7 +47,6 @@ function GM:LoadVault(pl)
 		if contents and #contents > 0 then
 			contents = Deserialize(contents)
 			if contents then
-				pl.PointsVault = contents.Points
 
 				if contents.RemortLevel then
 					pl:SetZSRemortLevel(contents.RemortLevel)
@@ -61,35 +60,15 @@ function GM:LoadVault(pl)
 				if contents.DesiredActiveSkills then
 					pl:SetDesiredActiveSkills(util.DecompressBitTable(contents.DesiredActiveSkills), true)
 				end
-				if contents.NextSkillReset then
-					pl.NextSkillReset = contents.NextSkillReset
-				end
 				if not contents.Version or contents.Version < self.SkillTreeVersion then
 					pl:SkillsReset()
 					pl.SkillsRefunded = true
-				end
-				if contents.UpgradableSkills then
-					pl:SetUpgradeSkills(util.DecompressBitTable(contents.UpgradableSkills), true)
-				end
-				if contents.MeleeMastery then
-					pl.MeleeMastery = contents.MeleeMastery
-				end
-				if contents.GunMastery then
-					pl.GunMastery = contents.GunMastery
-				end
-				if contents.MedicMastery then
-					pl.MedicMastery = contents.MedicMastery
-				end
-				if contents.Zban then
-					pl.Zban = contents.Zban
 				end
 
 				pl.SkillVersion = self.SkillTreeVersion
 			end
 		end
 	end
-
-	pl.PointsVault = pl.PointsVault or 0
 end
 
 function GM:PlayerReadyVault(pl)
@@ -127,16 +106,11 @@ function GM:SaveVault(pl)
 	if not self:ShouldSaveVault(pl) then return end
 
 	local tosave = {
-		Points = math.floor(pl.PointsVault),
 		XP = pl:GetZSXP(),
 		RemortLevel = pl:GetZSRemortLevel(),
 		DesiredActiveSkills = util.CompressBitTable(pl:GetDesiredActiveSkills()),
 		UnlockedSkills = util.CompressBitTable(pl:GetUnlockedSkills()),
-		Version = pl.SkillVersion or self.SkillTreeVersion,
-		MedicMastery = pl.MedicMastery,
-		MeleeMastery = pl.MeleeMastery,
-		GunMastery = pl.GunMastery,
-		Zban = (pl.Zban or false)
+		Version = pl.SkillVersion or self.SkillTreeVersion
 	}
 
 	if pl.NextSkillReset and os.time() < pl.NextSkillReset then
