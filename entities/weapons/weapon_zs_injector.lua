@@ -141,7 +141,7 @@ function SWEP:PrimaryAttack()
 				local tox = curtgt:GetStatus("tox")
 				local getblock = (curtgt:GetActiveWeapon().IsMelee and curtgt:GetActiveWeapon():GetBlock() or curtgt:GetActiveWeapon().IsMelee)
 				local ultra = owner:IsSkillActive(SKILL_INJECTOR)
-				local time = (ultra and 5 or (getblock and (self.ToxDuration * 0.45) or self.ToxDuration))
+				local time = (ultra and 4 or (getblock and (self.ToxDuration * 0.45) or self.ToxDuration))
 				if (tox and tox:IsValid()) then
 					tox:AddTime(time)
 					tox:SetOwner(curtgt)

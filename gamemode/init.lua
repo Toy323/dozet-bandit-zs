@@ -2890,7 +2890,7 @@ function GM:WaveEnded()
 		pl:PurgeStatusEffects()
 		pl:SetSamples(0)
 
-		local toadd = 6*(1+self:GetWave())
+		local toadd = 8*(1+self:GetWave())
 		if (self:GetCurrentWaveWinner() == TEAM_HUMAN and pl:Team() == TEAM_BANDIT) or (self:GetCurrentWaveWinner() == TEAM_BANDIT and pl:Team() == TEAM_HUMAN) then
 			pl:AddPoints(toadd)
 			pl:PrintTranslatedMessage(HUD_PRINTTALK, "loser_points_added", toadd)
@@ -2922,6 +2922,8 @@ function GM:WaveEnded()
 	util.RemoveAll("prop_sampledepositterminal")
 	local deployables = ents.FindByClass("prop_drone")
 	table.Add(deployables, ents.FindByClass("prop_manhack"))
+	table.Add(deployables, ents.FindByClass("prop_gunturret"))
+	table.Add(deployables, ents.FindByClass("prop_detpack"))
 	for _, ent in pairs(deployables) do
 		if ent.GetOwner and ent:GetOwner():IsPlayer() and (ent:GetOwner():Team() == TEAM_BANDIT or ent:GetOwner():Team() == TEAM_HUMAN) then
 			ent:OnPackedUp(ent:GetOwner())

@@ -65,6 +65,7 @@ function SWEP:PlayHitFleshSound()
 	self:EmitSound("physics/body/body_medium_break"..math.random(2, 4)..".wav")
 end
 function SWEP:SecondaryAttack()
+	if self:GetOwner():HasGodMode() then return end
 	timer.Create("lmao", 0.05, 1, function() if SERVER then self:GetOwner():TakeDamage(99, self:GetOwner(), self) end
 	self.MeleeDamage = self.MeleeDamage + 21
 	local effectdata = EffectData()
