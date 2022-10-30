@@ -1348,7 +1348,7 @@ function GM:PlayerInitialSpawnRound(pl)
 			table.ForceInsert(pl.ClassicModeInsuredWeps,pl:GetWeaponMelee())
 		end
 		if (self:IsClassicMode() or self.SuddenDeath) and self:GetWaveActive() then
-			timer.Simple(0.1,pl:Kill())
+			timer.Simple(0.1, function() if pl:IsValid() then pl:Kill() end end)
 			return
 		end
 	end
@@ -2231,7 +2231,7 @@ function GM:KeyPress(pl, key)
 		end
 	elseif key == IN_ZOOM and pl:IsSkillActive(SKILL_STARDUST) then
 		if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl.NextStarC <= CurTime() then
-			pl.NextStarC = CurTime() + 3
+			pl.NextStarC = CurTime() + 1.2
 			pl:SetPos(pl:GetStarDust())
 		end
 	end

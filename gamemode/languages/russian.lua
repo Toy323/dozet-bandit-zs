@@ -886,6 +886,10 @@ LANGUAGE.skill_generator = "Авто-кровь"
 LANGUAGE.skill_generator_d1 = "Генерирует кровавку каждые 5 секунд\n"
 LANGUAGE.skill_crusader = "Крестоносец"
 LANGUAGE.skill_crusader_d1 = "Дает бафф на защиту ближайшим союзникам.\n"
+
+LANGUAGE.skill_module_autoscan = "Автоскан"
+LANGUAGE.skill_module_autoscan_d1 = "Можно видеть ближайших игроков.\n"
+LANGUAGE.skill_module_autoscan_d2 = "+150% Задержка сканнера."
 -- стрелок
 
 LANGUAGE.skill_uncorrupt = "Очиститель"

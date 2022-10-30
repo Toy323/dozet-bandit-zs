@@ -146,6 +146,7 @@ SKILL_TURRET_BUFF = 36
 SKILL_REPULLER = 37
 SKILL_STARDUST = 38
 SKILL_CRUSADER = 39
+SKILL_AUTOSCAN = 40
 
 SKILLMOD_HEALTH = 1
 SKILLMOD_SPEED = 2
@@ -348,7 +349,10 @@ GM:AddSkill(SKILL_HANDY3, translate.Get("skill_handy").."III", GOOD.."+8%"..tran
 GM:AddSkill(SKILL_STARDUST, translate.Get("skill_stardust"), GOOD..translate.Get("skill_stardust_d1")..BAD..translate.Get("skill_stardust_d2"),
 																-4,			1,					{}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_TURRET_BUFF, translate.Get("skill_t_buff"), GOOD..translate.Get("skill_t_buff_d1"),
-																-6,			-3,					{}, TREE_BUILDINGTREE)
+																-6,			-3,					{SKILL_AUTOSCAN}, TREE_BUILDINGTREE)
+GM:AddSkill(SKILL_AUTOSCAN, translate.Get("skill_module_autoscan"), GOOD..translate.Get("skill_module_autoscan_d1")..BAD..translate.Get("skill_module_autoscan_d2"),
+																-8,			-5,					{}, TREE_BUILDINGTREE)
+
 
 GM:AddSkill(SKILL_BATTLER1, translate.Get("skill_battler").."I", GOOD.."+3%"..translate.Get("meleedamage")..BAD.."-2%"..translate.Get("r_speed"),
 																-6,			-6,					{SKILL_BATTLER2, SKILL_NONE}, TREE_MELEETREE)

@@ -615,6 +615,7 @@ function GM:_PostDrawTranslucentRenderables()
 		self:DrawPointWorldHints()
 		self:DrawWorldHints()
 		self:DrawStarIndicators()
+		self:DrawNearestEnemy()
 	end
 	if self.ShowIndicators then
 		local plys = team.GetPlayers(MySelf:Team())

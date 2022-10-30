@@ -916,6 +916,11 @@ LANGUAGE.skill_stardust = "Stardust"
 LANGUAGE.skill_stardust_d1 = "Can teleport in old position(3 seconds).\n"
 LANGUAGE.skill_stardust_d2 = "Phasing is disabled."
 
+
+LANGUAGE.skill_module_autoscan = "Autoscan"
+LANGUAGE.skill_module_autoscan_d1 = "Can see nearest players.\n"
+LANGUAGE.skill_module_autoscan_d2 = "+150% Scanner delay."
+
 LANGUAGE.skill_h_disp = "Hammer Discipline "
 LANGUAGE.skill_t_buff = "Turret AI"
 LANGUAGE.skill_t_buff_d1 = "Turret shoots faster."

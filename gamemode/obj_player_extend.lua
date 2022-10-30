@@ -753,7 +753,7 @@ function meta:PlayGiveAmmoSound()
 end
 
 function meta:PlayDeathSound()
-	local snds = GAMEMODE.VoiceSets[self.VoiceSet].DeathSounds
+	local snds = GAMEMODE.VoiceSets[self.VoiceSet].DeathSounds or "npc/fast_zombie/idle1.wav"
 	if snds then
 		self:EmitSound(snds[math.random(1, #snds)])
 	end

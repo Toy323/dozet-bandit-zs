@@ -57,7 +57,11 @@ function SWEP:Reload()
 end
 
 function SWEP:Think()
-	if CLIENT and GAMEMODE:GetWaveActive() and self.LastScan + self.ScanDelay <= CurTime() then
+	local mul = 1
+	if self:GetOwner():IsSkillActive(SKILL_AUTOSCAN) then
+		mul = mul + 1.5
+	end
+	if CLIENT and GAMEMODE:GetWaveActive() and self.LastScan + (self.ScanDelay * mul ) <= CurTime() then
 		self.targets = {}
 		self.targets1 = {}
 		local toscan = player.GetAllActive()
@@ -90,13 +94,16 @@ function SWEP:DrawHUD()
 			end
 		end
 	end
-
+	local mul = 1
+	if self:GetOwner():IsSkillActive(SKILL_AUTOSCAN) then
+		mul = mul + 1.5
+	end
 	local scrW = ScrW()
 	local scrH = ScrH()
 	local width = 200
 	local height = 20
 	local x, y = ScrW() - width - 32, ScrH() - height - 72
-	local ratio = math.Clamp((CurTime() - self.LastScan) / self.ScanDelay,0,1)
+	local ratio = math.Clamp((CurTime() - self.LastScan) / self.ScanDelay / mul,0,1)
 	
 	surface.SetDrawColor(5, 5, 5, 180)
 	surface.DrawRect(x, y, width, height)
