@@ -784,7 +784,7 @@ function GM:Think()
 		end
 		if pl:IsSkillActive(SKILL_CRUSADER) then
 			for _, ent in pairs(ents.FindInSphere(pl:GetPos(), 128)) do
-				if ent ~= pl and ent:IsValid() and ent:IsPlayer() then
+				if ent ~= pl and ent:IsValid() and ent:IsPlayer() and ent:Team() == pl:Team() then
 				   local buff = ent:GiveStatus("crusader_buff", 0.2)
 				   buff.Applier = pl
 				end

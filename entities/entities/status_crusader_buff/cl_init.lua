@@ -5,9 +5,6 @@ ENT.NextEmit = 0
 function ENT:Draw()
 	local owner = self:GetOwner()
 	if not owner:IsValid() or owner == MySelf and not owner:ShouldDrawLocalPlayer() then return end
-	if owner:GetZombieClassTable().IgnoreTargetAssist then return end
-
-	if owner.SpawnProtection then return end
 
 	if CurTime() < self.NextEmit then return end
 	self.NextEmit = CurTime() + 0.5
