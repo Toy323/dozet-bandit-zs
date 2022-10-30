@@ -145,6 +145,7 @@ SKILL_INJECTOR = 35
 SKILL_TURRET_BUFF = 36
 SKILL_REPULLER = 37
 SKILL_STARDUST = 38
+SKILL_CRUSADER = 39
 
 SKILLMOD_HEALTH = 1
 SKILLMOD_SPEED = 2
@@ -358,7 +359,9 @@ GM:AddSkill(SKILL_BATTLER3, translate.Get("skill_battler").."III", GOOD.."+8%"..
 GM:AddSkill(SKILL_BATTLER4, translate.Get("skill_battler").."IV", GOOD.."+9%"..translate.Get("meleedamage")..BAD.."-13%"..translate.Get("r_speed"),
 																-2,			0,					{SKILL_BATTLER5}, TREE_MELEETREE)
 GM:AddSkill(SKILL_BATTLER5, translate.Get("skill_battler").."V", GOOD.."+13%"..translate.Get("meleedamage")..BAD.."-16%"..translate.Get("r_speed"),
-																0,			2,					{SKILL_GENERATOR}, TREE_MELEETREE)
+																0,			2,					{SKILL_GENERATOR, SKILL_CRUSADER}, TREE_MELEETREE)
+GM:AddSkill(SKILL_CRUSADER, translate.Get("skill_crusader"), BAD.."-50%"..translate.Get("meleedamage")..GOOD..translate.Get("skill_crusader_d1"),
+																0,			4,					{}, TREE_MELEETREE)
 GM:AddSkill(SKILL_GENERATOR, translate.Get("skill_generator"), BAD.."-10%"..translate.Get("meleedamage")..GOOD..translate.Get("skill_generator_d1").."-30"..translate.Get("health"),
 																0,			1,					{}, TREE_MELEETREE)
 
@@ -797,3 +800,5 @@ GM:AddSkillModifier(SKILL_RELOAD4, SKILLMOD_RELOADSPEED_MUL, 0.12)
 GM:AddSkillModifier(SKILL_RELOAD5, SKILLMOD_RELOADSPEED_MUL, 0.14)
 
 GM:AddSkillModifier(SKILL_ULTRADEFENCE, SKILLMOD_SPEED, -70)
+
+GM:AddSkillModifier(SKILL_CRUSADER, SKILLMOD_MELEE_DAMAGE_MUL, -0.5)

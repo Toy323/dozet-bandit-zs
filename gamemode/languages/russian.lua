@@ -884,7 +884,8 @@ LANGUAGE.pshop_magic = "Магия"
 LANGUAGE.skill_battler = "Боец "
 LANGUAGE.skill_generator = "Авто-кровь"
 LANGUAGE.skill_generator_d1 = "Генерирует кровавку каждые 5 секунд\n"
-
+LANGUAGE.skill_crusader = "Крестоносец"
+LANGUAGE.skill_crusader_d1 = "Дает бафф на защиту ближайшим союзникам.\n"
 -- стрелок
 
 LANGUAGE.skill_uncorrupt = "Очиститель"

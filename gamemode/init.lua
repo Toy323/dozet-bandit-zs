@@ -782,6 +782,14 @@ function GM:Think()
 			pl.Think_Stardust = CurTime() + 2
 			timer.Simple(1, function() pl:UpdateStarDust(pl:GetPos()) end)
 		end
+		if pl:IsSkillActive(SKILL_CRUSADER) then
+			for _, ent in pairs(ents.FindInSphere(pl:GetPos(), 128)) do
+				if ent ~= pl and ent:IsValid() and ent:IsPlayer() then
+				   local buff = ent:GiveStatus("crusader_buff", 0.2)
+				   buff.Applier = pl
+				end
+			end
+		end
 		if pl:IsSpectator() then
 			self:SpectatorThink(pl)
 		elseif not self.RoundEnded and not self:GetWaveActive() and not self:GetWaveStart() ~= -1 and self:GetWaveStart() > time then

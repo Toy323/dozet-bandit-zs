@@ -882,7 +882,8 @@ LANGUAGE.spoint = " Skill points!\n"
 LANGUAGE.skill_battler = "Battler "
 LANGUAGE.skill_generator = "Auto-Blood"
 LANGUAGE.skill_generator_d1 = "Generate blood armor every 5 seconds\n"
-
+LANGUAGE.skill_crusader = "Crusader"
+LANGUAGE.skill_crusader_d1 = "Give defence boost nearest friends.\n"
 --shooter
 
 LANGUAGE.skill_bproof = "Blast Proof"
