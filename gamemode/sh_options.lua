@@ -75,7 +75,7 @@ GM:AddPointShopWeapon(0,"crklr", ITEMCAT_GUNS, 15, "weapon_zs_crackler")
 GM:AddPointShopWeapon(0,"stbbr", ITEMCAT_GUNS, 15, "weapon_zs_stubber")
 GM:AddPointShopWeapon(0,"doublebarrel", ITEMCAT_GUNS, 15, "weapon_zs_doublebarrel")
 GM:AddPointShopWeapon(0,"jabbr", ITEMCAT_GUNS, 20, "weapon_zs_injector")
-GM:AddPointShopWeapon(0,"nailgun", ITEMCAT_GUNS, 50, "weapon_zs_nailgun")
+GM:AddPointShopWeapon(0,"nailgun", ITEMCAT_GUNS, 50, "weapon_zs_nailgun").SkillRequirement = SKILL_HANDY3
 
 local item = GM:AddPointShopWeapon(1,"deagle", ITEMCAT_GUNS, 65, "weapon_zs_deagle")
 GM:AddWeaponPrerequisite(item,"btlax")
@@ -251,6 +251,7 @@ GM:AddWeaponPrerequisite(item,"classic")
 
 
 local item = GM:AddPointShopWeapon(0,"crphmr", ITEMCAT_MELEE, 35, "weapon_zs_hammer")
+item.SkillRequirement = SKILL_HANDY3
 local item = GM:AddPointShopWeapon(0,"wrench", ITEMCAT_MELEE, 40, "weapon_zs_wrench")
 item.NoClassicMode = true
 item.NoSampleCollectMode = true
@@ -332,7 +333,6 @@ item.Countables = {"prop_gunturret"}
 --item.NoClassicMode = true
 
 local item = GM:AddPointShopWeapon(nil,"manhack", ITEMCAT_TOOLS, 55, "weapon_zs_manhack")
-item.SkillRequirement = SKILL_HANDY3
 item.Countables = {"prop_manhack","weapon_zs_manhackcontrol"}
 item.ControllerWep = "weapon_zs_manhackcontrol"
 --item.NoClassicMode = true

@@ -778,6 +778,10 @@ function GM:Think()
 			pl.BloodRegen = CurTime() + 5
 			pl:SetBloodArmor(math.min(100,pl:GetBloodArmor() + 3))
 		end
+		if pl:IsSkillActive(SKILL_STARDUST) and pl.Think_Stardust <= CurTime() then
+			pl.Think_Stardust = CurTime() + 2
+			timer.Simple(1, function() pl:UpdateStarDust(pl:GetPos()) end)
+		end
 		if pl:IsSpectator() then
 			self:SpectatorThink(pl)
 		elseif not self.RoundEnded and not self:GetWaveActive() and not self:GetWaveStart() ~= -1 and self:GetWaveStart() > time then
@@ -1270,6 +1274,9 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.PointsSpent = 0
 	pl.CarryOverCommision = 0
 	pl.BackdoorsUsed = 0
+	pl:UpdateStarDust((pl:GetPos() or table.Random(player.GetAll()):GetPos() or Vector(0,0,0)))
+	pl.Think_Stardust = 0
+	pl.NextStarC = 0
 	self:LoadVault(pl)
 	pl:ApplySkills()
 
@@ -1591,7 +1598,11 @@ function GM:PlayerPurchasePointshopItem(pl,itemtab,slot)
 		pl:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
 		return
 	end
-	
+	if itemtab.SkillRequirement and not pl:IsSkillActive(itemtab.SkillRequirement) then
+		pl:CenterNotify(COLOR_RED, translate.ClientFormat(pl, "x_requires_a_skill_you_dont_have", self.Skills[itemtab.SkillRequirement].Name))
+		pl:SendLua("surface.PlaySound(\"buttons/button10.wav\")")
+		return
+	end
 	if not self:IsClassicMode() then
 		if slot == WEAPONLOADOUT_NULL or not slot then
 			if not pl:Alive() then
@@ -1674,7 +1685,7 @@ function GM:PlayerPurchasePointshopItem(pl,itemtab,slot)
 			return
 		end
 	end
-	
+
 	local cost = GetItemCost(itemtab)
 	pl:TakePoints(cost)
 	pl.PointsSpent = pl.PointsSpent + cost
@@ -1699,10 +1710,7 @@ concommand.Add("zsb_pointsshopbuy", function(sender, command, arguments)
 	local id = arguments[1]
 	local slot = tonumber(arguments[2])
 	local itemtab = FindItem(id)
-	if itemtab.SkillRequirement and not sender:IsSkillActive(itemtab.SkillRequirement) then
-		GAMEMODE:ConCommandErrorMessage(sender, translate.ClientFormat(sender, "x_requires_a_skill_you_dont_have", itemtab.Name))
-		return
-	end
+
 
 	if not GAMEMODE:IsRoundModeUnassigned() then
 		gamemode.Call("PlayerPurchasePointshopItem",sender,itemtab,slot)
@@ -2209,9 +2217,14 @@ function GM:KeyPress(pl, key)
 			end
 		end
 	--elseif key == IN_WALK then
-	elseif key == IN_ZOOM then
+	elseif key == IN_ZOOM and !pl:IsSkillActive(SKILL_STARDUST) then
 		if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl:IsOnGround() or pl:GetMoveType() == MOVETYPE_LADDER then
 			pl:SetBarricadeGhosting(true)
+		end
+	elseif key == IN_ZOOM and pl:IsSkillActive(SKILL_STARDUST) then
+		if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl.NextStarC <= CurTime() then
+			pl.NextStarC = CurTime() + 3
+			pl:SetPos(pl:GetStarDust())
 		end
 	end
 end

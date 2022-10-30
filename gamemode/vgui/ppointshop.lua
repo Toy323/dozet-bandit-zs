@@ -82,7 +82,7 @@ local function ItemButtonThink(self)
 			local missing_skill = itemtab.SkillRequirement and not MySelf:IsSkillActive(itemtab.SkillRequirement)
 			if missing_skill then
 				self.PriceLabel:SetTextColor(COLOR_RED)
-				self.PriceLabel:SetText(GAMEMODE.Skills[itemtab.SkillRequirement].PrintName)
+				self.PriceLabel:SetText(GAMEMODE.Skills[itemtab.SkillRequirement].Name)
 				self.m_LastPrice = newcost
 			else
 				self.PriceLabel:SetText(translate.Format("x_points_abbreviated",tostring(math.ceil(newcost))))
@@ -383,7 +383,7 @@ local function costcounterThink(self)
 			if missing_skill then
 				self:SetTextColor(COLOR_RED)
 				self.m_LastCost = cost
-				self:SetText("NEED "..GAMEMODE.Skills[itemtab.SkillRequirement].PrintName)
+				self:SetText("NEED "..GAMEMODE.Skills[itemtab.SkillRequirement].Name)
 				self:SizeToContents()
 			else
 				self.m_LastCost = cost

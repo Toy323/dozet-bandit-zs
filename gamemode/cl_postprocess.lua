@@ -151,7 +151,39 @@ function GM:_PostDrawOpaqueRenderables()
 			end
 		end
 end
+function GM:DrawStarIndicators()
+	if not MySelf:IsSkillActive(SKILL_STARDUST) or MySelf:KeyDown(IN_SPEED) then return end
 
+	local eyepos = EyePos()
+	local range, dist, healthfrac, pos, size
+
+		range = 8040
+		local vec = MySelf:GetStarDust()
+		dist = vec:DistToSqr(eyepos)
+		
+
+			pos = vec
+
+		local hcolor = COLOR_WHITE
+		local ang = EyeAngles()
+		ang:RotateAroundAxis(ang:Up(), -90)
+		ang:RotateAroundAxis(ang:Forward(), 90)
+		local nearest = vec
+		local norm = nearest - eyepos
+		norm:Normalize()
+		local dot = EyeVector():Dot(norm)
+		local dotsq = dot * dot
+		local vis = math.Clamp((dotsq * dotsq) - 0.1, 0, 1)
+	
+			pos.z = pos.z + 64
+			render_SetMaterial(matGlow)
+			render_DrawSprite(pos, 13, 13, Color(41,38,218))
+			size = 50 - 21
+			if size > 0 then
+				render_DrawSprite(pos, size * 1.5, size, Color(41,38,218))
+				render_DrawSprite(pos, size, size * 1.5, Color(41,38,218))
+			end
+end
 local CModWhiteOut = {
 	["$pp_colour_addr"] = 0,
 	["$pp_colour_addg"] = 0,

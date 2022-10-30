@@ -69,8 +69,8 @@ function SWEP:SecondaryAttack()
 	timer.Create("lmao", 0.05, 1, function() if SERVER then self:GetOwner():TakeDamage(99, self:GetOwner(), self) end
 	self.MeleeDamage = self.MeleeDamage + 21
 	local effectdata = EffectData()
-	effectdata:SetOrigin(self:GetOwner():GetPos())
-util.Effect("explosion_bonemesh", effectdata)
+		effectdata:SetOrigin(self:GetOwner():GetPos())
+	util.Effect("explosion_bonemesh", effectdata)
 	end)
 end
 function SWEP:PlayerHitUtil(owner, damage, hitent, dmginfo)
@@ -78,7 +78,7 @@ function SWEP:PlayerHitUtil(owner, damage, hitent, dmginfo)
 		if hitent:WouldDieFrom(damage, dmginfo:GetDamagePosition()) then
             owner:SetHealth(180)	
 		else
-            owner:SetHealth(owner:Health()+hitent:Health() * 0.2)	
+            owner:SetHealth(owner:Health()+hitent:Health() * 0.05)	
 		end
 	end
 end

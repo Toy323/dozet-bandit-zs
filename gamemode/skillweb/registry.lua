@@ -143,6 +143,8 @@ SKILL_KAMIKAZE = 33
 SKILL_QUALITY = 34
 SKILL_INJECTOR = 35
 SKILL_TURRET_BUFF = 36
+SKILL_REPULLER = 37
+SKILL_STARDUST = 38
 
 SKILLMOD_HEALTH = 1
 SKILLMOD_SPEED = 2
@@ -259,7 +261,15 @@ local GOOD = "^"..COLORID_GREEN
 local BAD = "^"..COLORID_RED
 local NEUTRAL = "^"..COLORID_GRAY
 local PURPLE = "^"..COLORID_PURPLE
---
+--[[
+Как делать скиллы?
+Вот пример
+GM:AddSkill(Айди (SKILL_ИМЯ), translate.Get("skill_имя") - перевод, BAD- цвет.."-1%"..translate.Get("meleedamage" либо "skill_имя_d1")- перевод..GOOD- цвет.."+7%" -- нее забываем убрать это когда там не meleedamage или что-то иное..translate.Get("meleedamage" либо "skill_имя_d2"),
+																-4,			6, эти цифры ниже расположение в скилл-ветке					{SKILL_NONE, SKILL_RELOAD2} - к чему привязаны эти скиллы, TREE_GUNTREE - какая ветка)
+реекомендую ниже скилла добавить его модификаторы а не в самом низу
+
+GM:AddSkillModifier(SKILL_ИМЯ, SKILLMOD_ИМЯ_МОДИФИКАТОРА, СКОЛЬКО ДАЕТСЯ)
+]]
 GM:AddSkill(SKILL_RELOAD1, translate.Get("skill_q_r").."I", BAD.."-1%"..translate.Get("meleedamage")..GOOD.."+7%"..translate.Get("r_speed"),
 																-4,			6,					{SKILL_NONE, SKILL_RELOAD2}, TREE_GUNTREE)
 
@@ -271,8 +281,10 @@ GM:AddSkill(SKILL_RELOAD4, translate.Get("skill_q_r").."IV", BAD.."-9%"..transla
 																-4,			0,					{SKILL_RELOAD5}, TREE_GUNTREE)
 GM:AddSkill(SKILL_RELOAD5, translate.Get("skill_q_r").."V", BAD.."-12%"..translate.Get("meleedamage")..GOOD.."+14%"..translate.Get("r_speed"),
 																-4,			-2,					{SKILL_RELOAD4}, TREE_GUNTREE)
+GM:AddSkill(SKILL_REPULLER, translate.Get("skill_repuller"), GOOD..translate.Get("skill_repuller_d1")..BAD.."-10%"..translate.Get("w_ac"),
+																-1,			2,					{SKILL_RELOAD3}, TREE_GUNTREE)
 GM:AddSkill(SKILL_QUALITY, translate.Get("skill_quality"), BAD.."-50%"..translate.Get("meleedamage")..GOOD.."+50%"..translate.Get("w_ac"),
-																-2,			-0,					{SKILL_RELOAD5}, TREE_GUNTREE)
+																-2,			-0.5,					{SKILL_RELOAD5}, TREE_GUNTREE)
 -- Health Tree
 GM:AddSkill(SKILL_STOIC1, translate.Get("skill_stoici_0"), GOOD..translate.Get("skill_stoici_d1")..BAD.."-7"..translate.Get("speed"),
 																-4,			-6,					{SKILL_NONE, SKILL_STOIC2}, TREE_HEALTHTREE)
@@ -331,7 +343,9 @@ GM:AddSkill(SKILL_HANDY1, translate.Get("skill_handy").."I", GOOD.."+5%"..transl
 GM:AddSkill(SKILL_HANDY2, translate.Get("skill_handy").."II", GOOD.."+6%"..translate.Get("repair"),
 																-5,			-4,					{SKILL_HANDY3}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_HANDY3, translate.Get("skill_handy").."III", GOOD.."+8%"..translate.Get("repair"),
-																-5,			-1,					{SKILL_TURRET_BUFF}, TREE_BUILDINGTREE)
+																-5,			-1,					{SKILL_TURRET_BUFF,SKILL_STARDUST}, TREE_BUILDINGTREE)
+GM:AddSkill(SKILL_STARDUST, translate.Get("skill_stardust"), GOOD..translate.Get("skill_stardust_d1")..BAD..translate.Get("skill_stardust_d2"),
+																-4,			1,					{}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_TURRET_BUFF, translate.Get("skill_t_buff"), GOOD..translate.Get("skill_t_buff_d1"),
 																-6,			-3,					{}, TREE_BUILDINGTREE)
 
@@ -758,6 +772,8 @@ GM:AddSkillModifier(SKILL_GENERATOR, SKILLMOD_HEALTH, 30)
 
 GM:AddSkillModifier(SKILL_QUALITY, SKILLMOD_MELEE_DAMAGE_MUL, -0.50)
 GM:AddSkillModifier(SKILL_QUALITY, SKILLMOD_AIMSPREAD_MUL, -0.50)
+
+GM:AddSkillModifier(SKILL_REPULLER, SKILLMOD_AIMSPREAD_MUL, 0.10)
 
 
 GM:AddSkillModifier(SKILL_BATTLER1, SKILLMOD_RELOADSPEED_MUL, -0.02)

@@ -614,6 +614,7 @@ function GM:_PostDrawTranslucentRenderables()
 	if not self.DrawingInSky then
 		self:DrawPointWorldHints()
 		self:DrawWorldHints()
+		self:DrawStarIndicators()
 	end
 	if self.ShowIndicators then
 		local plys = team.GetPlayers(MySelf:Team())

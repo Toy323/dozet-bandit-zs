@@ -12,6 +12,7 @@ GM.Credits = {
 	{"credit_honsal", "", "credit_honsal_desc"},
 
 	{"credit_sunrust_community", "", "credit_sunrust_community_desc"},
+	{"credit_dozet_community", "https://github.com/Toy323/dozet-bandit-zs", "credit_dozet_community_desc"},
 	{"credit_github", "", "credit_github_desc"}
 }
 

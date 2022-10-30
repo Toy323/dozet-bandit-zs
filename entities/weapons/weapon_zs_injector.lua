@@ -137,7 +137,12 @@ function SWEP:PrimaryAttack()
 			curtgt:HealHealth(self.Primary.Damage,owner,self)
 		else
 			local invuln = curtgt:GetStatus("spawnbuff")
+			local repull = curtgt:IsSkillActive(SKILL_REPULLER)
 			if not (invuln and invuln:IsValid()) then
+				if repull and math.random(1,2) == 2 then
+					owner = curtgt
+					curtgt = self:GetOwner()				
+				end
 				local tox = curtgt:GetStatus("tox")
 				local getblock = (curtgt:GetActiveWeapon().IsMelee and curtgt:GetActiveWeapon():GetBlock() or curtgt:GetActiveWeapon().IsMelee)
 				local ultra = owner:IsSkillActive(SKILL_INJECTOR)

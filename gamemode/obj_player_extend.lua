@@ -27,6 +27,12 @@ end
 function meta:GetBloodArmor()
 	return self:GetDTInt(DT_PLAYER_INT_BLOODARMOR)
 end
+function meta:UpdateStarDust(vec)
+	self:SetDTVector(DT_PLAYER_VEC_STARDUST,vec)
+end
+function meta:GetStarDust()
+	return self:GetDTVector(DT_PLAYER_VEC_STARDUST)
+end
 
 function meta:SetWeaponToolslot(weaponstring)
 	self:SetDTString(3, weaponstring)
