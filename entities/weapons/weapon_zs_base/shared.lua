@@ -121,11 +121,18 @@ function SWEP:GetCone()
 end
 function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end 
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+	local owner = self:GetOwner()
+	local newmode = owner:IsSkillActive(SKILL_MODE_WHIRLWHIND)
+	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay * (newmode and self.Primary.Ammo == "autocharging" and 0.5 or 1))
 	--self:SetNextReload(CurTime() + self.Primary.Delay)
 	self:EmitFireSound()
 	self:TakeAmmo()
-	self:ShootBullets(self.Primary.Damage, self.Primary.NumShots, self:GetCone())
+	local mul = (self:GetOwner().BulletMul or 1)
+	if self.Primary.Ammo == "autocharging" and newmode then
+		mul = mul * 0.5
+	end
+
+	self:ShootBullets(self.Primary.Damage * mul, self.Primary.NumShots, self:GetCone())
 	self.IdleAnimation = CurTime() + self:SequenceDuration()
 end
 
@@ -395,14 +402,16 @@ function SWEP:Think()
 		elseif self.IdleAnimation and self.IdleAnimation <= curTime then
 			self.IdleAnimation = nil
 			self:SendWeaponAnim(self.IdleActivity)
-		end
+		end	
+		local owner = self:GetOwner()
+		local newmode = owner:IsSkillActive(SKILL_MODE_WHIRLWHIND)
 		
 		if self:GetIronsights() and not self:GetOwner():KeyDown(IN_ATTACK2) then
 			self:SetIronsights(false)
 		end
-		if not self:GetOwner():KeyDown(IN_ATTACK) and (self.LastAttemptedShot + (self.AutoReloadDelay and self.AutoReloadDelay or 1)  <= curTime) and self.Primary.Ammo == "autocharging" then
+		if not self:GetOwner():KeyDown(IN_ATTACK) and (self.LastAttemptedShot + (self.AutoReloadDelay and self.AutoReloadDelay or 1) * (newmode and 3.5 or 1)  <= curTime) and self.Primary.Ammo == "autocharging" then
 			if self:GetNextAutoReload() <= curTime and self:Clip1() < self.Primary.ClipSize then
-				self:SetClip1(self:Clip1() + 1)
+				self:SetClip1(self:Clip1() + 1 * (newmode and 2.5 or 1))
 				self:SetNextAutoReload(curTime+0.02)
 				self:GetOwner():EmitSound("buttons/button16.wav")
 			end

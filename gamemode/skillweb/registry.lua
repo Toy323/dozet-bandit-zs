@@ -147,6 +147,14 @@ SKILL_REPULLER = 37
 SKILL_STARDUST = 38
 SKILL_CRUSADER = 39
 SKILL_AUTOSCAN = 40
+SKILL_DAMN_BRO = 41
+SKILL_FOCUS1 = 42
+SKILL_FOCUS2 = 43
+SKILL_FOCUS3 = 44
+SKILL_FOCUS4 = 45
+SKILL_FOCUS5 = 46
+SKILL_DEEPFOCUS = 47
+SKILL_MODE_WHIRLWHIND = 48
 
 SKILLMOD_HEALTH = 1
 SKILLMOD_SPEED = 2
@@ -283,8 +291,34 @@ GM:AddSkill(SKILL_RELOAD4, translate.Get("skill_q_r").."IV", BAD.."-9%"..transla
 																-4,			0,					{SKILL_RELOAD5}, TREE_GUNTREE)
 GM:AddSkill(SKILL_RELOAD5, translate.Get("skill_q_r").."V", BAD.."-12%"..translate.Get("meleedamage")..GOOD.."+14%"..translate.Get("r_speed"),
 																-4,			-2,					{SKILL_RELOAD4}, TREE_GUNTREE)
+
+GM:AddSkill(SKILL_FOCUS1, translate.Get("skill_focus").."I", GOOD.."+1%"..translate.Get("b_damage")..GOOD.."+4%"..translate.Get("w_ac"),
+																-0,			6,					{SKILL_NONE, SKILL_FOCUS2}, TREE_GUNTREE)
+GM:AddSkillModifier(SKILL_FOCUS1, SKILLMOD_AIMSPREAD_MUL, -0.04)
+GM:AddSkillModifier(SKILL_FOCUS1, SKILLMOD_DAMAGE, 0.01)
+GM:AddSkill(SKILL_FOCUS2, translate.Get("skill_focus").."II", GOOD.."+2%"..translate.Get("b_damage")..GOOD.."+5%"..translate.Get("w_ac"),
+																-0,			4,					{SKILL_FOCUS3}, TREE_GUNTREE)
+GM:AddSkillModifier(SKILL_FOCUS2, SKILLMOD_AIMSPREAD_MUL, -0.05)
+GM:AddSkillModifier(SKILL_FOCUS2, SKILLMOD_DAMAGE, 0.02)
+GM:AddSkill(SKILL_FOCUS3, translate.Get("skill_focus").."III", GOOD.."+3%"..translate.Get("b_damage")..GOOD.."+6%"..translate.Get("w_ac"),
+																2,			2,					{SKILL_FOCUS4}, TREE_GUNTREE)
+GM:AddSkillModifier(SKILL_FOCUS3, SKILLMOD_AIMSPREAD_MUL, -0.06)
+GM:AddSkillModifier(SKILL_FOCUS3, SKILLMOD_DAMAGE, 0.03)
+GM:AddSkill(SKILL_FOCUS4, translate.Get("skill_focus").."IV", GOOD.."+4%"..translate.Get("b_damage")..GOOD.."+8%"..translate.Get("w_ac"),
+																-0,			0,					{SKILL_FOCUS5,SKILL_DEEPFOCUS}, TREE_GUNTREE)
+GM:AddSkillModifier(SKILL_FOCUS4, SKILLMOD_AIMSPREAD_MUL, -0.08)
+GM:AddSkillModifier(SKILL_FOCUS4, SKILLMOD_DAMAGE, 0.04)
+GM:AddSkill(SKILL_FOCUS5, translate.Get("skill_focus").."V", GOOD.."+5%"..translate.Get("b_damage")..GOOD.."+9%"..translate.Get("w_ac"),
+																-0.5,			-2,					{}, TREE_GUNTREE)
+GM:AddSkillModifier(SKILL_FOCUS5, SKILLMOD_AIMSPREAD_MUL, -0.09)
+GM:AddSkillModifier(SKILL_FOCUS5, SKILLMOD_DAMAGE, 0.05)
+GM:AddSkill(SKILL_DEEPFOCUS, translate.Get("skill_deepfocus"), BAD.."-45%"..translate.Get("b_damage")..GOOD..translate.Get("skill_deepfocus_d1"),
+																1.5,			-1,					{}, TREE_GUNTREE)
+GM:AddSkillModifier(SKILL_DEEPFOCUS, SKILLMOD_DAMAGE, -0.45)
 GM:AddSkill(SKILL_REPULLER, translate.Get("skill_repuller"), GOOD..translate.Get("skill_repuller_d1")..BAD.."-10%"..translate.Get("w_ac"),
-																-1,			2,					{SKILL_RELOAD3}, TREE_GUNTREE)
+																-1,			2,					{SKILL_RELOAD3,SKILL_DAMN_BRO}, TREE_GUNTREE)
+GM:AddSkill(SKILL_DAMN_BRO, translate.Get("skill_anti_proj"), GOOD..translate.Get("skill_anti_proj_d1")..BAD..translate.Get("skill_anti_proj_d2"),
+																-1,			1.25,					{}, TREE_GUNTREE)
 GM:AddSkill(SKILL_QUALITY, translate.Get("skill_quality"), BAD.."-50%"..translate.Get("meleedamage")..GOOD.."+50%"..translate.Get("w_ac"),
 																-2,			-0.5,					{SKILL_RELOAD5}, TREE_GUNTREE)
 -- Health Tree
@@ -351,7 +385,9 @@ GM:AddSkill(SKILL_STARDUST, translate.Get("skill_stardust"), GOOD..translate.Get
 GM:AddSkill(SKILL_TURRET_BUFF, translate.Get("skill_t_buff"), GOOD..translate.Get("skill_t_buff_d1"),
 																-6,			-3,					{SKILL_AUTOSCAN}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_AUTOSCAN, translate.Get("skill_module_autoscan"), GOOD..translate.Get("skill_module_autoscan_d1")..BAD..translate.Get("skill_module_autoscan_d2"),
-																-8,			-5,					{}, TREE_BUILDINGTREE)
+																-8,			-5,					{SKILL_MODE_WHIRLWHIND}, TREE_BUILDINGTREE)
+GM:AddSkill(SKILL_MODE_WHIRLWHIND, translate.Get("skill_mode_whirlwind"), GOOD..translate.Get("skill_mode_whirlwind_d1")..BAD..translate.Get("skill_mode_whirlwind_d2"),
+																-6,			-7,					{}, TREE_BUILDINGTREE)
 
 
 GM:AddSkill(SKILL_BATTLER1, translate.Get("skill_battler").."I", GOOD.."+3%"..translate.Get("meleedamage")..BAD.."-2%"..translate.Get("r_speed"),

@@ -78,10 +78,13 @@ end]]
 local steeringratio = 0.8
 function SWEP:Attack(proj)
 	if proj:IsValid() and (!proj.Twister or proj.Twister == nil or !IsValid(proj.Twister)) then
-		self:GetOwner():EmitSound("weapons/ar1/ar1_dist"..math.random(2)..".wav")
-		self:TakeAmmo()
-	
 		local owner = self:GetOwner()
+		local newmode = owner:IsSkillActive(SKILL_MODE_WHIRLWHIND)
+		owner:EmitSound("weapons/ar1/ar1_dist"..math.random(2)..".wav")
+		for i=1, (newmode and 5 or 1) do  
+			self:TakeAmmo()
+		end
+	
 		--owner:MuzzleFlash()
 		self:SendWeaponAnimation()
 		owner:DoAttackEvent()
@@ -126,19 +129,24 @@ function SWEP:Think()
 		self.IdleAnimation = nil
 		self:SendWeaponAnim(ACT_VM_IDLE)
 	end
+	local owner = self:GetOwner()
+	local newmode = owner:IsSkillActive(SKILL_MODE_WHIRLWHIND)
+	if newmode then
+		self.Primary.ClipSize = 67
+	end
 	if SERVER then
-	if (self.LastAttack + self.Primary.Delay*2 <= curTime ) and self:Clip1() > 0 then
-		local center = self:GetOwner():GetShootPos()
-		for _, ent in ipairs(ents.FindInSphere(center, self.SearchRadius)) do
-			if (ent ~= self and !ent:IsPlayer() and ent:IsProjectile() and ent:GetMoveType() != MOVETYPE_NONE and not (ent:GetOwner() and ent:GetOwner():IsPlayer() and self:GetOwner():IsPlayer() and ent:GetOwner():Team() == self:GetOwner():Team())) then
-				local dot = (ent:GetPos() - center):GetNormalized():Dot(self:GetOwner():GetAimVector())
-				if dot >= 0.5 and (LightVisible(center, ent:GetPos(), self, ent, self:GetOwner())) then
-					self:Attack(ent)
-					break
+		if (self.LastAttack + self.Primary.Delay*2 <= curTime ) and self:Clip1() > 0 then
+			local center = self:GetOwner():GetShootPos()
+			for _, ent in ipairs(ents.FindInSphere(center, self.SearchRadius)) do
+				if (ent ~= self and !ent:IsPlayer() and ent:IsProjectile() and ent:GetMoveType() != MOVETYPE_NONE and not (ent:GetOwner() and ent:GetOwner():IsPlayer() and self:GetOwner():IsPlayer() and ent:GetOwner():Team() == self:GetOwner():Team())) then
+					local dot = (ent:GetPos() - center):GetNormalized():Dot(self:GetOwner():GetAimVector())
+					if dot >= 0.5 and (LightVisible(center, ent:GetPos(), self, ent, self:GetOwner())) then
+						self:Attack(ent)
+						break
+					end
 				end
 			end
 		end
-	end
 	end
 	self.BaseClass.Think(self)	
 end

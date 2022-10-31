@@ -407,6 +407,9 @@ function meta:ResetSpeed(noset)
 	if self.HumanSpeedAdder and (self:Team() == TEAM_HUMAN or self:Team() == TEAM_BANDIT) and 32 < speed then
 		speed = speed + self.HumanSpeedAdder
 	end
+	if self.DeepFocuses and self:IsSkillActive(SKILL_DEEPFOCUS) then
+		speed = speed * 1.75
+	end
 
 	if not noset then
 		self:SetSpeed(speed)

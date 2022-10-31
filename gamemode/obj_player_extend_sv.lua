@@ -245,8 +245,18 @@ function meta:ProcessDamage(dmginfo)
 		if attacker:IsSkillActive(SKILL_KAMIKAZE) then
 			dmginfo:ScaleDamage(0.40)
 		end
+		if attacker:IsSkillActive(SKILL_DEEPFOCUS) and attacker.DeepFocuses then
+			dmginfo:ScaleDamage(0)
+		end
 		if self:IsSkillActive(SKILL_KAMIKAZE) then
 			dmginfo:ScaleDamage(2)
+		end
+		if self:IsSkillActive(SKILL_DAMN_BRO) and inflictor.m_IsProjectile and math.random(1,5) == 1 then
+			attacker:TakeDamage(dmginfo:GetDamage() * 0.6)
+			dmginfo:SetDamage(0)
+		end
+		if self:IsSkillActive(SKILL_DAMN_BRO) and math.random(1,6) == 1 and !inflictor.m_IsProjectile then
+			dmginfo:ScaleDamage(2.5)
 		end
 		if self:GetBodyArmor() and self:GetBodyArmor() > 0 then
 			local ratio = 0.75

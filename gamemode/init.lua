@@ -782,6 +782,7 @@ function GM:Think()
 			pl.Think_Stardust = CurTime() + 2
 			timer.Simple(1, function() pl:UpdateStarDust(pl:GetPos()) end)
 		end
+
 		if pl:IsSkillActive(SKILL_CRUSADER) then
 			for _, ent in pairs(ents.FindInSphere(pl:GetPos(), 128)) do
 				if ent ~= pl and ent:IsValid() and ent:IsPlayer() and ent:Team() == pl:Team() then
@@ -1285,6 +1286,9 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl:UpdateStarDust((pl:GetPos() or table.Random(player.GetAll()):GetPos() or Vector(0,0,0)))
 	pl.Think_Stardust = 0
 	pl.NextStarC = 0
+
+	pl.DeepFocuses = nil
+	pl.DeepFocus_Time = 0
 	self:LoadVault(pl)
 	pl:ApplySkills()
 
@@ -2218,6 +2222,27 @@ function GM:KeyPress(pl, key)
 				self:TryHumanPickup(pl, pl:TraceLine(64).Entity)
 			end
 		end
+		if pl:KeyDown(IN_RELOAD) and pl:IsSkillActive(SKILL_DEEPFOCUS) then
+			if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl.DeepFocus_Time <= CurTime() then
+				pl.DeepFocus_Time = CurTime() + 15
+				pl.DeepFocuses = true
+				print("true")
+				pl:Fire( "alpha", 0, 0 )
+				pl:ResetSpeed()
+				pl:DrawWorldModel( false )
+				pl:DrawShadow( false )
+				pl:SetMaterial( "models/effects/vol_light001" )
+				timer.Simple(6, function()
+					pl.DeepFocuses = false
+					print("false")
+					pl:Fire( "alpha", 255, 0.5 )
+					pl:ResetSpeed()
+					pl:DrawWorldModel(true)
+					pl:DrawShadow(true)
+					pl:SetMaterial( "" )
+				end)
+			end
+		end
 	elseif key == IN_SPEED then
 		if pl:Alive() then
 			if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) then
@@ -2234,6 +2259,7 @@ function GM:KeyPress(pl, key)
 			pl.NextStarC = CurTime() + 1.2
 			pl:SetPos(pl:GetStarDust())
 		end
+
 	end
 end
 
