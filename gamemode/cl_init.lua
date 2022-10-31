@@ -1486,6 +1486,7 @@ net.Receive("zs_dmg_prop", function(length)
 		local effectdata = EffectData()
 			effectdata:SetOrigin(pos)
 			effectdata:SetMagnitude(damage)
+			effectdata:SetAttachment(0)
 			effectdata:SetScale(1)
 		util.Effect("damagenumber", effectdata)
 	end

@@ -155,6 +155,7 @@ SKILL_FOCUS4 = 45
 SKILL_FOCUS5 = 46
 SKILL_DEEPFOCUS = 47
 SKILL_MODE_WHIRLWHIND = 48
+SKILL_MANHUNT = 49
 
 SKILLMOD_HEALTH = 1
 SKILLMOD_SPEED = 2
@@ -385,7 +386,9 @@ GM:AddSkill(SKILL_STARDUST, translate.Get("skill_stardust"), GOOD..translate.Get
 GM:AddSkill(SKILL_TURRET_BUFF, translate.Get("skill_t_buff"), GOOD..translate.Get("skill_t_buff_d1"),
 																-6,			-3,					{SKILL_AUTOSCAN}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_AUTOSCAN, translate.Get("skill_module_autoscan"), GOOD..translate.Get("skill_module_autoscan_d1")..BAD..translate.Get("skill_module_autoscan_d2"),
-																-8,			-5,					{SKILL_MODE_WHIRLWHIND}, TREE_BUILDINGTREE)
+																-8,			-5,					{SKILL_MODE_WHIRLWHIND,SKILL_MANHUNT}, TREE_BUILDINGTREE)
+GM:AddSkill(SKILL_MANHUNT, translate.Get("skill_manhunt"), GOOD..translate.Get("skill_manhunt_d1")..BAD..translate.Get("skill_manhunt_d2"),
+																-8,			-2.5,					{}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_MODE_WHIRLWHIND, translate.Get("skill_mode_whirlwind"), GOOD..translate.Get("skill_mode_whirlwind_d1")..BAD..translate.Get("skill_mode_whirlwind_d2"),
 																-6,			-7,					{}, TREE_BUILDINGTREE)
 

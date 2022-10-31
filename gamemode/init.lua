@@ -340,8 +340,9 @@ end
 
 function GM:ShowSpare1(pl)
 	if not self:IsRoundModeUnassigned() then
-		if not (pl:IsValid() and pl:IsConnected() and pl:Alive()) then return end
-		pl:DropActiveWeapon()
+		if (pl:IsValid() and pl:IsConnected() and pl:Alive()) then 
+			pl:DropActiveWeapon()
+		end
 	end
 end
 

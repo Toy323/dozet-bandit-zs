@@ -311,9 +311,8 @@ GM:AddWeaponPrerequisite(item,"sawhack")
 --GM:AddPointShopWeapon(nil,"zpfryp", ITEMCAT_MELEE, 31, "weapon_zs_fryingpan")
 --GM:AddPointShopWeapon(nil,"zpcpot", ITEMCAT_MELEE, 32, "weapon_zs_pot")
 
-GM:AddPointShopWeapon(nil,"barricadekit", ITEMCAT_TOOLS, 125, "weapon_zs_barricadekit").NoClassicMode = true
+GM:AddPointShopWeapon(nil,"barricadekit", ITEMCAT_TOOLS, 125, "weapon_zs_barricadekit")
 local item = GM:AddPointShopWeapon(nil,"empgun", ITEMCAT_TOOLS, 55, "weapon_zs_empgun")
-item.NoClassicMode = true
 item.NoSampleCollectMode = true
 
 local item = GM:AddPointShopWeapon(nil,"grenadelauncher", ITEMCAT_TOOLS, 70, "weapon_zs_grenadelauncher")
@@ -336,6 +335,9 @@ local item = GM:AddPointShopWeapon(nil,"manhack", ITEMCAT_TOOLS, 55, "weapon_zs_
 item.Countables = {"prop_manhack","weapon_zs_manhackcontrol"}
 item.ControllerWep = "weapon_zs_manhackcontrol"
 --item.NoClassicMode = true
+local item = GM:AddPointShopWeapon(nil,"manhacksaw", ITEMCAT_TOOLS, 155, "weapon_zs_manhack_saw")
+item.Countables = {"prop_manhack","weapon_zs_manhackcontrol_saw"}
+item.ControllerWep = "weapon_zs_manhackcontrol_saw"
 
 local item = GM:AddPointShopWeapon(nil,"drone", ITEMCAT_TOOLS, 50, "weapon_zs_drone")
 item.Countables = {"prop_drone","weapon_zs_dronecontrol"}

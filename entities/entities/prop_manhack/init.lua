@@ -137,7 +137,11 @@ function ENT:PhysicsSimulate(phys, frametime)
 
 	local owner = self:GetOwner()
 	if not owner:IsValid() then return SIM_NOTHING end
-
+	local mul = 1
+	local manhunt = 1
+	if owner:IsSkillActive(SKILL_MANHUNT) then
+		manhunt = mul *1.6
+	end
 	local vel = phys:GetVelocity()
 	local movedir = Vector()
 	local eyeangles = owner:SyncAngles()
@@ -165,11 +169,11 @@ function ENT:PhysicsSimulate(phys, frametime)
 	end
 
 	if movedir == vector_origin then
-		vel = vel * (1 - frametime * self.IdleDrag)
+		vel = vel * (1 - frametime * self.IdleDrag * mul)
 	else
 		movedir:Normalize()
 
-		vel = vel + frametime * self.Acceleration * math.Clamp((self:GetObjectHealth() / self:GetMaxObjectHealth() + 1) / 2, 0.5, 1) * movedir
+		vel = (vel + frametime * self.Acceleration * mul * math.Clamp((self:GetObjectHealth() / self:GetMaxObjectHealth() + 1) / 2, 0.5, 1) * movedir)
 	end
 
 	if vel:Length() > self.MaxSpeed then
@@ -330,9 +334,12 @@ function ENT:ThreadSafePhysicsCollide(data)
 				effectdata:SetScale(1)
 			util.Effect("sparks", effectdata)
 		end
-
+		local mul = 1
+		if self:GetOwner():IsSkillActive(SKILL_MANHUNT) then
+			mul = mul  *0.5
+		end
 		if data.Speed >= self.MaxSpeed * self.SelfDamageSpeed and ent and ent:IsWorld() and CurTime() >= self.PhysDamageImmunity then
-			self:TakeDamage(math.Clamp(data.Speed * self.SelfDamageMul, 0, 30))
+			self:TakeDamage(math.Clamp((data.Speed * self.SelfDamageMul) * mul, 0, 30 * mul))
 		end
 	end
 end

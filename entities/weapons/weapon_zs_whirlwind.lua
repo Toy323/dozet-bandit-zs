@@ -133,6 +133,8 @@ function SWEP:Think()
 	local newmode = owner:IsSkillActive(SKILL_MODE_WHIRLWHIND)
 	if newmode then
 		self.Primary.ClipSize = 67
+	else
+		self.Primary.ClipSize = 12
 	end
 	if SERVER then
 		if (self.LastAttack + self.Primary.Delay*2 <= curTime ) and self:Clip1() > 0 then
