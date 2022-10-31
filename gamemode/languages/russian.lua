@@ -1002,6 +1002,8 @@ LANGUAGE.hud_sp = " СП"
 
 LANGUAGE.hud_uu_sp = "Неиспользованных Скилл Поинтов: "
 
+LANGUAGE.mm_skills = "Скиллы"
+
 LANGUAGE.hud_lvl_max = "Уровень МАКСИМАЛЬНЫЙ // Реморт "
 LANGUAGE.hud_r_lvl = "Уровень %d "
 LANGUAGE.skill_add_bloodarmor = "Кров.Брони"

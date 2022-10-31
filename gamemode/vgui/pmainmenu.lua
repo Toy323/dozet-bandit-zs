@@ -175,6 +175,14 @@ function GM:ShowHelp()
 	but:DockPadding(0, 12, 0, 12)
 	but:Dock(TOP)
 	but.DoClick = function() MakepCredits() end
+	but = vgui.Create("DButton", menu)
+	but:SetFont("ZSHUDFontSmaller")
+	but:SetText(translate.Get("mm_skills"))
+	but:SetTall(buttonhei)
+	but:DockMargin(0, 0, 0, 12)
+	but:DockPadding(0, 12, 0, 12)
+	but:Dock(TOP)
+	but.DoClick = function() GAMEMODE:ToggleSkillWeb() end
 
 	local but = vgui.Create("DButton", menu)
 	but:SetFont("ZSHUDFontSmaller")

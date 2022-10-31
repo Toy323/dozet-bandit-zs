@@ -340,14 +340,8 @@ end
 
 function GM:ShowSpare1(pl)
 	if not self:IsRoundModeUnassigned() then
-		if pl:KeyDown(IN_SPEED) then
-			if not (pl:IsValid() and pl:IsConnected() and pl:Alive()) then return end
-			pl:DropActiveWeapon()
-		end
-	end
-	if !pl:KeyDown(IN_SPEED) then
-		if not (pl:IsValid() and pl:IsConnected()) then return end
-		pl:SendLua("GAMEMODE:ToggleSkillWeb()")
+		if not (pl:IsValid() and pl:IsConnected() and pl:Alive()) then return end
+		pl:DropActiveWeapon()
 	end
 end
 
@@ -2975,7 +2969,7 @@ function GM:WaveEnded()
 		if ent.GetOwner and ent:GetOwner():IsPlayer() and (ent:GetOwner():Team() == TEAM_BANDIT or ent:GetOwner():Team() == TEAM_HUMAN) then
 			ent:OnPackedUp(ent:GetOwner())
 		else
-			ent:Destroy()
+			ent:Remove()
 		end
 	end
 	timer.Simple(1, function() self:SetCurrentWaveWinner(nil) end)

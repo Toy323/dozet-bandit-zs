@@ -1083,6 +1083,8 @@ LANGUAGE.hud_uu_sp = "Unused skill points: "
 LANGUAGE.hud_r_lvl = "Level %d "
 LANGUAGE.hud_lvl_max = "Level MAX // Remort "
 
+LANGUAGE.mm_skills = "Skills"
+
 
 LANGUAGE.skill_quepro = "Que Pro"
 
