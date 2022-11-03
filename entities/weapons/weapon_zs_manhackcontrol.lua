@@ -69,6 +69,7 @@ function SWEP:Think()
 end
 
 function SWEP:PrimaryAttack()
+	if SERVER and self:GetOwner():IsSkillActive(SKILL_OPERATOR) and self:GetOwner().NextUseManhack >= CurTime() then return end
 	if IsFirstTimePredicted() then
 		self:SetDTBool(0, not self:GetDTBool(0))
 

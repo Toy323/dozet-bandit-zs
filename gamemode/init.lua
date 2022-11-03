@@ -774,9 +774,13 @@ function GM:Think()
 			pl:SetBloodArmor(math.min(100,pl:GetBloodArmor() + 3))
 		end
 		if pl:IsSkillActive(SKILL_STARDUST) and pl.Think_Stardust <= CurTime() then
-			pl.Think_Stardust = CurTime() + 2
-			timer.Simple(1, function() pl:UpdateStarDust(pl:GetPos()) end)
+			pl.Think_Stardust = CurTime() + 3
+			pl:UpdateStarDust(pl:GetPos())
 		end
+		if pl:IsSkillActive(SKILL_OPERATOR) and pl:GetVelocity():LengthSqr() >= 255 then
+			pl.NextUseManhack = CurTime() + 4
+		end
+
 
 		if pl:IsSkillActive(SKILL_CRUSADER) then
 			for _, ent in pairs(ents.FindInSphere(pl:GetPos(), 128)) do
@@ -1281,6 +1285,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl:UpdateStarDust((pl:GetPos() or table.Random(player.GetAll()):GetPos() or Vector(0,0,0)))
 	pl.Think_Stardust = 0
 	pl.NextStarC = 0
+	pl.NextUseManhack = 0
 
 	pl.DeepFocuses = nil
 	pl.DeepFocus_Time = 0
@@ -2219,7 +2224,7 @@ function GM:KeyPress(pl, key)
 		end
 		if pl:KeyDown(IN_RELOAD) and pl:IsSkillActive(SKILL_DEEPFOCUS) then
 			if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl.DeepFocus_Time <= CurTime() then
-				pl.DeepFocus_Time = CurTime() + 15
+				pl.DeepFocus_Time = CurTime() + 45
 				pl.DeepFocuses = true
 				print("true")
 				pl:Fire( "alpha", 0, 0 )

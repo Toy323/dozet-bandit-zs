@@ -243,8 +243,6 @@ local item = GM:AddPointShopWeapon(4,"crossbow", ITEMCAT_GUNS, 300, "weapon_zs_c
 GM:AddWeaponPrerequisite(item,"arbalest")
 local item = GM:AddPointShopWeapon(4,"classic", ITEMCAT_GUNS, 320, "weapon_zs_classic")
 GM:AddWeaponPrerequisite(item,"renegade")
-local item = GM:AddPointShopWeapon(5,"classix", ITEMCAT_GUNS, 320, "weapon_zs_classixx")
-GM:AddWeaponPrerequisite(item,"classic")
 
 --GM:AddPointShopWeapon(2,"grenadelauncher", ITEMCAT_GUNS, 120, "weapon_zs_grenadelauncher")
 

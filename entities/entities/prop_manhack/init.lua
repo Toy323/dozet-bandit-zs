@@ -95,6 +95,9 @@ function ENT:OnTakeDamage(dmginfo)
 	--if dmginfo:GetDamageType() ~= DMG_CRUSH and not self._AllowDamage then return end
 
 	local attacker = dmginfo:GetAttacker()
+	if self:GetOwner():IsSkillActive(SKILL_OPERATOR) then
+		dmginfo:ScaleDamage(0.67)
+	end
 	if not (attacker:IsValid() and attacker:IsPlayer() and self:GetOwner():IsPlayer() and attacker:Team() == self:GetOwner():Team()) then
 		self:TakePhysicsDamage(dmginfo)
 
@@ -110,6 +113,7 @@ function ENT:OnTakeDamage(dmginfo)
 			effectdata:SetScale(1.33)
 		util.Effect("sparks", effectdata)
 	end
+
 end
 
 function ENT:Use(pl)
@@ -146,25 +150,31 @@ function ENT:PhysicsSimulate(phys, frametime)
 	local movedir = Vector()
 	local eyeangles = owner:SyncAngles()
 	local aimangles = owner:EyeAngles()
-
+	local CurTime = CurTime()
 	if self:BeingControlled() and GAMEMODE:GetWaveActive() then
 		if owner:KeyDown(IN_FORWARD) then
 			movedir = movedir + aimangles:Forward()
+			owner.NextUseManhack = CurTime + 4
 		end
 		if owner:KeyDown(IN_BACK) then
 			movedir = movedir - aimangles:Forward()
+			owner.NextUseManhack = CurTime + 4
 		end
 		if owner:KeyDown(IN_MOVERIGHT) then
 			movedir = movedir + aimangles:Right()
+			owner.NextUseManhack = CurTime + 4
 		end
 		if owner:KeyDown(IN_MOVELEFT) then
 			movedir = movedir - aimangles:Right()
+			owner.NextUseManhack = CurTime + 4
 		end
 		if owner:KeyDown(IN_BULLRUSH) then
 			movedir = movedir + Vector(0, 0, 0.5)
+			owner.NextUseManhack = CurTime + 4
 		end
 		if owner:KeyDown(IN_GRENADE1) then
 			movedir = movedir - Vector(0, 0, 0.5)
+			owner.NextUseManhack = CurTime + 4
 		end
 	end
 

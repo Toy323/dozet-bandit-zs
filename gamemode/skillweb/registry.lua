@@ -156,6 +156,8 @@ SKILL_FOCUS5 = 46
 SKILL_DEEPFOCUS = 47
 SKILL_MODE_WHIRLWHIND = 48
 SKILL_MANHUNT = 49
+SKILL_RAGDOG = 50
+SKILL_OPERATOR = 51
 
 SKILLMOD_HEALTH = 1
 SKILLMOD_SPEED = 2
@@ -313,9 +315,10 @@ GM:AddSkill(SKILL_FOCUS5, translate.Get("skill_focus").."V", GOOD.."+5%"..transl
 																-0.5,			-2,					{}, TREE_GUNTREE)
 GM:AddSkillModifier(SKILL_FOCUS5, SKILLMOD_AIMSPREAD_MUL, -0.09)
 GM:AddSkillModifier(SKILL_FOCUS5, SKILLMOD_DAMAGE, 0.05)
-GM:AddSkill(SKILL_DEEPFOCUS, translate.Get("skill_deepfocus"), BAD.."-45%"..translate.Get("b_damage")..GOOD..translate.Get("skill_deepfocus_d1"),
+GM:AddSkill(SKILL_DEEPFOCUS, translate.Get("skill_deepfocus"), BAD.."-45%"..translate.Get("skill_deepfocus_d2")..GOOD..translate.Get("skill_deepfocus_d1"),
 																1.5,			-1,					{}, TREE_GUNTREE)
 GM:AddSkillModifier(SKILL_DEEPFOCUS, SKILLMOD_DAMAGE, -0.45)
+GM:AddSkillModifier(SKILL_DEEPFOCUS, SKILLMOD_MELEE_DAMAGE_MUL, -0.45)
 GM:AddSkill(SKILL_REPULLER, translate.Get("skill_repuller"), GOOD..translate.Get("skill_repuller_d1")..BAD.."-10%"..translate.Get("w_ac"),
 																-1,			2,					{SKILL_RELOAD3,SKILL_DAMN_BRO}, TREE_GUNTREE)
 GM:AddSkill(SKILL_DAMN_BRO, translate.Get("skill_anti_proj"), GOOD..translate.Get("skill_anti_proj_d1")..BAD..translate.Get("skill_anti_proj_d2"),
@@ -330,11 +333,13 @@ GM:AddSkill(SKILL_STOIC2, translate.Get("skill_stoicii_0"), GOOD..translate.Get(
 GM:AddSkill(SKILL_STOIC3, translate.Get("skill_stoiciii_0"), GOOD..translate.Get("skill_stoiciii_d1")..BAD.."-9"..translate.Get("speed"),
 																-3,			-2,					{SKILL_STOIC4}, TREE_HEALTHTREE)
 GM:AddSkill(SKILL_STOIC4, translate.Get("skill_stoiciv_0"), GOOD..translate.Get("skill_stoiciv_d1")..BAD.."-11"..translate.Get("speed"),
-																-3,			0,					{SKILL_STOIC5}, TREE_HEALTHTREE)
+																-3,			0,					{SKILL_STOIC5,SKILL_RAGDOG}, TREE_HEALTHTREE)
 GM:AddSkill(SKILL_STOIC5, translate.Get("skill_stoicv_0"), GOOD..translate.Get("skill_stoicv_d1")..BAD.."-15"..translate.Get("speed"),
 																-3,			2,					{SKILL_BLOODARMOR, SKILL_ULTRADEFENCE}, TREE_HEALTHTREE)
 GM:AddSkill(SKILL_ULTRADEFENCE, translate.Get("skill_ultradefence"), GOOD..translate.Get("skill_ultradefence_d1")..BAD.."-70"..translate.Get("speed"),
 																-2,			4,					{SKILL_STOIC5}, TREE_HEALTHTREE)
+GM:AddSkill(SKILL_RAGDOG, translate.Get("skill_ragdoller"), GOOD..translate.Get("skill_ragdoller_d1")..BAD..translate.Get("skill_ragdoller_d2"),
+																-2,			1,					{}, TREE_HEALTHTREE)
 
 -- Speed Tree
 GM:AddSkill(SKILL_SPEED1, translate.Get("skill_speed").."I", GOOD.."+7"..translate.Get("speed")..BAD.."-4"..translate.Get("health"),
@@ -388,7 +393,9 @@ GM:AddSkill(SKILL_TURRET_BUFF, translate.Get("skill_t_buff"), GOOD..translate.Ge
 GM:AddSkill(SKILL_AUTOSCAN, translate.Get("skill_module_autoscan"), GOOD..translate.Get("skill_module_autoscan_d1")..BAD..translate.Get("skill_module_autoscan_d2"),
 																-8,			-5,					{SKILL_MODE_WHIRLWHIND,SKILL_MANHUNT}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_MANHUNT, translate.Get("skill_manhunt"), GOOD..translate.Get("skill_manhunt_d1")..BAD..translate.Get("skill_manhunt_d2"),
-																-8,			-2.5,					{}, TREE_BUILDINGTREE)
+																-8,			-2.5,					{SKILL_OPERATOR}, TREE_BUILDINGTREE)
+GM:AddSkill(SKILL_OPERATOR, translate.Get("skill_operator"), GOOD..translate.Get("skill_operator_d1")..BAD..translate.Get("skill_operator_d2"),
+																-8,			0,					{}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_MODE_WHIRLWHIND, translate.Get("skill_mode_whirlwind"), GOOD..translate.Get("skill_mode_whirlwind_d1")..BAD..translate.Get("skill_mode_whirlwind_d2"),
 																-6,			-7,					{}, TREE_BUILDINGTREE)
 

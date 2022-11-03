@@ -299,6 +299,14 @@ function SWEP:MeleeHitEntity(tr, hitent, damagemultiplier)
 			if hitent:WouldDieFrom(damage, tr.HitPos) then
 				dmginfo:SetDamageForce(math.min(self.MeleeDamage, 50) * 400 * owner:GetAimVector())
 			end
+			if owner:IsSkillActive(SKILL_RAGDOG) then
+				if hitent:GetActiveWeapon().IsMelee and hitent:GetActiveWeapon():GetBlock() and math.random(0,100) <= 35 then
+					owner:GiveStatus("knockdown",3)
+				end
+				if math.random(0,100) <= 20 then
+					owner:GiveStatus("knockdown",2)
+				end
+			end
 		end
 		vel = hitent:GetVelocity()
 	end
