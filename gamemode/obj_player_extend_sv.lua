@@ -252,7 +252,7 @@ function meta:ProcessDamage(dmginfo)
 			dmginfo:ScaleDamage(2)
 		end
 		if self:IsSkillActive(SKILL_DAMN_BRO) and inflictor.m_IsProjectile and math.random(1,5) == 1 then
-			attacker:TakeDamage(dmginfo:GetDamage() * 0.6)
+			attacker:TakeDamage(dmginfo:GetDamage() * 0.6, self, inflictor)
 			dmginfo:SetDamage(0)
 		end
 		if self:IsSkillActive(SKILL_DAMN_BRO) and math.random(1,6) == 1 and !inflictor.m_IsProjectile then

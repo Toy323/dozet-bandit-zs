@@ -2226,7 +2226,6 @@ function GM:KeyPress(pl, key)
 			if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl.DeepFocus_Time <= CurTime() then
 				pl.DeepFocus_Time = CurTime() + 45
 				pl.DeepFocuses = true
-				print("true")
 				pl:Fire( "alpha", 0, 0 )
 				pl:ResetSpeed()
 				pl:DrawWorldModel( false )
@@ -2234,7 +2233,6 @@ function GM:KeyPress(pl, key)
 				pl:SetMaterial( "models/effects/vol_light001" )
 				timer.Simple(6, function()
 					pl.DeepFocuses = false
-					print("false")
 					pl:Fire( "alpha", 255, 0.5 )
 					pl:ResetSpeed()
 					pl:DrawWorldModel(true)
@@ -2258,6 +2256,9 @@ function GM:KeyPress(pl, key)
 		if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl.NextStarC <= CurTime() then
 			pl.NextStarC = CurTime() + 1.2
 			pl:SetPos(pl:GetStarDust())
+			local vel20 = pl:GetVelocity()
+			vel20.z = 0
+			pl:SetVelocity(vel20)
 		end
 
 	end

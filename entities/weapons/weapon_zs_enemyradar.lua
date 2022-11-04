@@ -134,12 +134,5 @@ function SWEP:DrawTarget(tgt, size, offset)
 	draw.SimpleText(text, "ZSHUDFontSmallest", scrpos.x - size- w/2,scrpos.y - size+ (offset * size) - h/2)
 end
 function SWEP:DrawLowTgt(tgt, size, offset)
-	local scrpos = tgt:GetPos():ToScreen()
-	scrpos.x = math.Clamp(scrpos.x, size, ScrW() - size)
-	scrpos.y = math.Clamp(scrpos.y, size, ScrH() - size)
-	local text = tgt:Health()
-	local w, h = surface.GetTextSize(text)
-	--surface.SetFont("ZSHUDFontSmall")
-	--surface.DrawText(text)
-	draw.SimpleText(text, "ZSHUDFontSmallest", scrpos.x - size- w/2,scrpos.y - size+ (offset * size) - h/2)
+
 end

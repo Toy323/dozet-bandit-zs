@@ -304,7 +304,7 @@ function SWEP:MeleeHitEntity(tr, hitent, damagemultiplier)
 					owner:GiveStatus("knockdown",3)
 				end
 				if math.random(0,100) <= 20 then
-					owner:GiveStatus("knockdown",2)
+					hitent:GiveStatus("knockdown",2)
 				end
 			end
 		end

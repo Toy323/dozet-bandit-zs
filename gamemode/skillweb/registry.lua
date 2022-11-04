@@ -322,9 +322,9 @@ GM:AddSkillModifier(SKILL_DEEPFOCUS, SKILLMOD_DAMAGE, -0.45)
 GM:AddSkillModifier(SKILL_DEEPFOCUS, SKILLMOD_MELEE_DAMAGE_MUL, -0.45)
 GM:AddSkill(SKILL_REPULLER, translate.Get("skill_repuller"), GOOD..translate.Get("skill_repuller_d1")..BAD.."-10%"..translate.Get("w_ac"),
 																-1,			2,					{SKILL_RELOAD3,SKILL_DAMN_BRO}, TREE_GUNTREE)
-GM:AddSkill(SKILL_R_BULLETS, translate.Get("skill_r_bullets"), GOOD..translate.Get("skill_r_bullets_d1")..BAD.."-60%"..translate.Get("b_damage"),
+GM:AddSkill(SKILL_R_BULLETS, translate.Get("skill_r_bullets"), GOOD..translate.Get("skill_r_bullets_d1")..BAD.."-35%"..translate.Get("b_damage"),
 																3,			3,					{SKILL_FOCUS3}, TREE_GUNTREE)
-GM:AddSkillModifier(SKILL_R_BULLETS, SKILLMOD_DAMAGE, -0.6)
+GM:AddSkillModifier(SKILL_R_BULLETS, SKILLMOD_DAMAGE, -0.35)
 GM:AddSkill(SKILL_DAMN_BRO, translate.Get("skill_anti_proj"), GOOD..translate.Get("skill_anti_proj_d1")..BAD..translate.Get("skill_anti_proj_d2"),
 																-1,			1.25,					{}, TREE_GUNTREE)
 GM:AddSkill(SKILL_QUALITY, translate.Get("skill_quality"), BAD.."-50%"..translate.Get("meleedamage")..GOOD.."+50%"..translate.Get("w_ac"),
