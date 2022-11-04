@@ -316,7 +316,7 @@ GM:AddSkill(SKILL_FOCUS5, translate.Get("skill_focus").."V", GOOD.."+5%"..transl
 																-0.5,			-2,					{}, TREE_GUNTREE)
 GM:AddSkillModifier(SKILL_FOCUS5, SKILLMOD_AIMSPREAD_MUL, -0.09)
 GM:AddSkillModifier(SKILL_FOCUS5, SKILLMOD_DAMAGE, 0.05)
-GM:AddSkill(SKILL_DEEPFOCUS, translate.Get("skill_deepfocus"), BAD.."-45%"..translate.Get("skill_deepfocus_d2")..GOOD..translate.Get("skill_deepfocus_d1"),
+GM:AddSkill(SKILL_DEEPFOCUS, translate.Get("skill_deepfocus"), BAD..translate.Get("skill_deepfocus_d2")..GOOD..translate.Get("skill_deepfocus_d1"),
 																1.5,			-1,					{}, TREE_GUNTREE)
 GM:AddSkillModifier(SKILL_DEEPFOCUS, SKILLMOD_DAMAGE, -0.45)
 GM:AddSkillModifier(SKILL_DEEPFOCUS, SKILLMOD_MELEE_DAMAGE_MUL, -0.45)

@@ -892,7 +892,7 @@ LANGUAGE.skill_crusader_d1 = "Give defence boost nearest friends.\n"
 --shooter
 LANGUAGE.skill_deepfocus = "Deep Focus"
 LANGUAGE.skill_deepfocus_d1 = "Can become invisible and speed uped by 75% and -100% damage in this time.\n(E + RELOAD)"
-LANGUAGE.skill_deepfocus_d2 = "-45% Damage from melee and ranged weapon."
+LANGUAGE.skill_deepfocus_d2 = "-45% Damage from melee and ranged weapon.\n"
 LANGUAGE.skill_bproof = "Blast Proof"
 LANGUAGE.skill_ego = "Egocentric"
 LANGUAGE.skill_orfocus = "Orphic Focus"
