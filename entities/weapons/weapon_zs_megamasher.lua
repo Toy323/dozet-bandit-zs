@@ -28,7 +28,7 @@ SWEP.ViewModel = "models/weapons/v_sledgehammer/c_sledgehammer.mdl"
 SWEP.WorldModel = "models/weapons/w_sledgehammer.mdl"
 SWEP.UseHands = true
 
-SWEP.MeleeDamage = 150
+SWEP.MeleeDamage = 60
 SWEP.MeleeRange = 75
 SWEP.MeleeSize = 4
 SWEP.MeleeKnockBack = 150
@@ -36,13 +36,13 @@ SWEP.MeleeKnockBack = 150
 SWEP.BlockVsMelee = 0.1
 SWEP.BlockVsDissolve = 0
 
-SWEP.CanBlockDamage = true
+
 
 
 SWEP.Primary.Delay = 2.25
 
 SWEP.WalkSpeed = SPEED_SLOWEST * 0.5
-SWEP.SwingWalkSpeed = SPEED_FASTEST * 1.9
+SWEP.SwingWalkSpeed = SPEED_FASTEST * 1.4
 SWEP.SwingRotation = Angle(60, 0, -80)
 SWEP.SwingOffset = Vector(0, -30, 0)
 SWEP.SwingTime = 1.33
@@ -79,7 +79,7 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 	end
 	if IsValid(hitent) then
 		if not hitent:IsPlayer() and self:GetOwner():IsPlayer() then
-			if hitent:GetClass() == "prop_drone" or hitent:GetClass() == "prop_manhack" and not hitent:IsSameTeam(self:GetOwner()) and SERVER then
+			if hitent:GetClass() == "prop_drone" or hitent:GetClass() == "prop_manhack*" and not hitent:IsSameTeam(self:GetOwner()) and SERVER then
 				hitent:Destroy()
 			elseif not hitent:IsSameTeam(self:GetOwner()) and SERVER and (hitent:IsNailed() or hitent.IsBarricadeObject) then
 				hitent:TakeSpecialDamage(math.max(hitent:GetBarricadeHealth() or self.MeleeDamage,500), DMG_DIRECT, self:GetOwner(), self, tr.HitPos)
@@ -92,10 +92,10 @@ function SWEP:Move(mv)
 	if self:IsSwinging() then
 		local ratio = math.Clamp((self:GetSwingEnd()-CurTime())/self.SwingTime,0,1)
 		local speed = self.WalkSpeed + (self.SwingWalkSpeed)*ratio
-		--mv:SetForwardSpeed(10000)
+		--mv:SetForwardSpeed(10000) math.max(25,speed)
 		--mv:SetSideSpeed(mv:GetSideSpeed() * 0.05)
-		mv:SetMaxSpeed(speed)
-		mv:SetMaxClientSpeed(speed)	
+		mv:SetMaxSpeed(math.max(25,speed))
+		mv:SetMaxClientSpeed(math.max(25,speed))	
 	end
 end
 
@@ -113,7 +113,7 @@ if not CLIENT then return end
 
 function SWEP:CreateMove(cmd)
 	if self.m_LastViewAngles and self:IsSwinging() then
-		local difflimit = 256
+		local difflimit = 2561
 		local maxdiff = FrameTime() * difflimit
 		local mindiff = -maxdiff
 		local originalangles = self.m_LastViewAngles

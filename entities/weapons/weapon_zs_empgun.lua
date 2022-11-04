@@ -55,10 +55,10 @@ SWEP.HoldType = "revolver"
 SWEP.ViewModel = "models/weapons/cstrike/c_pist_deagle.mdl"
 SWEP.WorldModel = "models/weapons/w_pist_deagle.mdl"
 SWEP.UseHands = true
-SWEP.Primary.ClipSize = 3
+SWEP.Primary.ClipSize = 1
 SWEP.Primary.Automatic = false
-SWEP.Primary.Ammo = "gravity"
-SWEP.Primary.DefaultClip = 3
+SWEP.Primary.Ammo = "autocharging"
+SWEP.Primary.DefaultClip = 0
 
 SWEP.Primary.Sound = Sound("Weapon_EMPgun.Single")
 SWEP.Primary.Damage = 1

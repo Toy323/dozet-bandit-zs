@@ -17,7 +17,7 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 	local attacker = dmginfo:GetAttacker()
 	if ent ~= self:GetOwner() then return end
 	if (attacker:IsValid() and attacker:IsPlayer() and self:GetOwner():IsPlayer() and attacker:Team() == self:GetOwner():Team()) then return end
-	if attacker:IsPlayer() then
+	if attacker:IsPlayer() and self.Applier:Alive() then
 		local protect = 0.5
 
 		local dmgfraction = dmginfo:GetDamage() * protect

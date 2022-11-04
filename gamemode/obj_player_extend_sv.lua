@@ -838,6 +838,7 @@ end
 
 function meta:AddPoints(points)
 	--self:AddFrags(points)
+	self:AddZSXP(points * 3)
 	self:SetPoints(self:GetPoints() + points)
 	self:SetFullPoints(self:GetFullPoints() + points)
 	gamemode.Call("PlayerPointsAdded", self, points)

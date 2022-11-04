@@ -327,7 +327,7 @@ GM:AddSkill(SKILL_R_BULLETS, translate.Get("skill_r_bullets"), GOOD..translate.G
 GM:AddSkillModifier(SKILL_R_BULLETS, SKILLMOD_DAMAGE, -0.35)
 GM:AddSkill(SKILL_DAMN_BRO, translate.Get("skill_anti_proj"), GOOD..translate.Get("skill_anti_proj_d1")..BAD..translate.Get("skill_anti_proj_d2"),
 																-1,			1.25,					{}, TREE_GUNTREE)
-GM:AddSkill(SKILL_QUALITY, translate.Get("skill_quality"), BAD.."-50%"..translate.Get("meleedamage")..GOOD.."+50%"..translate.Get("w_ac"),
+GM:AddSkill(SKILL_QUALITY, translate.Get("skill_quality"), BAD.."-50%"..translate.Get("meleedamage")..GOOD.."+20%"..translate.Get("w_ac"),
 																-2,			-0.5,					{SKILL_RELOAD5}, TREE_GUNTREE)
 -- Health Tree
 GM:AddSkill(SKILL_STOIC1, translate.Get("skill_stoici_0"), GOOD..translate.Get("skill_stoici_d1")..BAD.."-7"..translate.Get("speed"),
@@ -825,10 +825,10 @@ GM:AddSkillModifier(SKILL_BATTLER4, SKILLMOD_MELEE_DAMAGE_MUL, 0.09)
 GM:AddSkillModifier(SKILL_BATTLER5, SKILLMOD_MELEE_DAMAGE_MUL, 0.13)
 
 GM:AddSkillModifier(SKILL_GENERATOR, SKILLMOD_MELEE_DAMAGE_MUL, -0.10)
-GM:AddSkillModifier(SKILL_GENERATOR, SKILLMOD_HEALTH, 30)
+GM:AddSkillModifier(SKILL_GENERATOR, SKILLMOD_HEALTH, -30)
 
 GM:AddSkillModifier(SKILL_QUALITY, SKILLMOD_MELEE_DAMAGE_MUL, -0.50)
-GM:AddSkillModifier(SKILL_QUALITY, SKILLMOD_AIMSPREAD_MUL, -0.50)
+GM:AddSkillModifier(SKILL_QUALITY, SKILLMOD_AIMSPREAD_MUL, -0.20)
 
 GM:AddSkillModifier(SKILL_REPULLER, SKILLMOD_AIMSPREAD_MUL, 0.10)
 

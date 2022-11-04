@@ -782,7 +782,7 @@ function GM:Think()
 		end
 
 
-		if pl:IsSkillActive(SKILL_CRUSADER) then
+		if pl:IsSkillActive(SKILL_CRUSADER) and pl:Alive() then
 			for _, ent in pairs(ents.FindInSphere(pl:GetPos(), 128)) do
 				if ent ~= pl and ent:IsValid() and ent:IsPlayer() and ent:Team() == pl:Team() then
 				   local buff = ent:GiveStatus("crusader_buff", 0.2)
@@ -2324,7 +2324,7 @@ end
 function GM:PlayerDeath(pl, inflictor, attacker)
 	self:SaveVault(pl)
 	if pl:IsSkillActive(SKILL_KAMIKAZE) then
-		util.BlastDamage2(pl, pl, pl:GetPos(), 356, 310)
+		util.BlastDamage2(pl, pl, pl:GetPos(), 456, 310)
 		pl:EmitSound("c4.explode")
 		local effectdata = EffectData()
 			effectdata:SetOrigin(pl:GetPos())
