@@ -920,6 +920,8 @@ LANGUAGE.skill_deli = "Delibration"
 LANGUAGE.skill_uncorrupt = "Uncorruptor"
 LANGUAGE.skill_quality = "Focus "
 LANGUAGE.skill_focus = "Focusing "
+LANGUAGE.skill_r_bullets = "Rubber Bullets"
+LANGUAGE.skill_r_bullets_d1 = "Give confusion on bullets hit,in headshot x5 confusion.\n"
 --Skill repairsman
 
 

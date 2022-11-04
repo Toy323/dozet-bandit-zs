@@ -367,6 +367,11 @@ function GenericBulletCallback(attacker, tr, dmginfo)
 			attacker.ShotsHit = attacker.ShotsHit + 1
 		end
 		if ent:IsPlayer() then
+			if attacker:IsSkillActive(SKILL_R_BULLETS) then
+				local d = tr.Hit and tr.HitGroup == HITGROUP_HEAD
+				local power = dmginfo:GetDamage() / 3
+				local conf = ent:GiveStatus("confusion",(d and power * 5 or power))
+			end
 			if attacker:IsPlayer() and ent:Team() ~= attacker:Team() and tempknockback then
 				tempknockback[ent] = ent:GetVelocity()
 			end
