@@ -889,6 +889,9 @@ LANGUAGE.skill_generator = "Auto-Blood"
 LANGUAGE.skill_generator_d1 = "Generate blood armor every 5 seconds\n"
 LANGUAGE.skill_crusader = "Crusader"
 LANGUAGE.skill_crusader_d1 = "Give defence boost nearest friends.\n"
+LANGUAGE.skill_s_anubis = "STAND:Anubis"
+LANGUAGE.skill_s_anubis_d1 = "Increase your damage and attack speed on melee weapon.\nMore waves = more damage and attack speed.\n"
+LANGUAGE.skill_s_anubis_d2 = "Blind forever."
 --shooter
 LANGUAGE.skill_deepfocus = "Deep Focus"
 LANGUAGE.skill_deepfocus_d1 = "Can become invisible and speed uped by 75% and -100% damage in this time.\n(E + RELOAD)"
@@ -964,6 +967,10 @@ LANGUAGE.skill_cool_med_d1 = "Healing ray give 1 sec of sigil defend!\n(Mega-ray
 LANGUAGE.skill_2_life = "Stand"
 LANGUAGE.skill_2_life_d1 = "You become a stand!Can't die.\n"
 LANGUAGE.skill_2_life_d2 = "Die if team members equal 0 and -damage equal team health.\n -15% Damage"
+
+LANGUAGE.skill_s_cinder = "STAND:Cinderrela"
+LANGUAGE.skill_s_cinder_d1 = "Леча союзников ты баффаешь их на 30 секунд(+25% к силе атаки и +25% к скорости).\n"
+LANGUAGE.skill_s_cinder_d2 = "После того как дебафф закончится они дебафнутся на 10 секунд(-35% Скорости и -35% Сила атаки)."
 
 -- WOrthness
 LANGUAGE.worthness = "Worthiness "
@@ -1065,6 +1072,7 @@ LANGUAGE.s_unl_act = " unlocked and activated!"
 LANGUAGE.s_need_l = "Need Level: "
 LANGUAGE.s_need_r = "Need Remort: "
 LANGUAGE.s_need_am = "Need Cells: "
+LANGUAGE.s_need_skill = "Need Skill: "
 LANGUAGE.s_give_am = "Give Cells: "
 LANGUAGE.s_alw_act = "Always Active"
 LANGUAGE.s_act_all = "Activate all"

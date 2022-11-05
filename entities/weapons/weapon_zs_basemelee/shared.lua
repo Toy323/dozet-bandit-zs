@@ -186,7 +186,7 @@ end
 
 function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay / (self:GetOwner():IsSkillActive(SKILL_S_ANUBIS) and (GAMEMODE:GetWave() * 0.03 + 0.6) or 1))
 
 	if self.SwingTime == 0 then
 		self:MeleeSwing()
@@ -233,7 +233,7 @@ function SWEP:MeleeSwing()
 		return
 	end
 
-	local damagemultiplier = (owner.MeleeDamageMultiplier or 1)
+	local damagemultiplier = (owner.MeleeDamageMultiplier or 1) * (self:GetOwner():IsSkillActive(SKILL_S_ANUBIS) and (GAMEMODE:GetWave() * 0.03 + 0.6) or 1)
 	local damage = (self:GetBlock() and self.MeleeDamage * (self.DamageMulBlock or 0.4) or self.MeleeDamage) * damagemultiplier 
 	local hitent = tr.Entity
 	local hitflesh = tr.MatType == MAT_FLESH or tr.MatType == MAT_BLOODYFLESH or tr.MatType == MAT_ANTLION or tr.MatType == MAT_ALIENFLESH

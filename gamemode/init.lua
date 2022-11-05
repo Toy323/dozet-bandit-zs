@@ -781,6 +781,9 @@ function GM:Think()
 			if pl:IsSkillActive(SKILL_OPERATOR) and pl:GetVelocity():LengthSqr() >= 255 then
 				pl.NextUseManhack = CurTime() + 4
 			end
+			if pl:IsSkillActive(SKILL_S_ANUBIS) and !pl:GetStatus("dimvision") then
+				pl:GiveStatus("dimvision",999)
+			end
 			if pl:IsSkillActive(SKILL_2_LIFE) then
 				local attacker = pl
 				local num = #team.GetPlayers(attacker:Team())

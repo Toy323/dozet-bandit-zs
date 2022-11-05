@@ -177,6 +177,11 @@ function meta:HealHealth(toheal,healer, wep)
 	if SERVER and toheal >= 5 then
 		self:PurgeStatusEffects()
 	end
+	if healer:IsPlayer() and self ~= healer and healer:IsSkillActive(SKILL_S_CINDERELA) then
+		self:GiveStatus("c_debuff",1)
+		local g = self:GiveStatus("c_buff",30)
+		g.Applier = healer
+	end
 	if healer:IsPlayer() and healer~=self and newhealth != oldhealth and healer:Team() == self:Team() then
 		gamemode.Call("PlayerHealedTeamMember", healer, self, newhealth - oldhealth, wep)
 	end
@@ -410,7 +415,12 @@ function meta:ResetSpeed(noset)
 	if self:IsSkillActive(SKILL_2_LIFE) then
 		speed = speed * 0.33
 	end
-
+	if self:GetStatus("c_buff") then
+		speed = speed * 0.65
+	end
+	if self:GetStatus("c_debuff") then
+		speed = speed * 0.65
+	end
 	if not noset then
 		self:SetSpeed(speed)
 	end

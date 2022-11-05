@@ -50,6 +50,9 @@ function GM:SkillCanUnlock(pl, skillid, skilllist)
 		if connections[SKILL_NONE] then
 			return true
 		end
+		if skill.NeedSkill and !pl:IsSkillActive(skill.NeedSkill) then
+			return false
+		end
 
 		for _, myskillid in pairs(skilllist) do
 			if connections[myskillid] then

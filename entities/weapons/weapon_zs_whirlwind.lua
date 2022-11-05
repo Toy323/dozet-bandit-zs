@@ -114,11 +114,14 @@ function SWEP:Attack(proj)
 				local dir = (aimvec*steeringratio+firevec*(1-steeringratio))
 				phys:AddVelocity(dir*2200)
 				proj:SetOwner(self:GetOwner())
+				if owner:IsSkillActive(SKILL_MODE_WHIRLWIND) then
+					proj:Remove()
+				end
 			else
 				proj:Remove()
 			end
 		end
-		self.LastAttack = CurTime()
+		self.LastAttack = CurTime() - (owner:IsSkillActive(SKILL_MODE_WHIRLWIND) and 0.25 or 0)
 		self:SetNextPrimaryFire(CurTime() + self.Primary.Delay*1.5)
 	end
 end
