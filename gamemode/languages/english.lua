@@ -961,6 +961,9 @@ LANGUAGE.skill_surg = "Surgeon "
 LANGUAGE.skill_bio = "Biology "
 LANGUAGE.skill_cool_med = "Cool Medic"
 LANGUAGE.skill_cool_med_d1 = "Healing ray give 1 sec of sigil defend!\n(Mega-ray give 3 secs!)\n"
+LANGUAGE.skill_2_life = "Stand"
+LANGUAGE.skill_2_life_d1 = "You become a stand!Can't die.\n"
+LANGUAGE.skill_2_life_d2 = "Die if team members equal 0 and -damage equal team health.\n -15% Damage"
 
 -- WOrthness
 LANGUAGE.worthness = "Worthiness "

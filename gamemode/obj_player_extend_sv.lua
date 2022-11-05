@@ -228,6 +228,12 @@ function meta:ProcessDamage(dmginfo)
 	local attacker, inflictor = dmginfo:GetAttacker(), dmginfo:GetInflictor()
 	local attackweapon = (attacker:IsPlayer() and attacker:GetActiveWeapon() or nil)
 	local lasthitgroup = self:LastHitGroup()
+	if self:IsSkillActive(SKILL_2_LIFE) and attacker:IsPlayer() and !attacker:IsSkillActive(SKILL_2_LIFE) or self:IsSkillActive(SKILL_2_LIFE) and !attacker:IsPlayer() then
+		if attacker:IsPlayer() and attacker:GetActiveWeapon().IsMelee then
+			attacker:SetBloodArmor(math.min(100, attacker:GetBloodArmor() + dmginfo:GetDamage() * 0.25))
+		end
+		dmginfo:SetDamage(0)
+	end
 	if attacker:IsPlayer() then
 		if attacker ~= self then
 			local head = (self:WasHitInHead())
@@ -235,6 +241,35 @@ function meta:ProcessDamage(dmginfo)
 				net.WriteBool( self:IsPlayer() )
 				net.WriteBool( head )
 			net.Send( attacker )
+		end
+		if attacker:IsSkillActive(SKILL_2_LIFE) then
+			local num = #team.GetPlayers(attacker:Team())
+			local del = #team.GetPlayers(attacker:Team()) - 1
+			local stands = 1
+			for _, pl in pairs(team.GetPlayers(attacker:Team())) do 
+				if pl:IsSkillActive(SKILL_2_LIFE) and pl ~= attacker then
+					del = del + 1
+					stands = stands + 1
+				end
+				if !pl:Alive() and pl ~= attacker then
+					num = num - 1
+				end
+				if num ~= 1 + stands then
+					for _, pl2 in pairs(team.GetPlayers(attacker:Team())) do 
+						if !pl2:IsSkillActive(SKILL_2_LIFE) then
+							truepl = pl
+						end
+					end
+				end
+			end
+			if num ~= 1 + stands then
+				dmginfo:ScaleDamage((num/del))
+				--print((num/del))
+			else		
+				dmginfo:ScaleDamage((truepl:Health()/truepl:GetMaxHealth()) /#team.GetPlayers(attacker:Team()))
+				--print((truepl:Health()/truepl:GetMaxHealth()) /#team.GetPlayers(attacker:Team()))
+			end
+			dmginfo:ScaleDamage(0.85)
 		end
 		if attacker:LessPlayersOnTeam() and attackweapon and not attackweapon.NoScaleToLessPlayers and not attackweapon.IgnoreDamageScaling then
 			dmginfo:ScaleDamage(1.25)
@@ -254,6 +289,7 @@ function meta:ProcessDamage(dmginfo)
 		if self:IsSkillActive(SKILL_DAMN_BRO) and inflictor.m_IsProjectile and math.random(1,5) == 1 then
 			attacker:TakeDamage(dmginfo:GetDamage() * 0.6, self, inflictor)
 			dmginfo:SetDamage(0)
+			inflictor:Remove()
 		end
 		if self:IsSkillActive(SKILL_DAMN_BRO) and math.random(1,6) == 1 and !inflictor.m_IsProjectile then
 			dmginfo:ScaleDamage(2.5)

@@ -131,9 +131,6 @@ function meta:ApplyAdrenaline()
 end
 
 function meta:WearBodyArmor()
-	if self:GetBodyArmor() == 0 then
-		self.HumanSpeedAdder = (self.HumanSpeedAdder or 0) -15
-	end
 	self:ResetSpeed() 
 	self:SetBodyArmor((self:GetBodyArmor() or 0)+100 - self:GetBloodArmor())
 	self:EmitSound("npc/combine_soldier/gear"..math.random(6)..".wav")
@@ -397,8 +394,8 @@ function meta:ResetSpeed(noset)
 		speed = wep.WalkSpeed or SPEED_NORMAL
 	end
 	
-	if self:GetBodyArmor() > 0 then
-		speed = speed - 25
+	if self:GetBodyArmor() > 20 then
+		speed = speed - self:GetBodyArmor() / 2
 	end
 	if self.SkillSpeedAdd then
 		speed = speed + self.SkillSpeedAdd
@@ -409,6 +406,9 @@ function meta:ResetSpeed(noset)
 	end
 	if self.DeepFocuses and self:IsSkillActive(SKILL_DEEPFOCUS) then
 		speed = speed * 1.75
+	end
+	if self:IsSkillActive(SKILL_2_LIFE) then
+		speed = speed * 0.33
 	end
 
 	if not noset then

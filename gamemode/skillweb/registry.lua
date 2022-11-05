@@ -159,6 +159,7 @@ SKILL_MANHUNT = 49
 SKILL_RAGDOG = 50
 SKILL_OPERATOR = 51
 SKILL_R_BULLETS = 52
+SKILL_2_LIFE = 53
 
 SKILLMOD_HEALTH = 1
 SKILLMOD_SPEED = 2
@@ -374,7 +375,9 @@ GM:AddSkill(SKILL_SURGEON1, translate.Get("skill_surg").."I", GOOD.."-6%"..trans
 GM:AddSkill(SKILL_SURGEON2, translate.Get("skill_surg").."II", GOOD.."-9%"..translate.Get("med_cool"),
 																-3,			3,					{SKILL_WORTHINESS4, SKILL_SURGEON3}, TREE_SUPPORTTREE)
 GM:AddSkill(SKILL_SURGEON3, translate.Get("skill_surg").."III", GOOD.."-11%"..translate.Get("med_cool"),
-																-2,			0,					{}, TREE_SUPPORTTREE)
+																-2,			0,					{SKILL_2_LIFE}, TREE_SUPPORTTREE)
+GM:AddSkill(SKILL_2_LIFE, translate.Get("skill_2_life"), GOOD..translate.Get("skill_2_life_d1")..BAD..translate.Get("skill_2_life_d2"),
+																-1,			1,					{}, TREE_SUPPORTTREE)
 GM:AddSkill(SKILL_BIO1, translate.Get("skill_bio").."I", GOOD.."+6%"..translate.Get("med_effect"),
 																-3,			-1,					{SKILL_NONE,SKILL_BIO2}, TREE_SUPPORTTREE)
 GM:AddSkill(SKILL_BIO2, translate.Get("skill_bio").."II", GOOD.."+7%"..translate.Get("med_effect"),

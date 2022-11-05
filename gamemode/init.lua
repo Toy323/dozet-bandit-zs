@@ -769,24 +769,42 @@ function GM:Think()
 		if pl:GetBarricadeGhosting() then
 			pl:BarricadeGhostingThink()
 		end
-		if pl:IsSkillActive(SKILL_GENERATOR) and pl.BloodRegen <=  CurTime() then
-			pl.BloodRegen = CurTime() + 5
-			pl:SetBloodArmor(math.min(100,pl:GetBloodArmor() + 3))
-		end
-		if pl:IsSkillActive(SKILL_STARDUST) and pl.Think_Stardust <= CurTime() then
-			pl.Think_Stardust = CurTime() + 3
-			pl:UpdateStarDust(pl:GetPos())
-		end
-		if pl:IsSkillActive(SKILL_OPERATOR) and pl:GetVelocity():LengthSqr() >= 255 then
-			pl.NextUseManhack = CurTime() + 4
-		end
+		if pl:Alive() then
+			if pl:IsSkillActive(SKILL_GENERATOR) and pl.BloodRegen <=  CurTime() then
+				pl.BloodRegen = CurTime() + 5
+				pl:SetBloodArmor(math.min(100,pl:GetBloodArmor() + 3))
+			end
+			if pl:IsSkillActive(SKILL_STARDUST) and pl.Think_Stardust <= CurTime() then
+				pl.Think_Stardust = CurTime() + 3
+				pl:UpdateStarDust(pl:GetPos())
+			end
+			if pl:IsSkillActive(SKILL_OPERATOR) and pl:GetVelocity():LengthSqr() >= 255 then
+				pl.NextUseManhack = CurTime() + 4
+			end
+			if pl:IsSkillActive(SKILL_2_LIFE) then
+				local attacker = pl
+				local num = #team.GetPlayers(attacker:Team())
+				local stands = 1
+				for _, pl2 in pairs(team.GetPlayers(attacker:Team())) do 
+					if pl2:IsSkillActive(SKILL_2_LIFE) and pl2 ~= attacker then
+						stands = stands + 1
+					end
+					if !pl2:Alive() and pl2 ~= attacker then
+						num = num - 1
+					end
+					if num == stands then
+						attacker:Kill()
+					end
+				end
+			end
 
 
-		if pl:IsSkillActive(SKILL_CRUSADER) and pl:Alive() then
-			for _, ent in pairs(ents.FindInSphere(pl:GetPos(), 128)) do
-				if ent ~= pl and ent:IsValid() and ent:IsPlayer() and ent:Team() == pl:Team() then
-				   local buff = ent:GiveStatus("crusader_buff", 0.2)
-				   buff.Applier = pl
+			if pl:IsSkillActive(SKILL_CRUSADER) then
+				for _, ent in pairs(ents.FindInSphere(pl:GetPos(), 128)) do
+					if ent ~= pl and ent:IsValid() and ent:IsPlayer() and ent:Team() == pl:Team() then
+					local buff = ent:GiveStatus("crusader_buff", 0.2)
+					buff.Applier = pl
+					end
 				end
 			end
 		end
@@ -2254,11 +2272,17 @@ function GM:KeyPress(pl, key)
 		end
 	elseif key == IN_ZOOM and pl:IsSkillActive(SKILL_STARDUST) then
 		if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl.NextStarC <= CurTime() then
-			pl.NextStarC = CurTime() + 1.2
+			pl.NextStarC = CurTime() + 2
+			pl:EmitSound("npc/env_headcrabcanister/incoming.wav")
+			local effectdata = EffectData()
+				effectdata:SetOrigin(pl:GetPos())
+			util.Effect("Explosion", effectdata, true,true)
 			pl:SetPos(pl:GetStarDust())
 			local vel20 = pl:GetVelocity()
-			vel20.z = 0
-			pl:SetVelocity(vel20)
+			vel20.z = 120
+			vel20.x = vel20.x * 0.5
+			vel20.y = vel20.y * 0.2
+			timer.Simple(0.1, function() pl:SetVelocity(vel20) end)
 		end
 
 	end
