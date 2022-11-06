@@ -232,7 +232,7 @@ function meta:ProcessDamage(dmginfo)
 		if attacker:IsPlayer() and attacker:GetActiveWeapon().IsMelee then
 			attacker:SetBloodArmor(math.min(100, attacker:GetBloodArmor() + dmginfo:GetDamage() * 0.25))
 		end
-		dmginfo:SetDamage(0)
+		dmginfo:ScaleDamage(0.5)
 	end
 	if attacker:IsPlayer() then
 		if attacker ~= self then
@@ -246,6 +246,7 @@ function meta:ProcessDamage(dmginfo)
 			local num = #team.GetPlayers(attacker:Team())
 			local del = #team.GetPlayers(attacker:Team()) - 1
 			local stands = 1
+			local truepl = NULL
 			for _, pl in pairs(team.GetPlayers(attacker:Team())) do 
 				if pl:IsSkillActive(SKILL_2_LIFE) and pl ~= attacker then
 					del = del + 1

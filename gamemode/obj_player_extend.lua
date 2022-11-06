@@ -413,7 +413,7 @@ function meta:ResetSpeed(noset)
 		speed = speed * 1.75
 	end
 	if self:IsSkillActive(SKILL_2_LIFE) then
-		speed = speed * 0.33
+		speed = speed * 0.86
 	end
 	if self:GetStatus("c_buff") then
 		speed = speed * 0.65
@@ -421,11 +421,12 @@ function meta:ResetSpeed(noset)
 	if self:GetStatus("c_debuff") then
 		speed = speed * 0.65
 	end
+	
 	if not noset then
-		self:SetSpeed(speed)
+		self:SetSpeed(math.max(20,speed))
 	end
 
-	return speed
+	return math.max(20,speed)
 end
 
 

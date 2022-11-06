@@ -12,9 +12,7 @@ if SERVER then
 		end
 	end
 end
-function ENT:Think()
-	if !self.Applier or self.Applier and !self.Applier:Alive() then self:Remove() end
-end
+
 function ENT:EntityTakeDamage(ent, dmginfo)
 	local attacker = dmginfo:GetAttacker()
 	if ent ~= self:GetOwner() then return end
