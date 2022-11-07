@@ -22,7 +22,7 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 
 	if attacker:IsValid() and attacker:IsPlayer() --[[and inflictor == wep and wep.IsMelee]] then
 		local dmg = dmginfo:GetDamage()
-		local extradamage = dmg * 0.25
+		local extradamage = dmg * (self.Applier:IsSkillActive(SKILL_S_CINDERELA_B1) and 0.35 or 0.25)
 		dmginfo:SetDamage(dmg + extradamage)
 
 		if self.Applier and self.Applier:IsValid() and ent:IsPlayer() then

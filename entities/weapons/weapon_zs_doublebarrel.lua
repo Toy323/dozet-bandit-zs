@@ -42,7 +42,7 @@ SWEP.UseHands = true
 SWEP.CSMuzzleFlashes = false
 
 SWEP.Primary.Sound = Sound("Weapon_Shotgun.Single")
-SWEP.Primary.Damage = 3
+SWEP.Primary.Damage = 5
 SWEP.Primary.NumShots = 6
 SWEP.Primary.Delay = 0.4
 SWEP.Recoil = 5.71

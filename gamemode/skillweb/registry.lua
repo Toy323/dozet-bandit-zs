@@ -162,6 +162,10 @@ SKILL_R_BULLETS = 52
 SKILL_2_LIFE = 53
 SKILL_S_ANUBIS = 54
 SKILL_S_CINDERELA = 55
+SKILL_S_STICKY_FINGERS = 56
+SKILL_S_STICKY_FINGERS_B1 = 57
+SKILL_S_CINDERELA_B1 = 58
+SKILL_S_ANUBIS_B1 = 59
 
 SKILLMOD_HEALTH = 1
 SKILLMOD_SPEED = 2
@@ -379,10 +383,24 @@ GM:AddSkill(SKILL_SURGEON2, translate.Get("skill_surg").."II", GOOD.."-9%"..tran
 GM:AddSkill(SKILL_SURGEON3, translate.Get("skill_surg").."III", GOOD.."-11%"..translate.Get("med_cool"),
 																-2,			0,					{SKILL_2_LIFE}, TREE_SUPPORTTREE)
 GM:AddSkill(SKILL_2_LIFE, translate.Get("skill_2_life"), GOOD..translate.Get("skill_2_life_d1")..BAD..translate.Get("skill_2_life_d2"),
-																-1,			1,					{SKILL_S_CINDERELA}, TREE_SUPPORTTREE)
+																-1,			1,					{SKILL_S_CINDERELA, SKILL_S_ANUBIS,SKILL_S_STICKY_FINGERS}, TREE_SUPPORTTREE)
 .AlwaysActive = true
-GM:AddSkill(SKILL_S_CINDERELA, translate.Get("skill_s_cinder"), GOOD..translate.Get("skill_s_cinder_d1")..BAD..translate.Get("skill_s_cinder_d2"),
-																-1,			-1,					{}, TREE_SUPPORTTREE)
+local skill = GM:AddSkill(SKILL_S_CINDERELA, translate.Get("skill_s_cinder"), GOOD..translate.Get("skill_s_cinder_d1")..BAD..translate.Get("skill_s_cinder_d2"),
+																-1,			-1,					{SKILL_S_CINDERELA_B1}, TREE_SUPPORTTREE)
+skill.DontUnlock = SKILL_S_STICKY_FINGERS skill.DontUnlock2 = SKILL_S_ANUBIS
+local skill = GM:AddSkill(SKILL_S_ANUBIS, translate.Get("skill_s_anubis"), GOOD..translate.Get("skill_s_anubis_d1")..BAD..translate.Get("skill_s_anubis_d2"),
+																1,			-0,					{}, TREE_SUPPORTTREE)
+skill.DontUnlock = SKILL_S_STICKY_FINGERS skill.DontUnlock2 = SKILL_S_CINDERELA
+local skill = GM:AddSkill(SKILL_S_STICKY_FINGERS, translate.Get("skill_s_sticky_f"), GOOD..translate.Get("skill_s_sticky_f_d1")..BAD..translate.Get("skill_s_sticky_f_d2"),
+																1,			2.5,					{SKILL_S_STICKY_FINGERS_B1}, TREE_SUPPORTTREE)
+skill.DontUnlock = SKILL_S_ANUBIS skill.DontUnlock2 = SKILL_S_CINDERELA
+GM:AddSkillModifier(SKILL_S_STICKY_FINGERS, SKILLMOD_AIMSPREAD_MUL, 0.6)
+GM:AddSkill(SKILL_S_STICKY_FINGERS_B1, translate.Get("skill_s_sticky_f_branch_1"), GOOD..translate.Get("skill_s_sticky_f_branch_1_d1")..BAD..translate.Get("skill_s_sticky_f_branch_1_d2"),
+																1,			3,					{}, TREE_SUPPORTTREE)
+GM:AddSkill(SKILL_S_CINDERELA_B1, translate.Get("skill_s_cinder_b1"), GOOD..translate.Get("skill_s_cinder_b1_d1")..BAD..translate.Get("skill_s_cinder_b1_d2"),
+																-1,			-2,					{}, TREE_SUPPORTTREE)
+GM:AddSkill(SKILL_S_ANUBIS_B1, translate.Get("skill_s_anubis_b1"), GOOD..translate.Get("skill_s_anubis_b1_d1")..BAD..translate.Get("skill_s_anubis_b1_d2"),
+																1,			-0.5,					{}, TREE_SUPPORTTREE)
 GM:AddSkill(SKILL_BIO1, translate.Get("skill_bio").."I", GOOD.."+6%"..translate.Get("med_effect"),
 																-3,			-1,					{SKILL_NONE,SKILL_BIO2}, TREE_SUPPORTTREE)
 GM:AddSkill(SKILL_BIO2, translate.Get("skill_bio").."II", GOOD.."+7%"..translate.Get("med_effect"),
@@ -421,10 +439,9 @@ GM:AddSkill(SKILL_BATTLER3, translate.Get("skill_battler").."III", GOOD.."+8%"..
 GM:AddSkill(SKILL_BATTLER4, translate.Get("skill_battler").."IV", GOOD.."+9%"..translate.Get("meleedamage")..BAD.."-13%"..translate.Get("r_speed"),
 																-2,			0,					{SKILL_BATTLER5}, TREE_MELEETREE)
 GM:AddSkill(SKILL_BATTLER5, translate.Get("skill_battler").."V", GOOD.."+13%"..translate.Get("meleedamage")..BAD.."-16%"..translate.Get("r_speed"),
-																0,			2,					{SKILL_GENERATOR, SKILL_CRUSADER,SKILL_S_ANUBIS}, TREE_MELEETREE)
-GM:AddSkill(SKILL_S_ANUBIS, translate.Get("skill_s_anubis"), GOOD..translate.Get("skill_s_anubis_d1")..BAD..translate.Get("skill_s_anubis_d2"),
-																-3,			2,					{}, TREE_MELEETREE)
-.NeedSkill = SKILL_2_LIFE
+																0,			2,					{SKILL_GENERATOR, SKILL_CRUSADER}, TREE_MELEETREE)
+
+--.NeedSkill = SKILL_2_LIFE
 GM:AddSkill(SKILL_CRUSADER, translate.Get("skill_crusader"), BAD.."-50%"..translate.Get("meleedamage")..GOOD..translate.Get("skill_crusader_d1"),
 																0,			4,					{}, TREE_MELEETREE)
 GM:AddSkill(SKILL_GENERATOR, translate.Get("skill_generator"), BAD.."-10%"..translate.Get("meleedamage")..GOOD..translate.Get("skill_generator_d1").."-30"..translate.Get("health"),

@@ -369,7 +369,7 @@ function GenericBulletCallback(attacker, tr, dmginfo)
 		if ent:IsPlayer() then
 			if attacker:IsSkillActive(SKILL_R_BULLETS) then
 				local d = tr.Hit and tr.HitGroup == HITGROUP_HEAD
-				local power = dmginfo:GetDamage() / 7
+				local power = (dmginfo:GetDamage() / 7) / (dmginfo:GetInflictor().Primary.NumShots or 1)
 				local conf = ent:GiveStatus("confusion",(d and power * 5 or power))
 			end
 			if attacker:IsPlayer() and ent:Team() ~= attacker:Team() and tempknockback then
@@ -409,7 +409,7 @@ function SWEP:Think()
 			self:SendWeaponAnim(self.IdleActivity)
 		end	
 		local owner = self:GetOwner()
-		local newmode = owner:IsSkillActive(SKILL_MODE_WHIRLWHIND)
+		local newmode = self:GetOwner():IsSkillActive(SKILL_MODE_WHIRLWHIND)
 		
 		if self:GetIronsights() and not self:GetOwner():KeyDown(IN_ATTACK2) then
 			self:SetIronsights(false)

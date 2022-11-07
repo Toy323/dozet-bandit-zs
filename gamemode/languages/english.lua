@@ -971,7 +971,10 @@ LANGUAGE.skill_2_life_d2 = "Die if team members equal 0 and -damage equal team h
 LANGUAGE.skill_s_cinder = "STAND:Cinderrela"
 LANGUAGE.skill_s_cinder_d1 = "Леча союзников ты баффаешь их на 30 секунд(+25% к силе атаки и +25% к скорости).\n"
 LANGUAGE.skill_s_cinder_d2 = "После того как дебафф закончится они дебафнутся на 10 секунд(-35% Скорости и -35% Сила атаки)."
-
+LANGUAGE.skill_s_sticky_f = "STAND:Sticky Fingers"
+LANGUAGE.skill_s_sticky_f_branch_1 = "Unstable position"
+LANGUAGE.skill_s_cinder_b1 = "Strong Effect"
+LANGUAGE.skill_s_anubis_b1 = "A cost"
 -- WOrthness
 LANGUAGE.worthness = "Worthiness "
 --Skills speed

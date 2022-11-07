@@ -782,7 +782,7 @@ function GM:Think()
 				pl.NextUseManhack = CurTime() + 4
 			end
 			if pl:IsSkillActive(SKILL_S_ANUBIS) and !pl:GetStatus("dimvision") then
-				pl:GiveStatus("dimvision",999)
+				pl:GiveStatus("dimvision",10)
 			end
 			if pl:IsSkillActive(SKILL_2_LIFE) then
 				local attacker = pl
@@ -1293,6 +1293,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	
 	pl.m_PointQueue = 0
 	pl.m_LastDamageDealt = 0
+	pl.NextUseSF = 0
 
 	pl.HealedThisRound = 0
 	pl.CarryOverHealth = 0
@@ -2235,6 +2236,16 @@ function GM:KeyPress(pl, key)
 			end
 		end
 	end
+	if key == IN_RELOAD then
+		if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl:IsSkillActive(SKILL_S_STICKY_FINGERS) and pl:KeyDown(IN_SPEED) and pl.NextUseSF + 2 <= CurTime() then
+			local p = pl:GetEyeTrace().Normal * (250 + (pl:IsSkillActive(SKILL_S_STICKY_FINGERS_B1) and 100 or 0))
+			p.z = 0
+			p.y = p.y * (pl:IsSkillActive(SKILL_S_STICKY_FINGERS_B1) and math.random(-2,2) or 1)
+			p.x = p.x * (pl:IsSkillActive(SKILL_S_STICKY_FINGERS_B1) and math.random(-2,2) or 1)
+			pl:SetPos(pl:GetPos()+p)
+			pl.NextUseSF = CurTime()
+		end
+	end
 	if key == IN_USE then
 		if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() then
 			if pl:IsCarrying() then
@@ -2245,20 +2256,19 @@ function GM:KeyPress(pl, key)
 		end
 		if pl:KeyDown(IN_RELOAD) and pl:IsSkillActive(SKILL_DEEPFOCUS) then
 			if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl.DeepFocus_Time <= CurTime() then
-				pl.DeepFocus_Time = CurTime() + 45
+				pl.DeepFocus_Time = CurTime() + 25
 				pl.DeepFocuses = true
+				pl:UpdateFocus(true)
 				pl:Fire( "alpha", 0, 0 )
 				pl:ResetSpeed()
 				pl:DrawWorldModel( false )
 				pl:DrawShadow( false )
-				pl:SetMaterial( "models/effects/vol_light001" )
 				timer.Simple(6, function()
 					pl.DeepFocuses = false
-					pl:Fire( "alpha", 255, 0.5 )
+					pl:UpdateFocus(false)
 					pl:ResetSpeed()
 					pl:DrawWorldModel(true)
 					pl:DrawShadow(true)
-					pl:SetMaterial( "" )
 				end)
 			end
 		end

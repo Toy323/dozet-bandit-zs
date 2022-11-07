@@ -33,6 +33,12 @@ end
 function meta:GetStarDust()
 	return self:GetDTVector(DT_PLAYER_VEC_STARDUST)
 end
+function meta:UpdateFocus(b)
+	self:SetDTBool(2,b)
+end
+function meta:GetFocusD()
+	return self:GetDTBool(2)
+end
 
 function meta:SetWeaponToolslot(weaponstring)
 	self:SetDTString(3, weaponstring)
@@ -179,7 +185,7 @@ function meta:HealHealth(toheal,healer, wep)
 	end
 	if healer:IsPlayer() and self ~= healer and healer:IsSkillActive(SKILL_S_CINDERELA) then
 		self:GiveStatus("c_debuff",1)
-		local g = self:GiveStatus("c_buff",30)
+		local g = self:GiveStatus("c_buff",(healer:IsSkillActive(SKILL_S_CINDERELA_B1) and 10 or 30))
 		g.Applier = healer
 	end
 	if healer:IsPlayer() and healer~=self and newhealth != oldhealth and healer:Team() == self:Team() then
@@ -416,7 +422,7 @@ function meta:ResetSpeed(noset)
 		speed = speed * 0.86
 	end
 	if self:GetStatus("c_buff") then
-		speed = speed * 0.65
+		speed = speed * (self:GetStatus("c_buff").Applier and self:GetStatus("c_buff").Applier:IsSkillActive(SKILL_S_CINDERELA_B1) and 1.35 or 1.25)
 	end
 	if self:GetStatus("c_debuff") then
 		speed = speed * 0.65
