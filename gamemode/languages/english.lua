@@ -975,6 +975,9 @@ LANGUAGE.skill_s_sticky_f = "STAND:Sticky Fingers"
 LANGUAGE.skill_s_sticky_f_branch_1 = "Unstable position"
 LANGUAGE.skill_s_cinder_b1 = "Strong Effect"
 LANGUAGE.skill_s_anubis_b1 = "A cost"
+LANGUAGE.skill_s_sticky_f_b2 = "Layer of defence"
+LANGUAGE.skill_s_cinder_b2 = "Endless Healing"
+LANGUAGE.skill_s_anubis_b2 = "Pieces"
 -- WOrthness
 LANGUAGE.worthness = "Worthiness "
 --Skills speed

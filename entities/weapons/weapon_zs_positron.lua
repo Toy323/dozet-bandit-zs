@@ -46,7 +46,7 @@ SWEP.ShowWorldModel = false
 
 SWEP.ReloadSound = ""
 SWEP.Primary.Sound = ""
-SWEP.Primary.Damage = 20
+SWEP.Primary.Damage = 32
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 0.045
 

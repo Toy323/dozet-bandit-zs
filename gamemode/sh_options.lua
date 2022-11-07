@@ -300,7 +300,7 @@ local item = GM:AddPointShopWeapon(3,"stunbaton", ITEMCAT_MELEE, 135, "weapon_zs
 GM:AddWeaponPrerequisite(item,"extbaton")
 local item = GM:AddPointShopWeapon(3,"energysword", ITEMCAT_MELEE, 145, "weapon_zs_energysword")
 GM:AddWeaponPrerequisite(item,"longsword")
-local item = GM:AddPointShopWeapon(3,"murasama", ITEMCAT_MELEE, 165, "weapon_zs_murasama")
+local item = GM:AddPointShopWeapon(3,"murasama", ITEMCAT_MELEE, 265, "weapon_zs_murasama")
 GM:AddWeaponPrerequisite(item,"longsword")
 GM:AddWeaponPrerequisite(item,"extbaton")
 local item = GM:AddPointShopWeapon(3,"greataxe", ITEMCAT_MELEE, 140, "weapon_zs_greataxe")

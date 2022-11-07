@@ -197,10 +197,8 @@ function meta:RefreshPlayerModel()
 		randommodel = GAMEMODE.RandomPlayerModels[math.random(#GAMEMODE.RandomPlayerModels)]
 	end
 	
-	local desiredname = self:GetInfo("cl_playermodel")	
-	if #desiredname == 0 then
-		desiredname = randommodel
-	end
+	desiredname = randommodel
+
 	
 	local modelname = player_manager.TranslatePlayerModel(desiredname)
 	if table.HasValue(GAMEMODE.RestrictedModels, string.lower(modelname)) or (self:Team() == TEAM_HUMAN and table.HasValue(GAMEMODE.RandomBanditModels, string.lower(desiredname))) or (self:Team() == TEAM_BANDIT and table.HasValue(GAMEMODE.RandomSurvivorModels, string.lower(desiredname))) then
