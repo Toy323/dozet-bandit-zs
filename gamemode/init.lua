@@ -2109,17 +2109,17 @@ function GM:EntityTakeDamage(ent, dmginfo)
 	elseif ent:IsBarricadeProp() and attacker:IsPlayer() and not ent.NoDamageNumbers and not ent:IsSameTeam(attacker)then
 		dispatchdamagedisplay = true
 	end
-	if dmginfo:GetDamage() > 0 or (ent:IsPlayer() and ent:GetBloodArmor() >= 1) then
+	if dmginfo:GetDamage() > 0 then
 		local holder, status = ent:GetHolder()
 		if holder then status:Remove() end
 
 		if attacker:IsPlayer() and dispatchdamagedisplay then
-			self:DamageFloater(attacker, ent, dmginfo, (ent:IsPlayer() and ent:GetBloodArmor() >= 1))
+			self:DamageFloater(attacker, ent, dmginfo)
 		end
 	end
 end
 
-function GM:DamageFloater(attacker, victim, dmginfo, bool)
+function GM:DamageFloater(attacker, victim, dmginfo, bool, blooddmg)
 	local dmgpos = dmginfo:GetDamagePosition()
 	if dmgpos == vector_origin then dmgpos = victim:NearestPoint(attacker:EyePos()) end
 
@@ -2133,7 +2133,7 @@ function GM:DamageFloater(attacker, victim, dmginfo, bool)
 			else
 				bool = false
 			end
-			net.WriteUInt((math.ceil(dmginfo:GetDamage()) ~= 0 and math.ceil(dmginfo:GetDamage()) or victim:IsPlayer() and math.ceil(victim.BloodDead)), 16)
+			net.WriteUInt((!bool and math.ceil(dmginfo:GetDamage()) or bool and math.ceil(blooddmg)), 16)
 			net.WriteBool(bool)
 		end
 		net.WriteVector(dmgpos)

@@ -310,12 +310,12 @@ function meta:ProcessDamage(dmginfo)
 		end
 		if self:GetBloodArmor() > 0 then
 			local damage = dmginfo:GetDamage()
-			self.BloodDead = damage
 			if damage > 0 then
 	
 				local ratio = 1
 				local absorb = math.min(self:GetBloodArmor(), damage* ratio)
 				dmginfo:SetDamage(damage - absorb)
+				GAMEMODE:DamageFloater(attacker, self, dmginfo , true, absorb)
 				self:SetBloodArmor(self:GetBloodArmor() - absorb)
 				if (attackweapon and attackweapon.IgnoreDamageScaling) then
 					self:SetBloodArmor(self:GetBloodArmor() + (absorb * 0.5))
@@ -325,7 +325,9 @@ function meta:ProcessDamage(dmginfo)
 				if damage > 20 and damage - absorb <= 0 then
 					self:EmitSound("physics/flesh/flesh_strider_impact_bullet3.wav", 55)
 				end
+
 			end
+			
 		end
 		if attacker:GetActiveWeapon().IsMelee then
 			attacker:SetBloodArmor(math.min(100, attacker:GetBloodArmor() + dmginfo:GetDamage() * 0.25))
