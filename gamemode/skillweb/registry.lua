@@ -392,7 +392,7 @@ local skill = GM:AddSkill(SKILL_S_CINDERELA, translate.Get("skill_s_cinder"), GO
 																-1,			-1,					{SKILL_S_CINDERELA_B1}, TREE_SUPPORTTREE)
 skill.DontUnlock = SKILL_S_STICKY_FINGERS skill.DontUnlock2 = SKILL_S_ANUBIS
 local skill = GM:AddSkill(SKILL_S_ANUBIS, translate.Get("skill_s_anubis"), GOOD..translate.Get("skill_s_anubis_d1")..BAD..translate.Get("skill_s_anubis_d2"),
-																1,			-0,					{}, TREE_SUPPORTTREE)
+																1,			-0,					{SKILL_S_ANUBIS_B1}, TREE_SUPPORTTREE)
 skill.DontUnlock = SKILL_S_STICKY_FINGERS skill.DontUnlock2 = SKILL_S_CINDERELA
 local skill = GM:AddSkill(SKILL_S_STICKY_FINGERS, translate.Get("skill_s_sticky_f"), GOOD..translate.Get("skill_s_sticky_f_d1")..BAD..translate.Get("skill_s_sticky_f_d2"),
 																1,			2.5,					{SKILL_S_STICKY_FINGERS_B1}, TREE_SUPPORTTREE)

@@ -76,7 +76,7 @@ end
 function SWEP:PlayerHitUtil(owner, damage, hitent, dmginfo)
 	if SERVER then
 		if hitent:WouldDieFrom(damage, dmginfo:GetDamagePosition()) then
-            owner:SetHealth(180)	
+            owner:SetHealth(owner:Health()+hitent:Health() * 0.5)	
 		else
             owner:SetHealth(owner:Health()+hitent:Health() * 0.05)	
 		end
