@@ -1480,6 +1480,8 @@ net.Receive("zs_dmg", function(length)
 			effectdata:SetScale(0)
 		util.Effect("damagenumber", effectdata)
 	end
+	MySelf:EmitSound()
+	LocalPlayer():EmitSound("bandit/hitsound.wav", 500, 100, 1,CHAN_ITEM)
 end)
 
 net.Receive("zs_dmg_prop", function(length)

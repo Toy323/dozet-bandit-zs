@@ -801,18 +801,17 @@ function GM:Think()
 				pl:GiveStatus("dimvision",10)
 			end
 			if pl:IsSkillActive(SKILL_2_LIFE) then
-				local attacker = pl
-				local num = #team.GetPlayers(attacker:Team())
-				local stands = 1
+				local num = #team.GetPlayers(pl:Team())
+				local stands = 0
 				for _, pl2 in pairs(team.GetPlayers(attacker:Team())) do 
-					if pl2:IsSkillActive(SKILL_2_LIFE) and pl2 ~= attacker then
+					if pl2:IsSkillActive(SKILL_2_LIFE) then
 						stands = stands + 1
 					end
-					if !pl2:Alive() and pl2 ~= attacker then
+					if !pl2:Alive() and pl2 ~= pl then
 						num = num - 1
 					end
 					if num == stands then
-						attacker:Kill()
+						timer.Simple(0.2, function() 	if num == stands then pl:Kill() end end)
 					end
 				end
 			end
@@ -1321,6 +1320,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.CarryOverCommision = 0
 	pl.BackdoorsUsed = 0
 	pl:UpdateStarDust((pl:GetPos() or table.Random(player.GetAll()):GetPos() or Vector(0,0,0)))
+	pl:UpdateFocus(false)
 	pl.Think_Stardust = 0
 	pl.NextStarC = 0
 	pl.NextUseManhack = 0
@@ -3022,7 +3022,7 @@ function GM:WaveEnded()
 	util.RemoveAll("prop_obj_sample")
 	util.RemoveAll("prop_sampledepositterminal")
 	local deployables = ents.FindByClass("prop_drone")
-	table.Add(deployables, ents.FindByClass("prop_manhack"))
+	table.Add(deployables, ents.FindByClass("prop_manhack*"))
 	table.Add(deployables, ents.FindByClass("prop_gunturret"))
 	table.Add(deployables, ents.FindByClass("prop_detpack"))
 	for _, ent in pairs(deployables) do

@@ -367,7 +367,7 @@ GM:AddSkill(SKILL_SPEED4, translate.Get("skill_speed").."IV", GOOD.."+11"..trans
 																-4,			0,					{SKILL_SPEED5, SKILL_SAFEFALL}, TREE_SPEEDTREE)
 GM:AddSkill(SKILL_SPEED5, translate.Get("skill_speed").."V", GOOD.."+15"..translate.Get("speed")..BAD.."-11"..translate.Get("health"),
 																-4,			-2,					{SKILL_ULTRANIMBLE, SKILL_BACKPEDDLER, SKILL_MOTIONI, SKILL_CARDIOTONIC, SKILL_UNBOUND}, TREE_SPEEDTREE)
-GM:AddSkill(SKILL_BLOODHELL, translate.Get("skill_bloodyman"), GOOD..translate.Get("skill_bloodyman_d1")..BAD.."-45"..translate.Get("health"),
+GM:AddSkill(SKILL_BLOODHELL, translate.Get("skill_bloodyman"), GOOD..translate.Get("skill_bloodyman_d1")..BAD.."-20"..translate.Get("health"),
 																-6,			-3,					{SKILL_SPEED5}, TREE_SPEEDTREE)
 GM:AddSkill(SKILL_KAMIKAZE, translate.Get("skill_kamikaze"), GOOD..translate.Get("skill_kamikaze_d1")..BAD..translate.Get("skill_kamikaze_d2")..GOOD.."+66"..translate.Get("speed"),
 																-2,			-3,					{SKILL_SPEED5}, TREE_SPEEDTREE)
@@ -829,7 +829,7 @@ GM:AddSkillModifier(SKILL_STOIC4, SKILLMOD_SPEED, -11)
 
 GM:AddSkillModifier(SKILL_STOIC5, SKILLMOD_HEALTH, 11)
 GM:AddSkillModifier(SKILL_STOIC5, SKILLMOD_SPEED, -15)
-GM:AddSkillModifier(SKILL_BLOODHELL, SKILLMOD_HEALTH, -45)
+GM:AddSkillModifier(SKILL_BLOODHELL, SKILLMOD_HEALTH, -20)
 
 GM:AddSkillModifier(SKILL_SURGEON1, SKILLMOD_MEDKIT_COOLDOWN_MUL, -0.06)
 GM:AddSkillModifier(SKILL_SURGEON2, SKILLMOD_MEDKIT_COOLDOWN_MUL, -0.09)
