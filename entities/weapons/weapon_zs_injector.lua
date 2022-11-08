@@ -162,7 +162,7 @@ function SWEP:PrimaryAttack()
 					stat.TimeInterval = (ultra and 1 or self.ToxicTick)
 				end
 				curtgt:AddLegDamage(dmg*2)
-				curtgt:GiveStatus("knockdown", (ultra and 5 or (getblock and 0.5 or 2)))
+				curtgt:GiveStatus("knockdown", (ultra and (owner:GetFocusD() and 2.5 or 5) or (getblock and 0.5 or (owner:GetFocusD() and 1 or 2))))
 			end
 		end
 	end	

@@ -925,6 +925,8 @@ LANGUAGE.skill_quality = "Focus "
 LANGUAGE.skill_focus = "Focusing "
 LANGUAGE.skill_r_bullets = "Rubber Bullets"
 LANGUAGE.skill_r_bullets_d1 = "Give confusion on bullets hit,in headshot x5 confusion.\n"
+LANGUAGE.skill_biggest_boom = "Biggest boom!"
+
 --Skill repairsman
 
 
@@ -948,6 +950,9 @@ LANGUAGE.skill_mode_whirlwind_d2 = "-50% Damage and +250% Delay for ammo regen a
 LANGUAGE.skill_operator = "Operator"
 LANGUAGE.skill_operator_d1 = "-33% Damage taken for manhack.\n"
 LANGUAGE.skill_operator_d2 = "You need 4 seconds for start a control or leaving."
+
+LANGUAGE.skill_radiodanger = "Radiowaves"
+
 
 LANGUAGE.skill_h_disp = "Hammer Discipline "
 LANGUAGE.skill_t_buff = "Turret AI"

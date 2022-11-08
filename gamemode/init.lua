@@ -803,7 +803,7 @@ function GM:Think()
 			if pl:IsSkillActive(SKILL_2_LIFE) then
 				local num = #team.GetPlayers(pl:Team())
 				local stands = 0
-				for _, pl2 in pairs(team.GetPlayers(attacker:Team())) do 
+				for _, pl2 in pairs(team.GetPlayers(pl:Team())) do 
 					if pl2:IsSkillActive(SKILL_2_LIFE) then
 						stands = stands + 1
 					end
@@ -811,7 +811,7 @@ function GM:Think()
 						num = num - 1
 					end
 					if num == stands then
-						timer.Simple(0.2, function() 	if num == stands then pl:Kill() end end)
+						timer.Create(pl:Nick().."Stando die",0.2,1, function() 	if num == stands then pl:Kill() end end)
 					end
 				end
 			end
@@ -2377,7 +2377,7 @@ end
 function GM:PlayerDeath(pl, inflictor, attacker)
 	self:SaveVault(pl)
 	if pl:IsSkillActive(SKILL_KAMIKAZE) then
-		util.BlastDamage2(pl, pl, pl:GetPos(), 456, 310)
+		util.BlastDamage2(pl, pl, pl:GetPos(), 256, 310)
 		pl:EmitSound("c4.explode")
 		local effectdata = EffectData()
 			effectdata:SetOrigin(pl:GetPos())

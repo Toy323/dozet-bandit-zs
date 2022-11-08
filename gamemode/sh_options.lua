@@ -310,7 +310,7 @@ GM:AddWeaponPrerequisite(item,"sawhack")
 --GM:AddPointShopWeapon(nil,"zpcpot", ITEMCAT_MELEE, 32, "weapon_zs_pot")
 
 GM:AddPointShopWeapon(nil,"barricadekit", ITEMCAT_TOOLS, 125, "weapon_zs_barricadekit")
-local item = GM:AddPointShopWeapon(nil,"empgun", ITEMCAT_TOOLS, 55, "weapon_zs_empgun")
+local item = GM:AddPointShopWeapon(nil,"empgun", ITEMCAT_TOOLS, 355, "weapon_zs_empgun")
 item.NoSampleCollectMode = true
 
 local item = GM:AddPointShopWeapon(nil,"grenadelauncher", ITEMCAT_TOOLS, 70, "weapon_zs_grenadelauncher")

@@ -75,6 +75,16 @@ function SWEP:Think()
 		self.LastScan = CurTime()
 		surface.PlaySound("npc/combine_gunship/gunship_ping_search.wav")
 	end
+	if SERVER and GAMEMODE:GetWaveActive() and self.LastScan + (self.ScanDelay * mul ) <= CurTime() and self:GetOwner():IsSkillActive(SKILL_DANGER_RADIOWAVES) then
+		for _, ent in pairs(ents.FindInSphere(self:GetOwner():GetPos(), 400)) do
+			if WorldVisible(self:GetOwner():LocalToWorld(Vector(0, 0, 30)), ent:NearestPoint(self:GetOwner():LocalToWorld(Vector(0, 0, 30)))) then
+				if ent:IsValid() and ent:IsPlayer() and ent:Team() ~= self:GetOwner():Team() then
+					ent:TakeDamage(15, self:GetOwner(),self)
+					self:GetOwner():SetBloodArmor(math.min(100,self:GetOwner():GetBloodArmor() + 10))
+				end
+			end
+		end
+	end
 	if self.BaseClass.Think then
 		self.BaseClass.Think(self)
 	end

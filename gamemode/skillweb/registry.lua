@@ -169,6 +169,8 @@ SKILL_S_ANUBIS_B1 = 59
 SKILL_S_STICKY_FINGERS_B2 = 60
 SKILL_S_CINDERELA_B2 = 61
 SKILL_S_ANUBIS_B2 = 62
+SKILL_BIG_BOOM = 63
+SKILL_DANGER_RADIOWAVES = 64
 
 SKILLMOD_HEALTH = 1
 SKILLMOD_SPEED = 2
@@ -305,6 +307,8 @@ GM:AddSkill(SKILL_RELOAD4, translate.Get("skill_q_r").."IV", BAD.."-9%"..transla
 																-4,			0,					{SKILL_RELOAD5}, TREE_GUNTREE)
 GM:AddSkill(SKILL_RELOAD5, translate.Get("skill_q_r").."V", BAD.."-12%"..translate.Get("meleedamage")..GOOD.."+14%"..translate.Get("r_speed"),
 																-4,			-2,					{SKILL_RELOAD4}, TREE_GUNTREE)
+GM:AddSkill(SKILL_BIG_BOOM, translate.Get("skill_biggest_boom"), GOOD..translate.Get("skill_biggest_boom_d1")..BAD..translate.Get("skill_biggest_boom_d2"),
+																-4,			-3,					{SKILL_RELOAD5}, TREE_GUNTREE)
 
 GM:AddSkill(SKILL_FOCUS1, translate.Get("skill_focus").."I", GOOD.."+1%"..translate.Get("b_damage")..GOOD.."+4%"..translate.Get("w_ac"),
 																-0,			6,					{SKILL_NONE, SKILL_FOCUS2}, TREE_GUNTREE)
@@ -428,7 +432,9 @@ GM:AddSkill(SKILL_AUTOSCAN, translate.Get("skill_module_autoscan"), GOOD..transl
 GM:AddSkill(SKILL_MANHUNT, translate.Get("skill_manhunt"), GOOD..translate.Get("skill_manhunt_d1")..BAD..translate.Get("skill_manhunt_d2"),
 																-8,			-2.5,					{SKILL_OPERATOR}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_OPERATOR, translate.Get("skill_operator"), GOOD..translate.Get("skill_operator_d1")..BAD..translate.Get("skill_operator_d2"),
-																-8,			0,					{}, TREE_BUILDINGTREE)
+																-8,			0,					{DANGER_RADIOWAVES}, TREE_BUILDINGTREE)
+GM:AddSkill(SKILL_DANGER_RADIOWAVES, translate.Get("skill_radiodanger"), GOOD..translate.Get("skill_radiodanger_d1")..BAD.."-25%"..translate.Get("meleedamage"),
+																-9,			-1,					{}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_MODE_WHIRLWHIND, translate.Get("skill_mode_whirlwind"), GOOD..translate.Get("skill_mode_whirlwind_d1")..BAD..translate.Get("skill_mode_whirlwind_d2"),
 																-6,			-7,					{}, TREE_BUILDINGTREE)
 
@@ -887,3 +893,5 @@ GM:AddSkillModifier(SKILL_RELOAD5, SKILLMOD_RELOADSPEED_MUL, 0.14)
 GM:AddSkillModifier(SKILL_ULTRADEFENCE, SKILLMOD_SPEED, -70)
 
 GM:AddSkillModifier(SKILL_CRUSADER, SKILLMOD_MELEE_DAMAGE_MUL, -0.5)
+
+GM:AddSkillModifier(SKILL_DANGER_RADIOWAVES, SKILLMOD_MELEE_DAMAGE_MUL, -0.25)
