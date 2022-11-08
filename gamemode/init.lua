@@ -241,6 +241,7 @@ function GM:Initialize()
 	game.ConsoleCommand("fire_dmgscale 1\n")
 	game.ConsoleCommand("mp_flashlight 1\n")
 	game.ConsoleCommand("sv_gravity 600\n")
+
 end
 
 function GM:AddNetworkStrings()
@@ -722,10 +723,25 @@ function GM:InitialChooseRoundMode(vote)
 	file.Write(filename, tostring(self:GetRoundMode()))
 	gamemode.Call("OnRoundModeInitialSelected")
 end
-
+GM.NextThinkForRound = 0
 function GM:Think()
 	local time = CurTime()
-	
+	local aliveb = #team.GetPlayers(TEAM_BANDIT)
+	local aliveh = #team.GetPlayers(TEAM_HUMAN)
+	for _, b in ipairs( team.GetPlayers(TEAM_BANDIT)) do
+		if b:IsValid() and !b:Alive() then
+			aliveb = aliveb - 1
+		end
+	end
+	for _, b in ipairs( team.GetPlayers(TEAM_HUMAN)) do
+		if b:IsValid() and !b:Alive() then
+			aliveh = aliveh - 1
+		end
+	end
+	if self.NextThinkForRound <= CurTime() and (aliveb == 0 or aliveh == 0) then
+		self.NextThinkForRound = CurTime() + 6
+		self:SetWaveEnd(CurTime() + 4)
+	end
 	if not self.RoundEnded then
 		if self:GetWaveActive() then
 			if self:GetWaveEnd() <= time and self:GetWaveEnd() ~= -1 then
