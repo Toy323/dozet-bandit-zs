@@ -999,7 +999,7 @@ LANGUAGE.skill_s_sticky_req_f_d2 = "Задержка 10 секунд."
 LANGUAGE.skill_s_ge_req = "РЕКВИЕМ:Золотой Опыт"
 LANGUAGE.skill_s_ge_req_d1 = "При нажатие R(зажать) + Z или B(ЗАЖАТЬ) + shift вы можете сделать обманку.\nОбманка сделает ваши следующие 10 секунд действий полностью бесполезными.\n"
 -- WOrthness
-LANGUAGE.worthness = "Обмен "Ы
+LANGUAGE.worthness = "Обмен "
 --Скиллы скорость
 
 
