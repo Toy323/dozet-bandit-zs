@@ -82,7 +82,7 @@ function SWEP:Think()
 				if ent:IsValid() and ent:IsPlayer() and ent:Team() ~= self:GetOwner():Team() then
 					ent:TakeDamage(15, self:GetOwner(),self)
 					self:GetOwner():SetBloodArmor(math.min(100,self:GetOwner():GetBloodArmor() + 10))
-					self.NextDamage = CurTime() + 6
+					self.NextDamage = CurTime() + 4.5
 				end
 			end
 		end
