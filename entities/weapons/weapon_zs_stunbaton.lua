@@ -21,6 +21,8 @@ SWEP.MeleeSize = 1.5
 SWEP.Primary.Delay = 0.9
 SWEP.DamageType = DMG_CLUB
 
+SWEP.Stamina = 8
+
 SWEP.SwingTime = 0.25
 SWEP.SwingRotation = Angle(60, 0, 0)
 SWEP.SwingOffset = Vector(0, -50, 0)

@@ -27,6 +27,9 @@ SWEP.HoldType = "melee"
 
 SWEP.DamageType = DMG_CLUB
 
+
+SWEP.Stamina = 2
+
 SWEP.ViewModel = "models/weapons/c_stunstick.mdl"
 SWEP.WorldModel = "models/props_c17/computer01_keyboard.mdl"
 SWEP.UseHands = true

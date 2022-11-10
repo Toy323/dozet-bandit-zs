@@ -29,6 +29,8 @@ SWEP.ShowWorldModel = false
 
 SWEP.HoldType = "melee"
 
+SWEP.Stamina = 9
+
 SWEP.MeleeDamage = 30
 SWEP.MeleeRange = 55
 SWEP.MeleeSize = 1.5

@@ -34,6 +34,8 @@ SWEP.Primary.Delay = 0.35
 
 SWEP.WalkSpeed = SPEED_FAST
 
+SWEP.Stamina = 4
+
 SWEP.UseMelee1 = true
 
 SWEP.HitGesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_MELEE
@@ -71,7 +73,8 @@ function SWEP:PlayerHitUtil(owner, damage, hitent, dmginfo)
 	if self:GetHitAmount() < 20 then
 		self:SetHitAmount(self:GetHitAmount()+1)
 		self:SetLastEnemyHit(CurTime())
-		owner:ResetSpeed()
+		owner:ResetSpeed() 
+		owner:AddStamina(9)
 	end
 end
 

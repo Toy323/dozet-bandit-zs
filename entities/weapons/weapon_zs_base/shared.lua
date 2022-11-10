@@ -372,16 +372,16 @@ function GenericBulletCallback(attacker, tr, dmginfo)
 				local power = (dmginfo:GetDamage() / 7) / (dmginfo:GetInflictor().Primary.NumShots or 1)
 				local conf = ent:GiveStatus("confusion",(d and power * 5 or power))
 			end
-			if attacker:IsSkillActive(SKILL_BIG_BOOM) then
+			if attacker:IsSkillActive(SKILL_BIG_BOOM) and ent:GetActiveWeapon() and ent:GetActiveWeapon().IsMelee then
 				local pl = ent
 				timer.Create(ent:Nick().." Explode Ammo",1.2,1, function()
-					util.BlastDamage2(dmginfo:GetInflictor(), attacker, pl:GetPos(), 45, pl:Health() * 0.1 + dmginfo:GetDamage())
+					util.BlastDamage2(dmginfo:GetInflictor(), attacker, pl:GetPos(), 45, (pl:Health() or 1) * 0.1 + dmginfo:GetDamage())
 					pl:EmitSound("c4.explode")
 					local effectdata = EffectData()
 						effectdata:SetOrigin(pl:GetPos())
 					util.Effect("Explosion", effectdata)
 					if SERVER then
-						pl:TakeDamage(pl:Health() * 0.1, attacker,dmginfo:GetInflictor() )
+						pl:TakeDamage((pl:Health() or 1) * 0.1, attacker,dmginfo:GetInflictor() )
 						pl:SetBloodArmor(0)
 					end
 				 end)

@@ -46,6 +46,8 @@ SWEP.MeleeDamage = 35
 SWEP.MeleeRange = 60
 SWEP.MeleeSize = 4
 
+SWEP.Stamina = 22
+
 SWEP.WalkSpeed = SPEED_NORMAL
 
 SWEP.Primary.Delay = 0.5

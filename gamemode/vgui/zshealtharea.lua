@@ -52,7 +52,7 @@ local function ContentsPaint(self, w, h)
 		colHealth.g = 120
 		colHealth.b = 70
 		draw.SimpleTextBlurry(lp:Health(), "ZSHUDFont", 16, self:GetTall() - 12, colHealth, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-		if lp:GetStamina() >= 1 then
+		if lp:GetStamina() < 100 then
 			if lp:IsValid() then
 				local screenscale = BetterScreenScale()
 				local health = math.max(lp:GetStamina(), 0)

@@ -33,7 +33,7 @@ SWEP.UseHands = true
 SWEP.MeleeDamage = 43
 SWEP.MeleeRange = 60
 SWEP.MeleeSize = 1.4
-
+SWEP.Stamina = 45
 SWEP.UseMelee1 = false
 
 SWEP.HitGesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_MELEE

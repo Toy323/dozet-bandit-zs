@@ -29,6 +29,7 @@ SWEP.UseHands = true
 SWEP.MeleeDamage = 45
 SWEP.MeleeRange = 50
 SWEP.MeleeSize = 1.25
+SWEP.Stamina = 6
 
 SWEP.UseMelee1 = true
 

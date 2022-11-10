@@ -24,6 +24,8 @@ SWEP.BlockVsDissolve = 0.1
 
 SWEP.Base = "weapon_zs_basemelee"
 
+SWEP.Stamina = 25
+
 SWEP.HoldType = "melee2"
 SWEP.DamageType = DMG_DISSOLVE
 SWEP.FakeDamageType = DMG_SLASH

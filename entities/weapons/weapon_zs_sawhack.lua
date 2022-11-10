@@ -31,6 +31,8 @@ SWEP.HoldType = "melee2"
 
 SWEP.Primary.Delay = 0.45
 
+SWEP.Stamina = 9.2
+
 SWEP.MeleeDamage = 27
 SWEP.MeleeRange = 55
 SWEP.MeleeSize = 1.9
