@@ -374,15 +374,14 @@ function GenericBulletCallback(attacker, tr, dmginfo)
 			end
 			if attacker:IsSkillActive(SKILL_BIG_BOOM) then
 				local pl = ent
-				local pos = tr.HitPos
-				timer.Create(ent:Nick().."Explode Ammo",3,1, function()
-					util.BlastDamage2(dmginfo:GetInflictor(), attacker, pos, 45, pl:Health() * 0.1 + dmginfo:GetDamage())
-					pl:TakeDamage(pl:Health() * 0.1, attacker,dmginfo:GetInflictor() )
+				timer.Create(ent:Nick().." Explode Ammo",1.2,1, function()
+					util.BlastDamage2(dmginfo:GetInflictor(), attacker, pl:GetPos(), 45, pl:Health() * 0.1 + dmginfo:GetDamage())
 					pl:EmitSound("c4.explode")
 					local effectdata = EffectData()
-						effectdata:SetOrigin((pos or pl:GetPos()))
+						effectdata:SetOrigin(pl:GetPos())
 					util.Effect("Explosion", effectdata)
 					if SERVER then
+						pl:TakeDamage(pl:Health() * 0.1, attacker,dmginfo:GetInflictor() )
 						pl:SetBloodArmor(0)
 					end
 				 end)

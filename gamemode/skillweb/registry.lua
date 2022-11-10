@@ -440,7 +440,7 @@ GM:AddSkill(SKILL_AUTOSCAN, translate.Get("skill_module_autoscan"), GOOD..transl
 GM:AddSkill(SKILL_MANHUNT, translate.Get("skill_manhunt"), GOOD..translate.Get("skill_manhunt_d1")..BAD..translate.Get("skill_manhunt_d2"),
 																-8,			-2.5,					{SKILL_OPERATOR}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_OPERATOR, translate.Get("skill_operator"), GOOD..translate.Get("skill_operator_d1")..BAD..translate.Get("skill_operator_d2"),
-																-8,			0,					{DANGER_RADIOWAVES}, TREE_BUILDINGTREE)
+																-8,			0,					{SKILL_DANGER_RADIOWAVES}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_DANGER_RADIOWAVES, translate.Get("skill_radiodanger"), GOOD..translate.Get("skill_radiodanger_d1")..BAD.."-25%"..translate.Get("meleedamage"),
 																-9,			-1,					{}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_MODE_WHIRLWHIND, translate.Get("skill_mode_whirlwind"), GOOD..translate.Get("skill_mode_whirlwind_d1")..BAD..translate.Get("skill_mode_whirlwind_d2"),
