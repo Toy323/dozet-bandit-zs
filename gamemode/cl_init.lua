@@ -1194,7 +1194,10 @@ function GM:_PrePlayerDraw(pl)
 		undomodelblend = true
 		render.SetBlend(0)
 	else
-		if myteam == pl:Team() and pl ~= MySelf and not self.MedicalAura and MySelf:Alive() then
+		if pl == MySelf:GetStandUser() then
+			render.SetColorModulation(0.075, 0.714, 0.267)
+		end
+		if myteam == pl:Team() and pl ~= MySelf and not self.MedicalAura and MySelf:Alive() and pl ~= MySelf:GetStandUser() then
 			local radius = self.TransparencyRadius
 			if radius > 0 then
 				local eyepos = EyePos()

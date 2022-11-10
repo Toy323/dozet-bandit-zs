@@ -124,12 +124,21 @@ function meta:ApplyAssocModifiers(assoc)
 end
 
 -- These are done on human spawn.
+function meta:ShakeUser()
+	if #team.GetPlayers(self:Team()) <= 1 then return NULL end
+	local d = table.Random(team.GetPlayers(self:Team()))
+	if d == self then
+		d = self:ShakeUser()
+	end
+	return d
+end
 function meta:ApplySkills(override)
 	if GAMEMODE.ZombieEscape or GAMEMODE.ClassicMode then return end -- Skills not used on these modes
 	local allskills = GAMEMODE.Skills
 	local desired = override or self:Alive() and self:GetDesiredActiveSkills() or {}
 	local current_active = self:GetActiveSkills()
 	local desired_assoc = table.ToAssoc(desired)
+
 
 	-- Do we even have these skills unlocked?
 	if not override then
@@ -164,6 +173,15 @@ function meta:ApplySkills(override)
 	-- Store and sync with client.
 	self:SetActiveSkills(desired_assoc, not self.PlayerReady)
 	--self.SkillUsed = true
+	if self:IsSkillActive(SKILL_2_LIFE) then
+		local standu = self:ShakeUser()
+
+		if standu:IsValid() then
+			self:SetStandUser(standu)
+			self:PrintMessage(HUD_PRINTTALK, self:GetStandUser():Nick().." Твой юзер!")
+			self:GetStandUser():PrintMessage(HUD_PRINTTALK, self:Nick().." Твой стенд!")
+		end
+	end
 end
 
 -- For trinkets, these apply after your skills, and they need to work differently so they can't be used to "update" your skills midgame.

@@ -807,19 +807,11 @@ function GM:Think()
 			if pl:IsSkillActive(SKILL_S_ANUBIS) and !pl:GetStatus("dimvision") then
 				pl:GiveStatus("dimvision",10)
 			end
-			if pl:IsSkillActive(SKILL_2_LIFE) then
-				local num = #team.GetPlayers(pl:Team())
-				local stands = 0
-				for _, pl2 in pairs(team.GetPlayers(pl:Team())) do 
-					if pl2:IsSkillActive(SKILL_2_LIFE) then
-						stands = stands + 1
-					end
-					if !pl2:Alive() and pl2 ~= pl then
-						num = num - 1
-					end
-					if num == stands then
-						timer.Create(pl:Nick().."Stando die",0.2,1, function() 	if num == stands then pl:Kill() end end)
-					end
+			if pl:IsSkillActive(SKILL_2_LIFE) and pl:GetStandUser():IsValid() and pl.FixForFix <= CurTime() then
+				
+				if !pl:GetStandUser():Alive() then
+					pl.FixForFix = CurTime() + 1
+					timer.Create("Death STAND"..pl:Nick(),0.05,1, function() pl:Kill() end)
 				end
 			end
 
@@ -1295,6 +1287,8 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl:SetBloodArmor(0)
 	
 	pl.WaveJoined = self:GetWave()
+
+	pl.FixForFix = 0
 	
 	pl.BloodRegen = 0
 	pl.BarricadeDamage = 0

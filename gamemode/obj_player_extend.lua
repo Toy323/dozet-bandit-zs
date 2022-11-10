@@ -20,6 +20,12 @@ end
 function meta:SetWeaponMelee(weaponstring)
 	self:SetDTString(2, weaponstring)
 end
+function meta:GetStandUser()
+	return self:GetDTEntity(5)
+end
+function meta:SetStandUser(ent)
+	self:SetDTEntity(5, ent)
+end
 
 function meta:GetWeaponMelee()
 	return self:GetDTString(2)

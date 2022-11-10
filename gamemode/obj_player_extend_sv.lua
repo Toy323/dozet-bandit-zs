@@ -240,35 +240,8 @@ function meta:ProcessDamage(dmginfo)
 				net.WriteBool( head )
 			net.Send( attacker )
 		end
-		if attacker:IsSkillActive(SKILL_2_LIFE) then
-			local num = #team.GetPlayers(attacker:Team())
-			local del = #team.GetPlayers(attacker:Team()) - 1
-			local stands = 1
-			local truepl = NULL
-			for _, pl in pairs(team.GetPlayers(attacker:Team())) do 
-				if pl:IsSkillActive(SKILL_2_LIFE) and pl ~= attacker then
-					del = del + 1
-					stands = stands + 1
-				end
-				if !pl:Alive() and pl ~= attacker then
-					num = num - 1
-				end
-				if num ~= 1 + stands then
-					for _, pl2 in pairs(team.GetPlayers(attacker:Team())) do 
-						if !pl2:IsSkillActive(SKILL_2_LIFE) then
-							truepl = pl
-						end
-					end
-				end
-			end
-			if num ~= 1 + stands then
-				dmginfo:ScaleDamage((num/del))
-				--print((num/del))
-			else		
-				dmginfo:ScaleDamage((truepl:Health()/truepl:GetMaxHealth()) /#team.GetPlayers(attacker:Team()))
-				--print((truepl:Health()/truepl:GetMaxHealth()) /#team.GetPlayers(attacker:Team()))
-			end
-			dmginfo:ScaleDamage(0.85)
+		if attacker:IsSkillActive(SKILL_2_LIFE) and attacker:GetStandUser():IsValid() then
+			dmginfo:ScaleDamage(attacker:GetStandUser():Health()/attacker:GetStandUser():GetMaxHealth())
 		end
 		if attacker:LessPlayersOnTeam() and attackweapon and not attackweapon.NoScaleToLessPlayers and not attackweapon.IgnoreDamageScaling then
 			dmginfo:ScaleDamage(1.25)
