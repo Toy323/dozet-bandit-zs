@@ -126,7 +126,7 @@ function SWEP:ProcessDamage(dmginfo)
 		if attacker:GetStamina() <= 50 then
 			dmginfo:ScaleDamage(attacker:GetStamina()/100)
 		end
-		if attackweapon:GetBlock() then
+		if self:GetBlock() then
 			if dmginfo:IsDamageType(DMG_BULLET) and not (attackweapon and attackweapon.IgnoreDamageScaling) then
 				dmginfo:ScaleDamage(self.BlockVsBullet)
 			end
