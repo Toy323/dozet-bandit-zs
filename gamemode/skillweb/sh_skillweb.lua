@@ -52,6 +52,9 @@ function GM:SkillCanUnlock(pl, skillid, skilllist)
 		if skill.DontUnlock2 and pl:IsSkillUnlocked(skill.DontUnlock2) then
 			return false
 		end
+		if skill.DontUnlock3 and pl:IsSkillUnlocked(skill.DontUnlock3) then
+			return false
+		end
 		if connections[SKILL_NONE] then
 			return true
 		end

@@ -26,6 +26,8 @@ SWEP.BlockVsDissolve = 0.5
 SWEP.SpeedInBlock = 0.45
 SWEP.DamageMulBlock = 0.4
 
+SWEP.Stamina = 10
+
 
 SWEP.Secondary.ClipSize = 1
 SWEP.Secondary.DefaultClip = 1
@@ -121,7 +123,10 @@ function SWEP:ProcessDamage(dmginfo)
 	local owner = self:GetOwner()
 	local attackweapon = (attacker:IsPlayer() and attacker:GetActiveWeapon() or nil)
 	if attacker:IsPlayer() then
-		if self:GetBlock() then
+		if attacker:GetStamina() <= 50 then
+			dmginfo:ScaleDamage(attacker:GetStamina()/100)
+		end
+		if attackweapon:GetBlock() then
 			if dmginfo:IsDamageType(DMG_BULLET) and not (attackweapon and attackweapon.IgnoreDamageScaling) then
 				dmginfo:ScaleDamage(self.BlockVsBullet)
 			end
@@ -186,7 +191,7 @@ end
 
 function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end
-	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay / (self:GetOwner():IsSkillActive(SKILL_S_ANUBIS) and (GAMEMODE:GetWave() * (self:GetOwner():IsSkillActive(SKILL_S_ANUBIS_B1) and 0 or 0.04) + 0.6) or 1))
+	self:SetNextPrimaryFire(CurTime() + (self.Primary.Delay / (self:GetOwner():IsSkillActive(SKILL_S_ANUBIS) and (GAMEMODE:GetWave() * (self:GetOwner():IsSkillActive(SKILL_S_ANUBIS_B1) and 0 or 0.04) + 0.6) or 1)) / (math.max(0.25,(math.min(self:GetOwner():GetStamina()+25,100))/100)))
 
 	if self.SwingTime == 0 then
 		self:MeleeSwing()
@@ -217,7 +222,7 @@ end
 
 function SWEP:MeleeSwing()
 	local owner = self:GetOwner()
-
+	self:GetOwner():AddStamina(-(self.Stamina or 10))
 	owner:DoAttackEvent()
 	local tr = owner:CompensatedMeleeTrace(self.MeleeRange, self.MeleeSize)
 
@@ -234,7 +239,10 @@ function SWEP:MeleeSwing()
 	end
 
 	local damagemultiplier = (owner.MeleeDamageMultiplier or 1) * (self:GetOwner():IsSkillActive(SKILL_S_ANUBIS) and (GAMEMODE:GetWave() * (self:GetOwner():IsSkillActive(SKILL_S_ANUBIS_B1) and 0.06 or 0.03) + 0.6) or 1)
-	local damage = (self:GetBlock() and self.MeleeDamage * (self.DamageMulBlock or 0.4) or self.MeleeDamage) * damagemultiplier 
+	local damage = ((self:GetBlock() and self.MeleeDamage * (self.DamageMulBlock or 0.4) or self.MeleeDamage) * damagemultiplier )
+	if owner:GetStamina() >= 100 then
+		damage = damage * 1.35
+	end
 	local hitent = tr.Entity
 	local hitflesh = tr.MatType == MAT_FLESH or tr.MatType == MAT_BLOODYFLESH or tr.MatType == MAT_ANTLION or tr.MatType == MAT_ALIENFLESH
 
@@ -288,6 +296,7 @@ function SWEP:MeleeHitEntity(tr, hitent, damagemultiplier)
 	dmginfo:SetDamageType(self.DamageType)
 	dmginfo:SetDamage(damage)
 	dmginfo:SetDamageForce(math.min(self.MeleeDamage, 50) * 50 * owner:GetAimVector())
+	owner:AddStamina(-(self.Stamina or 20) * 0.1)
 
 	local vel
 	if hitent:IsPlayer() then

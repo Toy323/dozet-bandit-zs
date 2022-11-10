@@ -28,7 +28,7 @@ include("vgui/dexroundedframe.lua")
 include("vgui/dexrotatedimage.lua")
 include("vgui/dexnotificationslist.lua")
 include("vgui/dexchanginglabel.lua")
-
+include("sh_stamina.lua")
 include("vgui/pmainmenu.lua")
 include("vgui/poptions.lua")
 include("vgui/phelp.lua")

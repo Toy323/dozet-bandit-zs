@@ -42,6 +42,8 @@ AddCSLuaFile("obj_player_extend_cl.lua")
 AddCSLuaFile("obj_weapon_extend.lua")
 AddCSLuaFile("obj_entity_extend.lua")
 
+
+
 AddCSLuaFile("vgui/dgamestate.lua")
 AddCSLuaFile("vgui/dtransmittercounter.lua")
 AddCSLuaFile("vgui/dteamcounter.lua")
@@ -58,6 +60,7 @@ AddCSLuaFile("vgui/dexroundedframe.lua")
 AddCSLuaFile("vgui/dexrotatedimage.lua")
 AddCSLuaFile("vgui/dexnotificationslist.lua")
 AddCSLuaFile("vgui/dexchanginglabel.lua")
+AddCSLuaFile("sh_stamina.lua")
 
 AddCSLuaFile("vgui/pmainmenu.lua")
 AddCSLuaFile("vgui/poptions.lua")
@@ -794,6 +797,10 @@ function GM:Think()
 				pl.Think_Stardust = CurTime() + 3
 				pl:UpdateStarDust(pl:GetPos())
 			end
+			if pl.StaminaUsed <= CurTime() then
+				pl.StaminaUsed = CurTime() + 0.015 * pl:GetStamina()/25
+				pl:AddStamina(1)
+			end
 			if pl:IsSkillActive(SKILL_OPERATOR) and pl:GetVelocity():LengthSqr() >= 255 then
 				pl.NextUseManhack = CurTime() + 4
 			end
@@ -1327,6 +1334,7 @@ function GM:PlayerInitialSpawnRound(pl)
 
 	pl.DeepFocuses = nil
 	pl.DeepFocus_Time = 0
+	pl.StaminaUsed = 0
 	self:LoadVault(pl)
 	pl:ApplySkills()
 

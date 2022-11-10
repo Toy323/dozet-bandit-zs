@@ -46,6 +46,8 @@ include("obj_entity_extend.lua")
 include("obj_player_extend.lua")
 include("obj_weapon_extend.lua")
 
+include("sh_stamina.lua")
+
 include("workshopfix.lua")
 
 ----------------------
