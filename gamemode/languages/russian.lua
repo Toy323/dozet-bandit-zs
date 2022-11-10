@@ -530,6 +530,7 @@ LANGUAGE.pointfloater_kill_killed                   = "УБИТ"
 
 LANGUAGE.stat_walkspeed								= "Скорость передвижения"
 LANGUAGE.stat_meleedmg 								= "Урон в ближнем бою"
+LANGUAGE.stat_stamina 								= "Использование стамины"
 LANGUAGE.stat_meleerange							= "Дальность ближнего боя"
 
 LANGUAGE.stat_clipsize								= "Ёмкость магазина"

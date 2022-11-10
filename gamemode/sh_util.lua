@@ -192,6 +192,7 @@ end
 local weaponfeatures = {
 	{"WalkSpeed", "stat_walkspeed"},
 	{"MeleeDamage", "stat_meleedmg",1},
+	{"Stamina", "stat_stamina",1},
 	{"MeleeRange", "stat_meleerange"},
 
 	{"ClipSize", "stat_clipsize", 1, "Primary"},

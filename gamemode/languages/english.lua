@@ -539,6 +539,7 @@ LANGUAGE.pointfloater_kill_killed                   = "KILLED"
 
 LANGUAGE.stat_walkspeed								= "Walk Speed"
 LANGUAGE.stat_meleedmg 								= "Melee Damage"
+LANGUAGE.stat_stamina 								= "Stamina Usage"
 LANGUAGE.stat_meleerange							= "Melee Range"
 
 LANGUAGE.stat_clipsize								= "Clip Size"

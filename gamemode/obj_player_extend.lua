@@ -427,7 +427,11 @@ function meta:ResetSpeed(noset)
 	if self:GetStatus("c_debuff") then
 		speed = speed * 0.65
 	end
-	
+--[[	if self:GetStamina() > 0 and self:KeyDown(IN_SPEED) then
+		speed = speed * 1.1
+		self:AddStamina(-1)
+	end
+	]]
 	if not noset then
 		self:SetSpeed(math.max(20,speed))
 	end

@@ -2297,6 +2297,7 @@ function GM:KeyPress(pl, key)
 			end
 		end
 	elseif key == IN_SPEED then
+		--pl:ResetSpeed()
 		if pl:Alive() then
 			if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) then
 				pl:DispatchAltUse()

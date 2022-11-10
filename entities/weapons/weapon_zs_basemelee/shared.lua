@@ -240,7 +240,7 @@ function SWEP:MeleeSwing()
 
 	local damagemultiplier = (owner.MeleeDamageMultiplier or 1) * (self:GetOwner():IsSkillActive(SKILL_S_ANUBIS) and (GAMEMODE:GetWave() * (self:GetOwner():IsSkillActive(SKILL_S_ANUBIS_B1) and 0.06 or 0.03) + 0.6) or 1)
 	local damage = ((self:GetBlock() and self.MeleeDamage * (self.DamageMulBlock or 0.4) or self.MeleeDamage) * damagemultiplier )
-	if owner:GetStamina() >= 100 then
+	if owner:GetStamina() >= 99 then
 		damage = damage * 1.35
 	end
 	local hitent = tr.Entity
