@@ -391,10 +391,11 @@ end
 
 function meta:SetSpeed(speed)
 	if not speed then speed = SPEED_NORMAL end
+	local runspeed = self:GetStamina() > 0 and speed + 40 or speed
 
 	self:SetWalkSpeed(speed)
-	self:SetRunSpeed(speed)
-	self:SetMaxSpeed(speed)
+	self:SetRunSpeed(runspeed)
+	self:SetMaxSpeed(runspeed)
 end
 
 function meta:ResetSpeed(noset)

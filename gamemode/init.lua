@@ -797,6 +797,15 @@ function GM:Think()
 				pl.Think_Stardust = CurTime() + 3
 				pl:UpdateStarDust(pl:GetPos())
 			end
+			if pl:KeyDown(IN_SPEED) and pl:GetVelocity() ~= vector_origin then
+				if pl:GetStamina() > 0 then
+					pl:AddStamina(-0.32)
+
+				else
+					pl:ResetSpeed()
+				end
+			end
+
 			if pl.StaminaUsed <= CurTime() then
 				pl.StaminaUsed = CurTime() + 0.015 * pl:GetStamina()/25
 				pl:AddStamina(1)
@@ -2295,6 +2304,12 @@ function GM:KeyPress(pl, key)
 		if pl:Alive() then
 			if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) then
 				pl:DispatchAltUse()
+				if not pl:IsCarrying() and pl:KeyPressed(IN_SPEED) and pl:GetStamina() > 0 then
+					pl:AddStamina(-3)
+					pl:EmitSound("player/suit_sprint.wav", 50)
+
+					pl:ResetSpeed()
+				end
 			end
 		end
 	--elseif key == IN_WALK then
