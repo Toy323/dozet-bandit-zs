@@ -285,7 +285,7 @@ function meta:ProcessDamage(dmginfo)
 			local damage = dmginfo:GetDamage()
 			if damage > 0 then
 	
-				local ratio = 1
+				local ratio = 0.5
 				local absorb = math.min(self:GetBloodArmor(), damage* ratio)
 				dmginfo:SetDamage(damage - absorb)
 				GAMEMODE:DamageFloater(attacker, self, dmginfo , true, absorb)
