@@ -252,6 +252,9 @@ function meta:ProcessDamage(dmginfo)
 		if attacker:IsSkillActive(SKILL_KAMIKAZE) then
 			dmginfo:ScaleDamage(0.40)
 		end
+		if attacker:IsSkillActive(SKILL_NFV) and attacker.StaminaRun > CurTime() then 
+			dmginfo:ScaleDamage(1.25)
+		end
 		if attacker:IsSkillActive(SKILL_DEEPFOCUS) and attacker.DeepFocuses then
 			dmginfo:ScaleDamage(0)
 		end

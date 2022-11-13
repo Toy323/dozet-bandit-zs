@@ -126,11 +126,14 @@ end
 -- These are done on human spawn.
 function meta:ShakeUser()
 	if #team.GetPlayers(self:Team()) <= 1 then return NULL end
-	local d = table.Random(team.GetPlayers(self:Team()))
-	if d == self then
-		d = self:ShakeUser()
+	local c = team.GetPlayers(self:Team())
+	local d = {}
+	for k, v in pairs(c) do 
+		if !v:IsSkillActive(SKILL_2_LIFE) then
+			table.insert(d,k,v)
+		end
 	end
-	return d
+	return table.Random(d)
 end
 function meta:ApplySkills(override)
 	if GAMEMODE.ZombieEscape or GAMEMODE.ClassicMode then return end -- Skills not used on these modes
@@ -178,8 +181,6 @@ function meta:ApplySkills(override)
 
 		if standu:IsValid() then
 			self:SetStandUser(standu)
-			self:PrintMessage(HUD_PRINTTALK, self:GetStandUser():Nick().." Твой юзер!")
-			self:GetStandUser():PrintMessage(HUD_PRINTTALK, self:Nick().." Твой стенд!")
 		end
 	end
 end

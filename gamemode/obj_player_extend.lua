@@ -391,7 +391,8 @@ end
 
 function meta:SetSpeed(speed)
 	if not speed then speed = SPEED_NORMAL end
-	local runspeed = self:GetStamina() > 0 and speed + 60 or speed
+	local add = (self:IsSkillActive(SKILL_NFV) and 160 or 60)
+	local runspeed = self:GetStamina() > 0 and speed + add or speed
 
 	self:SetWalkSpeed(speed)
 	self:SetRunSpeed(runspeed)

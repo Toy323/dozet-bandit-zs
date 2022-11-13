@@ -696,6 +696,9 @@ function SWEP:ShootBullets(dmg, numbul, cone)
 		owner.LastShotWeapon = self:GetClass()
 	end
 	self:DoSelfKnockBack(1)
+	if owner:IsSkillActive(SKILL_CONC_DMG) then
+		owner:GiveStatus("knockdown", (dmg * numbul) / 35)
+	end
 	if GAMEMODE.ClientSideHitscan and !owner:IsBot() then
 		self:ShootCSBullets(owner, dmg, numbul, cone)
 	else

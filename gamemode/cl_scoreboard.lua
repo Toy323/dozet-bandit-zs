@@ -345,6 +345,12 @@ function PANEL:Refresh()
 	if #name > namelen then
 		name = string.sub(name, 1, namelen-2)..".."
 	end
+	if MySelf:GetStandUser() == pl then
+		name = name.."|U"
+	end
+	if pl:GetStandUser() == MySelf then
+		name = name.."|S"
+	end
 	self.m_PlayerLabel:SetText(name)
 	
 	if pl == LocalPlayer() then

@@ -178,6 +178,9 @@ SKILL_S_ANUBIS_REQ = 68
 SKILL_S_CINDERELA_REQ = 69
 SKILL_S_STICKY_FINGERS_REQ = 70
 SKILL_S_GER = 71
+SKILL_CONC_DMG = 72
+SKILL_STAMINA_RUNNER = 73
+SKILL_NFV = 74
 
 
 SKILLMOD_HEALTH = 1
@@ -253,7 +256,7 @@ SKILLMOD_PROP_CARRY_SLOW_MUL = 73
 SKILLMOD_BLEED_SPEED_MUL = 74
 SKILLMOD_MELEE_LEG_DAMAGE_ADD = 75
 SKILLMOD_SIGIL_TELEPORT_MUL = 76
-SKILLMOD_MELEE_ATTACKER_DMG_REFLECT_PERCENT = 77
+SKILLMOD_STAMINA_ADD = 77
 SKILLMOD_POISON_SPEED_MUL = 78
 SKILLMOD_PROJECTILE_DAMAGE_TAKEN_MUL = 79
 SKILLMOD_EXP_DAMAGE_RADIUS = 80
@@ -284,7 +287,7 @@ SKILLMOD_BLOCKMULTIPLIER = 105
 SKILLMOD_RES_AMMO_MUL = 106
 SKILLMOD_HEALTHMUL = 107
 SKILLMOD_SPOINT = 108
-SKILLMOD_SCALEMODEL = 109
+SKILLMOD_STAMINA_USE = 109
 SKILLMOD_M_DMG = 110
 SKILLMOD_M_REG = 111
 SKILLMOD_ADD_STATUS = 112
@@ -335,9 +338,12 @@ GM:AddSkill(SKILL_FOCUS4, translate.Get("skill_focus").."IV", GOOD.."+4%"..trans
 GM:AddSkillModifier(SKILL_FOCUS4, SKILLMOD_AIMSPREAD_MUL, -0.08)
 GM:AddSkillModifier(SKILL_FOCUS4, SKILLMOD_DAMAGE, 0.04)
 GM:AddSkill(SKILL_FOCUS5, translate.Get("skill_focus").."V", GOOD.."+5%"..translate.Get("b_damage")..GOOD.."+9%"..translate.Get("w_ac"),
-																-0.5,			-2,					{}, TREE_GUNTREE)
+																-0.5,			-2,					{SKILL_CONC_DMG}, TREE_GUNTREE)
 GM:AddSkillModifier(SKILL_FOCUS5, SKILLMOD_AIMSPREAD_MUL, -0.09)
 GM:AddSkillModifier(SKILL_FOCUS5, SKILLMOD_DAMAGE, 0.05)
+GM:AddSkill(SKILL_CONC_DMG, translate.Get("skill_conc_damage"), GOOD.."+35%"..translate.Get("b_damage")..BAD..translate.Get("skill_conc_damage_d1"),
+																-0.5,			-3,					{}, TREE_GUNTREE)
+GM:AddSkillModifier(SKILL_CONC_DMG, SKILLMOD_DAMAGE, 0.35)
 GM:AddSkill(SKILL_DEEPFOCUS, translate.Get("skill_deepfocus"), BAD..translate.Get("skill_deepfocus_d2")..GOOD..translate.Get("skill_deepfocus_d1"),
 																1.5,			-1,					{}, TREE_GUNTREE)
 GM:AddSkillModifier(SKILL_DEEPFOCUS, SKILLMOD_DAMAGE, -0.45)
@@ -380,9 +386,17 @@ GM:AddSkill(SKILL_SPEED4, translate.Get("skill_speed").."IV", GOOD.."+11"..trans
 GM:AddSkill(SKILL_SPEED5, translate.Get("skill_speed").."V", GOOD.."+15"..translate.Get("speed")..BAD.."-11"..translate.Get("health"),
 																-4,			-2,					{SKILL_ULTRANIMBLE, SKILL_BACKPEDDLER, SKILL_MOTIONI, SKILL_CARDIOTONIC, SKILL_UNBOUND}, TREE_SPEEDTREE)
 GM:AddSkill(SKILL_BLOODHELL, translate.Get("skill_bloodyman"), GOOD..translate.Get("skill_bloodyman_d1")..BAD.."-20"..translate.Get("health"),
-																-6,			-3,					{SKILL_SPEED5}, TREE_SPEEDTREE)
+																-6,			-3,					{SKILL_SPEED5,SKILL_NFV}, TREE_SPEEDTREE)
 GM:AddSkill(SKILL_KAMIKAZE, translate.Get("skill_kamikaze"), GOOD..translate.Get("skill_kamikaze_d1")..BAD..translate.Get("skill_kamikaze_d2")..GOOD.."+66"..translate.Get("speed"),
-																-2,			-3,					{SKILL_SPEED5}, TREE_SPEEDTREE)
+																-2,			-3,					{SKILL_SPEED5, SKILL_STAMINA_RUNNER}, TREE_SPEEDTREE)
+GM:AddSkill(SKILL_STAMINA_RUNNER, translate.Get("skill_stamina_run"), GOOD..translate.Get("skill_stamina_run_d1")..BAD..translate.Get("skill_stamina_run_d2"),
+																-2,			-4,					{}, TREE_SPEEDTREE)
+GM:AddSkillModifier(SKILL_STAMINA_RUNNER, SKILLMOD_STAMINA_ADD, -0.20)
+GM:AddSkillModifier(SKILL_STAMINA_RUNNER, SKILLMOD_STAMINA_USE, -0.20)
+GM:AddSkillModifier(SKILL_STAMINA_RUNNER, SKILLMOD_MELEE_DAMAGE_MUL, -0.33)
+GM:AddSkill(SKILL_NFV, translate.Get("skill_nfv"), GOOD..translate.Get("skill_nfv_d1")..BAD..translate.Get("skill_nfv_d2"),
+																-6,			-4,					{}, TREE_SPEEDTREE)
+GM:AddSkillModifier(SKILL_NFV, SKILLMOD_STAMINA_USE, 2)
 
 
 
@@ -402,14 +416,17 @@ GM:AddSkill(SKILL_2_LIFE, translate.Get("skill_2_life"), GOOD..translate.Get("sk
 .AlwaysActive = true
 local skill = GM:AddSkill(SKILL_S_CINDERELA, translate.Get("skill_s_cinder"), GOOD..translate.Get("skill_s_cinder_d1")..BAD..translate.Get("skill_s_cinder_d2"),
 																-1,			-1,					{SKILL_S_CINDERELA_B1}, TREE_SUPPORTTREE)
-skill.DontUnlock = SKILL_S_STICKY_FINGERS skill.DontUnlock2 = SKILL_S_ANUBIS
+skill.DontUnlock = SKILL_S_STICKY_FINGERS skill.DontUnlock2 = SKILL_S_ANUBIS skill.DontUnlock3 = SKILL_S_GE
 local skill = GM:AddSkill(SKILL_S_ANUBIS, translate.Get("skill_s_anubis"), GOOD..translate.Get("skill_s_anubis_d1")..BAD..translate.Get("skill_s_anubis_d2"),
 																1,			-0,					{SKILL_S_ANUBIS_B1}, TREE_SUPPORTTREE)
-skill.DontUnlock = SKILL_S_STICKY_FINGERS skill.DontUnlock2 = SKILL_S_CINDERELA
+skill.DontUnlock = SKILL_S_STICKY_FINGERS skill.DontUnlock2 = SKILL_S_CINDERELA skill.DontUnlock3 = SKILL_S_GE
 local skill = GM:AddSkill(SKILL_S_STICKY_FINGERS, translate.Get("skill_s_sticky_f"), GOOD..translate.Get("skill_s_sticky_f_d1")..BAD..translate.Get("skill_s_sticky_f_d2"),
 																1,			2.5,					{SKILL_S_STICKY_FINGERS_B1}, TREE_SUPPORTTREE)
-skill.DontUnlock = SKILL_S_ANUBIS skill.DontUnlock2 = SKILL_S_CINDERELA
+skill.DontUnlock = SKILL_S_ANUBIS skill.DontUnlock2 = SKILL_S_CINDERELA skill.DontUnlock3 = SKILL_S_GE
 GM:AddSkillModifier(SKILL_S_STICKY_FINGERS, SKILLMOD_AIMSPREAD_MUL, 0.6)
+--[[local skill = GM:AddSkill(SKILL_S_GE, translate.Get("skill_s_ge"), GOOD..translate.Get("skill_s_ge_d1")..BAD..translate.Get("skill_s_ge_d2"),
+																-1,			4,					{SKILL_2_LIFE}, TREE_SUPPORTTREE)
+skill.DontUnlock = SKILL_S_ANUBIS skill.DontUnlock2 = SKILL_S_CINDERELA skill.DontUnlock3 = SKILL_S_STICKY_FINGERS]]
 GM:AddSkill(SKILL_S_STICKY_FINGERS_B1, translate.Get("skill_s_sticky_f_branch_1"), GOOD..translate.Get("skill_s_sticky_f_branch_1_d1")..BAD..translate.Get("skill_s_sticky_f_branch_1_d2"),
 																1,			3,					{}, TREE_SUPPORTTREE)
 GM:AddSkill(SKILL_S_CINDERELA_B1, translate.Get("skill_s_cinder_b1"), GOOD..translate.Get("skill_s_cinder_b1_d1")..BAD..translate.Get("skill_s_cinder_b1_d2"),
@@ -749,15 +766,15 @@ GM:SetSkillModifierFunction(SKILLMOD_BLOCKMULTIPLIER, function(pl, amount)
 	pl.BlockMultiplier = math.Clamp(amount + 1.0, 0.1, 1000.0)
 end)
 
-GM:SetSkillModifierFunction(SKILLMOD_MELEE_ATTACKER_DMG_REFLECT_PERCENT, function(pl, amount)
-	pl.BarbedArmorPercent = math.Clamp(amount, 0, 1000.0)
+GM:SetSkillModifierFunction(SKILLMOD_STAMINA_ADD, function(pl, amount)
+	pl.StaminaAdd = math.Clamp(amount + 1.0, 0, 1000.0)
 end)
 
 GM:SetSkillModifierFunction(SKILLMOD_POISON_SPEED_MUL, function(pl, amount)
 	pl.PoisonSpeedMul = math.Clamp(amount + 1.0, 0.1, 1000.0)
 end)
-GM:SetSkillModifierFunction(SKILLMOD_SCALEMODEL, function(pl, amount)
-	pl.ScaleModel = math.Clamp(amount + 1.0, 0.15, 1000.0)
+GM:SetSkillModifierFunction(SKILLMOD_STAMINA_USE, function(pl, amount)
+	pl.StaminaUse = math.Clamp(amount + 1.0, 0, 1000.0)
 end)
 
 

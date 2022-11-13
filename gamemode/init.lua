@@ -799,7 +799,7 @@ function GM:Think()
 			end
 			if pl:KeyDown(IN_SPEED) and pl:GetVelocity() ~= vector_origin then
 				if pl:GetStamina() > 0 then
-					pl:AddStamina(-0.32)
+					pl:AddStamina(-0.32, true)
 
 				else
 					pl:ResetSpeed()
@@ -822,6 +822,9 @@ function GM:Think()
 					pl.FixForFix = CurTime() + 1
 					timer.Create("Death STAND"..pl:Nick(),0.05,1, function() pl:Kill() end)
 				end
+			elseif  pl:IsSkillActive(SKILL_2_LIFE) and !pl:GetStandUser():IsValid() and pl.FixForFix <= CurTime() and self:GetWaveActive() then
+				pl.FixForFix = CurTime() + 1
+				timer.Create("Death STAND WITHOUT USER"..pl:Nick(),0.05,1, function() pl:Kill() end)
 			end
 
 
@@ -1322,6 +1325,7 @@ function GM:PlayerInitialSpawnRound(pl)
 
 	pl.HealedThisRound = 0
 	pl.CarryOverHealth = 0
+	pl.StaminaRun = 0
 	local nosend = not pl.DidInitPostEntity
 
 	pl.RepairedThisRound = 0
