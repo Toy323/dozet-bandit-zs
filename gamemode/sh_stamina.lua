@@ -1,5 +1,33 @@
 
-
+function GM:GetGlobalStamina(teamed)
+    if teamed and !team.Valid(teamed) then
+        MsgC( Color(179,17,17),"Team is invalid!")
+        return "Team is invalid!"
+    end
+    local gstamina = 0
+    local ply = teamed and team.GetPlayers(teamed) or player.GetAll()
+	for _, pl in pairs(ply) do
+        gstamina = gstamina + pl:GetStamina()
+    end
+    
+    return gstamina
+end
+function GM:GetPercGlobalStamina(teamed, reverse)
+    if teamed and !team.Valid(teamed) then
+        MsgC( Color(179,17,17),"Team is invalid!")
+        return "Team is invalid!"
+    end
+    local ply = teamed and team.GetPlayers(teamed) or player.GetAll()
+    local gstamina = 0
+	for _, pl in pairs(ply) do
+        if reverse then
+            gstamina = gstamina - pl:GetStamina()
+        else
+            gstamina = gstamina + pl:GetStamina()
+        end
+    end
+    return gstamina/#ply
+end
 local meta = FindMetaTable("Player")
 if not meta then return end
 function meta:SetStamina(stamina)

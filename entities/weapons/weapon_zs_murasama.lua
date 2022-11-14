@@ -66,11 +66,12 @@ function SWEP:PlayHitFleshSound()
 end
 function SWEP:SecondaryAttack()
 	if self:GetOwner():HasGodMode() then return end
-	timer.Create("lmao", 0.05, 1, function() if SERVER and !GAMEMODE:GetWaveActive() then self:GetOwner():TakeDamage(99, self:GetOwner(), self) end
-	self.MeleeDamage = self.MeleeDamage + 21
-	local effectdata = EffectData()
-		effectdata:SetOrigin(self:GetOwner():GetPos())
-	util.Effect("explosion_bonemesh", effectdata)
+	timer.Create("lmao", 0.05, 1, function() if SERVER and !GAMEMODE:GetWaveActive() then self:GetOwner():TakeDamage(99, self:GetOwner(), self) 
+			self.MeleeDamage = self.MeleeDamage + 21
+			local effectdata = EffectData()
+				effectdata:SetOrigin(self:GetOwner():GetPos())
+			util.Effect("explosion_bonemesh", effectdata)
+		end
 	end)
 end
 function SWEP:PlayerHitUtil(owner, damage, hitent, dmginfo)
