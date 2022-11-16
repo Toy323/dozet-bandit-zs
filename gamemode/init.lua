@@ -351,7 +351,7 @@ function GM:ShowSpare1(pl)
 end
 
 function GM:ShowSpare2(pl)
-	pl:SendLua("MakepOptions()")
+	--pl:SendLua("MakepOptions()")
 end
 
 function GM:SetupSpawnPoints()

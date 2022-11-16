@@ -945,7 +945,9 @@ LANGUAGE.skill_later = "Может потом"
 LANGUAGE.skill_later_d1 = "Ты получишь урон потом\n+50% урона на потом\n"
 LANGUAGE.skill_later_d2 = "Если ОПУСТОШЕННИЕ выше чем 600 ты умрешь\nИммунен к проклятью"
 --SKILLS ON MEDICAL
-
+LANGUAGE.skill_falone = "Навсегда ОДИН"
+LANGUAGE.skill_falone_d1 = "Лечить аптечкой можно только себя!\n"
+LANGUAGE.skill_falone_d2 = "Кулдаун аптечки снижен в 3 раза.\nЭффективность лечения для себя на 50% меньше.\n"
 LANGUAGE.skill_surg = "Хирург "
 LANGUAGE.skill_bio = "Биолог "
 LANGUAGE.skill_inj = "Усиленный яд"

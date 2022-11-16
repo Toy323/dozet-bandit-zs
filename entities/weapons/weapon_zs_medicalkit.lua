@@ -57,7 +57,7 @@ end
 
 function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end
-
+	if owner:IsSkillActive(SKILL_FALONE) then return false end
 	local owner = self:GetOwner()
 
 	owner:LagCompensation(true)
@@ -90,12 +90,13 @@ function SWEP:SecondaryAttack()
 	local owner = self:GetOwner()
 	if not self:CanPrimaryAttack() or not gamemode.Call("PlayerCanBeHealed", owner) then return end
 
+
 	local health, maxhealth = owner:Health(), owner:GetMaxHealth()
-	local multiplier = owner.MedicHealMul or 1
+	local multiplier = (owner.MedicHealMul or 1) * (owner:IsSkillActive(SKILL_FALONE) and 0.5 or 1)
 	local toheal = math.min(self:GetPrimaryAmmoCount(), math.ceil(math.min(self.Secondary.Heal * multiplier, maxhealth - health)))
 	local totake = math.ceil(toheal / multiplier)
 	if toheal > 0 then
-		self:SetNextCharge(CurTime() + (self.Secondary.Delay * math.min(1, toheal / self.Secondary.Heal)) * (owner.MedicCooldownMul or 1))
+		self:SetNextCharge(CurTime() + ((self.Secondary.Delay * math.min(1, toheal / self.Secondary.Heal)) * (owner.MedicCooldownMul or 1)) / (owner:IsSkillActive(SKILL_FALONE) and 3 or 1))
 		owner.NextMedKitUse = self:GetNextCharge()
 
 		self:TakeCombinedPrimaryAmmo(totake)
@@ -153,6 +154,7 @@ end
 function SWEP:CanPrimaryAttack()
 	local owner = self:GetOwner()
 	if owner:IsHolding() or owner:GetBarricadeGhosting() or self:GetNextCharge() >= CurTime() then return false end
+
 
 	if self:GetPrimaryAmmoCount() <= 0 then
 		self:EmitSound("items/medshotno1.wav")

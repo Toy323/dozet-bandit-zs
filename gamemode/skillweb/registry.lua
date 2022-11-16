@@ -181,6 +181,7 @@ SKILL_S_GER = 71
 SKILL_CONC_DMG = 72
 SKILL_STAMINA_RUNNER = 73
 SKILL_NFV = 74
+SKILL_FALONE = 75
 
 
 SKILLMOD_HEALTH = 1
@@ -410,7 +411,9 @@ GM:AddSkill(SKILL_SURGEON1, translate.Get("skill_surg").."I", GOOD.."-6%"..trans
 GM:AddSkill(SKILL_SURGEON2, translate.Get("skill_surg").."II", GOOD.."-9%"..translate.Get("med_cool"),
 																-3,			3,					{SKILL_WORTHINESS4, SKILL_SURGEON3}, TREE_SUPPORTTREE)
 GM:AddSkill(SKILL_SURGEON3, translate.Get("skill_surg").."III", GOOD.."-11%"..translate.Get("med_cool"),
-																-2,			0,					{SKILL_2_LIFE}, TREE_SUPPORTTREE)
+																-2,			0,					{SKILL_2_LIFE,SKILL_FALONE}, TREE_SUPPORTTREE)
+GM:AddSkill(SKILL_FALONE, translate.Get("skill_falone"), GOOD..translate.Get("skill_falone_d2")..BAD..translate.Get("skill_falone_d1"),
+																-3,			-3,					{}, TREE_SUPPORTTREE)
 GM:AddSkill(SKILL_2_LIFE, translate.Get("skill_2_life"), GOOD..translate.Get("skill_2_life_d1")..BAD..translate.Get("skill_2_life_d2"),
 																-1,			1,					{SKILL_S_CINDERELA, SKILL_S_ANUBIS,SKILL_S_STICKY_FINGERS}, TREE_SUPPORTTREE)
 .AlwaysActive = true
