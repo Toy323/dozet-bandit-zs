@@ -57,8 +57,8 @@ end
 
 function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end
-	if owner:IsSkillActive(SKILL_FALONE) then return false end
 	local owner = self:GetOwner()
+	if owner:IsSkillActive(SKILL_FALONE) then return false end
 
 	owner:LagCompensation(true)
 	local meleetr = owner:MeleeTrace(32, 2,nil,nil,true)
