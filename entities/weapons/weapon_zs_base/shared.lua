@@ -697,7 +697,15 @@ function SWEP:ShootBullets(dmg, numbul, cone)
 	end
 	self:DoSelfKnockBack(1)
 	if owner:IsSkillActive(SKILL_CONC_DMG) then
-		owner:GiveStatus("knockdown", (dmg * numbul) / 35)
+		if SERVER then
+			self:GetOwner():ViewPunch(Angle(math.Rand(-(dmg * numbul), 0), math.Rand(-(dmg * numbul), (dmg * numbul)), 0))
+		else
+			local curAng = self:GetOwner():EyeAngles()
+			curAng.pitch = curAng.pitch - math.Rand((dmg * numbul), 0)
+			curAng.yaw = curAng.yaw + math.Rand(-(dmg * numbul), (dmg * numbul))
+			curAng.Roll = 0
+			self:GetOwner():SetEyeAngles(curAng)
+		end
 	end
 	if GAMEMODE.ClientSideHitscan and !owner:IsBot() then
 		self:ShootCSBullets(owner, dmg, numbul, cone)

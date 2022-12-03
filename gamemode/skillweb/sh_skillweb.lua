@@ -290,6 +290,12 @@ end
 function meta:GetDesiredActiveSkills()
 	return self.DesiredActiveSkills or {}
 end
+function meta:AddZSXP(xp)
+	-- TODO: Level change checking. Cache the "XP for next level" in the vault load and compare it here instead of checking every add.
+	if SERVER then
+		self:SetZSXP(self:GetZSXP() + xp)
+	end
+end
 
 function meta:GetActiveSkills()
 	return self.ActiveSkills or {}

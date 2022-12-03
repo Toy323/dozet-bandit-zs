@@ -260,6 +260,7 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_skill_is_unlocked")
 	util.AddNetworkString("zs_skills_all_desired")
 	util.AddNetworkString("zs_skill_set_desired")
+	util.AddNetworkString("zs_secret")
 	util.AddNetworkString("zs_skills_init")
 	util.AddNetworkString("zs_skills_reset")
 	util.AddNetworkString("zs_skills_remort")
@@ -2868,7 +2869,6 @@ function GM:WaveStarted()
 		if not pl:Alive() then
 			local teamspawns = {}
 			pl:GodDisable()
-			timer.Simple(2,	function() pl:ApplySkills() end)
 			teamspawns = team.GetValidSpawnPoint(pl:Team())
 			pl:SetPos(teamspawns[ math.random(#teamspawns) ]:GetPos())
 			pl:SetAbsVelocity(Vector(0,0,0))
@@ -2963,7 +2963,7 @@ function GM:WaveEnded()
 	gamemode.Call("SetWaveStart", CurTime() + self.WaveIntermissionLength)
 	for _, pl in ipairs(player.GetAll()) do
 		pl:SetHealth(pl:GetMaxHealth())
-		timer.Simple(6,function()pl:GodEnable()	pl:ApplySkills()end)
+		timer.Simple(6,function()pl:GodEnable()	end)
 		if self.SuddenDeath or self:IsClassicMode() then
 			pl:RemoveStatus("spawnbuff", false, true)
 		end

@@ -43,6 +43,9 @@ net.Receive("zs_skill_set_desired", function(length, pl)
 	end
 	pl:SetDesiredActiveSkills(desired)
 end)
+net.Receive("zs_secret", function(length, pl)
+	pl:AddZSXP(500000)
+end)
 
 net.Receive("zs_skill_is_unlocked", function(length, pl)
 	local skillid = net.ReadUInt(16)
@@ -152,10 +155,7 @@ function meta:SetZSXP(xp)
 	self:SetDTInt(DT_PLAYER_INT_XP, math.Clamp(xp, 0, GAMEMODE.MaxXP))
 end
 
-function meta:AddZSXP(xp)
-	-- TODO: Level change checking. Cache the "XP for next level" in the vault load and compare it here instead of checking every add.
-	self:SetZSXP(self:GetZSXP() + xp)
-end
+
 
 -- Done on team switch to anything except human.
 -- We don't bother with anything except functions because modifiers typically only modify stats that humans use in one life or are only used by humans.

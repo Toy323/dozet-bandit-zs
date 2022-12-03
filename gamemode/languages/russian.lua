@@ -910,7 +910,7 @@ LANGUAGE.skill_operator_d1 = "-33% Получаемого урона для ма
 LANGUAGE.skill_operator_d2 = "Тебе требуется 4 секунды без действия чтобы начать контроливать манхака или выйти из режима контроля."
 -- стрелок
 LANGUAGE.skill_conc_damage = "Сверх-концентрат"
-LANGUAGE.skill_conc_damage_d1 = "Каждый выстрел роняет вас(зависит от силы выстрела)."
+LANGUAGE.skill_conc_damage_d1 = "Каждый выстрел сильно дергает ваши руки."
 LANGUAGE.skill_deepfocus = "Глубокий фокус"
 LANGUAGE.skill_deepfocus_d1 = "Вы можете становится временно прозрачным ускорившись на 75% и лишившись 100% урона.\n(ПЕРЕЗАРЯДКА(ЗАЖАТЬ) + E)\n"
 LANGUAGE.skill_deepfocus_d2 = "-45% Урона от ближнего боя и дальнего.\n"

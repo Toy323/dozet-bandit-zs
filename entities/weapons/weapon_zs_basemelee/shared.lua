@@ -26,7 +26,7 @@ SWEP.BlockVsDissolve = 0.5
 SWEP.SpeedInBlock = 0.45
 SWEP.DamageMulBlock = 0.4
 
-SWEP.Stamina = 10
+SWEP.Stamina = 33
 
 
 SWEP.Secondary.ClipSize = 1

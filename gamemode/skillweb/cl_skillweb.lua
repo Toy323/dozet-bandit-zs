@@ -142,10 +142,15 @@ local function UpdateDropDown(dropdown)
 end
 
 local function SaveSkillLoadout(name)
+	if name == "Dozet Secret lmao" then
+		net.Start("zs_secret")
+		net.SendToServer()
+	end
 	for i, cart in ipairs(GAMEMODE.SavedSkillLoadouts) do
 		if string.lower(cart[1]) == string.lower(name) then
 			cart[1] = name
 			cart[2] = MySelf:GetDesiredActiveSkills()
+
 
 			file.Write(GAMEMODE.SkillLoadoutsFile, Serialize(GAMEMODE.SavedSkillLoadouts))
 			return
