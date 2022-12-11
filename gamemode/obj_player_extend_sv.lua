@@ -240,7 +240,7 @@ function meta:ProcessDamage(dmginfo)
 				net.WriteBool( head )
 			net.Send( attacker )
 		end
-		if attacker:IsSkillActive(SKILL_2_LIFE) and attacker:GetStandUser():IsValid() then
+		if attacker:IsSkillActive(SKILL_2_LIFE) and attacker:GetStandUser():IsValid() and GAMEMODE:GetSpecialWave() ~= "1hp" then
 			dmginfo:ScaleDamage(attacker:GetStandUser():Health()/attacker:GetStandUser():GetMaxHealth())
 		end
 		if attacker:LessPlayersOnTeam() and attackweapon and not attackweapon.NoScaleToLessPlayers and not attackweapon.IgnoreDamageScaling then
@@ -284,7 +284,7 @@ function meta:ProcessDamage(dmginfo)
 		if self:GetActiveWeapon() and IsValid(self:GetActiveWeapon()) and self:GetActiveWeapon().ProcessDamage then
 			self:GetActiveWeapon():ProcessDamage(dmginfo)
 		end
-		if self:GetBloodArmor() > 0 then
+		if self:GetBloodArmor() > 0 and GAMEMODE:GetSpecialWave()~= "1hp" then
 			local damage = dmginfo:GetDamage()
 			if damage > 0 then
 	

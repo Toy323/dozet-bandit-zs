@@ -1,5 +1,8 @@
 translate.AddLanguage("ru", "Russian (Русский)")
-
+local GOOD = "^"..3
+local BAD = "^"..2
+local NEUTRAL = "^"..0
+local PURPLE = "^"..7
 LANGUAGE.teamname_bandit							= "Бандиты"
 LANGUAGE.teamname_human								= "Выжившие"
 LANGUAGE.teamname_spectator							= "Наблюдатели"
@@ -28,6 +31,13 @@ LANGUAGE.close_button								= "Закрыть"
 LANGUAGE.back_button								= "Назад"
 LANGUAGE.consumables_purchase_button				= "Купить расходники"
 LANGUAGE.blockeddmg				= "ЗАБЛОКИРОВАННО %s УРОНА"
+LANGUAGE.sp_1hp				= "Специальная волна: 1ХП"
+LANGUAGE.sp_d_1hp				= "Кровавая броня и скиллы наносящие тебе вред не работают!"
+LANGUAGE.sp_anubis				= "Специальная волна: Проклятье анубиса"
+LANGUAGE.sp_d_anubis				= "Слепота анубиса."
+LANGUAGE.sp_bhop				= "Специальная волна: БХОП Момент"
+LANGUAGE.sp_d_bhop				= "Авто-прыжок и урон от падения выключен."
+
 
 
 LANGUAGE.option_no_floating_scores					= "Всплывающий текст (при убийстве, захвате, лечении)"
@@ -181,6 +191,8 @@ LANGUAGE.weapon_buststick_desc						= "Это оружие ближнего бо
 LANGUAGE.weapon_greataxe_name						= "Полукруглый топор"
 LANGUAGE.weapon_greataxe_desc						= "Этот массивный топор даёт владельцу некоторую защиту от пуль. \nВначале оружие имеет 10 наложений защиты. Каждый раз, когда в владельца стреляют, когда он держит топор, тратится одно наложение защиты, чтобы уменьшить получаемый урон на 50%.\nПопадание по врагу добавляет одно наложение защиты, а убийство врага добавляет 3 наложения защиты.\nЭффект топора вступает в силу после бронежилета."
 LANGUAGE.weapon_greatexe_defensestacks				= "НАЛОЖ. ЗАЩИТЫ"
+LANGUAGE.weapon_lowers_name						= "'Кровнос' Клинок"
+LANGUAGE.weapon_lowers_desc						= "Этот клинок кровоточит стенды при ударе и наносит двойной урон по ним.\nМожно кинуть ножны в стенд."
 LANGUAGE.weapon_lampmelee_name						= "Торшер"
 LANGUAGE.weapon_lampmelee_desc						= "Эта лампа - хорошее оружие ближнего боя. С ней относительно медленно замахивается, но она обладает большой силой."
 LANGUAGE.weapon_mechanicwrench_name					= "Гаечный ключ механика"
@@ -1040,6 +1052,12 @@ LANGUAGE.skill_stoicii_d2 = "-7 Скорости"
 LANGUAGE.skill_stoiciii_d2 = "-9 Скорости"
 LANGUAGE.skill_stoiciv_d2 = "-11 Скорости"
 LANGUAGE.skill_stoicv_d2 = "-10 Скорости"
+LANGUAGE.skill_badt = "Плохое время"
+LANGUAGE.skill_badt_d1 = "+20 скорости\n"
+LANGUAGE.skill_badt_d2 = "Каждые 10 секунд вы получаете 10 урона.\n"
+LANGUAGE.skill_badh = "Плохое здоровье"
+LANGUAGE.skill_badh_d1 = GOOD.."Быстрее бегаешь\n или\n"..BAD.."медленно,+15% Трата стамины.\n"
+
 
 
 LANGUAGE.s_deact = " деактивирован."

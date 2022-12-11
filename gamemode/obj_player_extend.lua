@@ -183,6 +183,7 @@ function meta:GetBleedDamage()
 end
 
 function meta:HealHealth(toheal,healer, wep)
+	if GAMEMODE:GetSpecialWave() == "1hp" then return end
 	local oldhealth = self:Health()
 	local newhealth = math.min(self:GetMaxHealth(),oldhealth + toheal)
 	self:SetHealth(newhealth)
@@ -391,7 +392,7 @@ end
 
 function meta:SetSpeed(speed)
 	if not speed then speed = SPEED_NORMAL end
-	local add = (self:IsSkillActive(SKILL_NFV) and 160 or 60)
+	local add = (self:IsSkillActive(SKILL_NFV) and 160 or 60) * (self:IsSkillActive(SKILL_BAD_HP) and math.random(-25,150)/100 or 1)
 	local runspeed = self:GetStamina() > 0 and speed + add or speed
 
 	self:SetWalkSpeed(speed)

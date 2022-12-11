@@ -201,7 +201,7 @@ function PANEL:Paint()
 	local lp = LocalPlayer()
 	if lp:IsValid() and !GAMEMODE.UseModelHealthBar then
 		local health = math.max(lp:Health(), 0)
-		local healthperc = math.Clamp(health / lp:GetMaxHealthEx(), 0, 1)
+		local healthperc = GAMEMODE:GetSpecialWave() == "1hp" and 1 or math.Clamp(health / lp:GetMaxHealthEx(), 0, 1)
 		local barghost = lp:IsBarricadeGhosting()
 		colHealth.r = (1 - healthperc) * 180
 		colHealth.g = healthperc * 180
@@ -274,7 +274,7 @@ end
 function PANEL:Think()
 	local lp = LocalPlayer()
 	if lp:IsValid() and GAMEMODE.UseModelHealthBar then
-		self.Health = math.Clamp(lp:Health() / lp:GetMaxHealthEx(), 0, 1)
+		self.Health = (GAMEMODE:GetSpecialWave() == "1hp" and 1 or math.Clamp(lp:Health() / lp:GetMaxHealthEx(), 0, 1))
 		self.BarricadeGhosting = math.Approach(self.BarricadeGhosting, lp:IsBarricadeGhosting() and 1 or 0, FrameTime() * 5)
 
 		local model = lp:GetModel()

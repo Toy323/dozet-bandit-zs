@@ -18,13 +18,16 @@ GM.Credits = {
 
 include("nixthelag.lua")
 include("buffthefps.lua")
-
+GM.SpecialWave = ""
 function GM:GetNumberOfWaves()
 	local default = self.NumberOfWaves
 	local num = GetGlobalInt("numwaves", default) -- This is controlled by logic_waves.
 	return num == -2 and default or num
 end
-
+function GM:GetSpecialWave()
+	local default = self.SpecialWave
+	return GetGlobal2String("specialwave", default)
+end
 function GM:GetWaveOneLength()
 	return self.WaveOneLength
 end
@@ -209,10 +212,10 @@ function GM:OnPlayerHitGround(pl, inwater, hitfloater, speed)
 		pl.LandSlow = true
 	end
 	local mul = 1
-
 	local damage = math.max(0,0.165*(speed-512))
 	damage = damage * mul
 	if hitfloater then damage = damage / 2 end
+	if self:GetSpecialWave() == "bhop" then return end
 	if math.floor(damage) > 0 then
 		pl:SetVelocity(- pl:GetVelocity() / 4)
 		if SERVER then

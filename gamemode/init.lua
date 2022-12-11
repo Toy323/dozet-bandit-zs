@@ -91,7 +91,6 @@ function BroadcastLua(code)
 		pl:SendLua(code)
 	end
 end
-
 function GM:WorldHint(hint, pos, ent, lifetime, filter)
 	net.Start("zs_worldhint")
 		net.WriteString(hint)
@@ -299,6 +298,8 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_weapon_toinsure")
 
 	util.AddNetworkString("zs_block_damage")
+	
+	util.AddNetworkString("zs_special_wave")
 	
 	util.AddNetworkString("zs_dmg")
 	util.AddNetworkString("zs_dmg_prop")
@@ -817,6 +818,9 @@ function GM:Think()
 			if pl:IsSkillActive(SKILL_S_ANUBIS) and !pl:GetStatus("dimvision") then
 				pl:GiveStatus("dimvision",10)
 			end
+			if self:GetSpecialWave() == "anubis" then
+				pl:GiveStatus("dimvision",1)
+			end
 			if pl:IsSkillActive(SKILL_2_LIFE) and pl:GetStandUser():IsValid() and pl.FixForFix <= CurTime() then
 				
 				if !pl:GetStandUser():Alive() then
@@ -832,10 +836,19 @@ function GM:Think()
 			if pl:IsSkillActive(SKILL_CRUSADER) then
 				for _, ent in pairs(ents.FindInSphere(pl:GetPos(), 128)) do
 					if ent ~= pl and ent:IsValid() and ent:IsPlayer() and ent:Team() == pl:Team() then
-					local buff = ent:GiveStatus("crusader_buff", 0.2)
-					buff.Applier = pl
+						local buff = ent:GiveStatus("crusader_buff", 0.2)
+						buff.Applier = pl
 					end
 				end
+			end
+			if self:GetSpecialWave() == "bhop" and pl:OnGround() then
+				local vector = pl:GetAimVector()
+				vector.z = math.max(5, pl:GetAimVector().z)
+				pl:SetVelocity(Vector(0,0,130) + (vector+Vector(0,0,10))*15 + pl:GetAimVector()*50)
+			end
+			if pl:IsSkillActive(SKILL_BAD_TIMES) and pl.BadTimeTime <= CurTime() and self:GetWaveActive() and self:GetSpecialWave() ~= "1hp" then
+				pl.BadTimeTime = CurTime() + 10
+				pl:TakeDamage(10, pl,pl:GetActiveWeapon())
 			end
 		end
 		if pl:IsSpectator() then
@@ -1312,6 +1325,8 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl:SendLua("LocalPlayer().BodyArmor = 0")
 	pl.BodyArmor = 0
 	pl.LastLegDamageThink = 0
+
+	pl.BadTimeTime = 0
 	
 	pl.DamageDealt = 0
 	pl.TimeCapping = 0
@@ -3057,10 +3072,34 @@ function GM:WaveEnded()
 	timer.Simple(1, function() self:SetCurrentWaveWinner(nil) end)
 end
 
+function GM:ActivateSpecialWave(force)
+	local wave = ""
+	if force then
+		wave = force or "1hp"
+	end
+	if wave == nil or wave == "" then
+		local specialwaves = {"1hp", "anubis", "bhop"}
+		wave = table.Random(specialwaves)
+	end
+	
+	net.Start("zs_special_wave")
+		net.WriteString(wave)
+	net.Broadcast()
+	self.SpecialWave = wave
+	if wave == "1hp" then
+		for _, pl in pairs(player.GetAll()) do
+			pl:SetHealth(1)
+		end
+	end
+end
 function GM:WaveStateChanged(newstate)
 	if newstate then
+		if math.random(1,20) == 20 then
+			self:ActivateSpecialWave()
+		end
 		gamemode.Call("WaveStarted")	
 	else
+		self.SpecialWave = ""
 		gamemode.Call("WaveEnded")
 	end
 	gamemode.Call("OnWaveStateChanged")

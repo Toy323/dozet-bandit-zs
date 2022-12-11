@@ -182,6 +182,8 @@ SKILL_CONC_DMG = 72
 SKILL_STAMINA_RUNNER = 73
 SKILL_NFV = 74
 SKILL_FALONE = 75
+SKILL_BAD_TIMES = 76
+SKILL_BAD_HP = 77
 
 
 SKILLMOD_HEALTH = 1
@@ -369,6 +371,12 @@ GM:AddSkill(SKILL_STOIC4, translate.Get("skill_stoiciv_0"), GOOD..translate.Get(
 																-3,			0,					{SKILL_STOIC5,SKILL_RAGDOG}, TREE_HEALTHTREE)
 GM:AddSkill(SKILL_STOIC5, translate.Get("skill_stoicv_0"), GOOD..translate.Get("skill_stoicv_d1")..BAD.."-15"..translate.Get("speed"),
 																-3,			2,					{SKILL_BLOODARMOR, SKILL_ULTRADEFENCE}, TREE_HEALTHTREE)
+GM:AddSkill(SKILL_BAD_TIMES, translate.Get("skill_badt"), GOOD..translate.Get("skill_badt_d1")..BAD..translate.Get("skill_badt_d2"),
+																-1,			0,					{SKILL_STOIC4}, TREE_HEALTHTREE)
+GM:AddSkillModifier(SKILL_BAD_TIMES, SKILLMOD_SPEED, 20)
+GM:AddSkillModifier(SKILL_BAD_HP, SKILLMOD_STAMINA_USE, 0.15)
+GM:AddSkill(SKILL_BAD_HP, translate.Get("skill_badh"), translate.Get("skill_badh_d1"),
+																-0,			2,					{SKILL_BAD_TIMES}, TREE_HEALTHTREE)
 GM:AddSkill(SKILL_ULTRADEFENCE, translate.Get("skill_ultradefence"), GOOD..translate.Get("skill_ultradefence_d1")..BAD.."-70"..translate.Get("speed"),
 																-2,			4,					{SKILL_STOIC5}, TREE_HEALTHTREE)
 GM:AddSkill(SKILL_RAGDOG, translate.Get("skill_ragdoller"), GOOD..translate.Get("skill_ragdoller_d1")..BAD..translate.Get("skill_ragdoller_d2"),

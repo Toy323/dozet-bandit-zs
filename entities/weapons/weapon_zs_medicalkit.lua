@@ -87,6 +87,7 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
+	if GAMEMODE:GetSpecialWave() == "1hp" then return end
 	local owner = self:GetOwner()
 	if not self:CanPrimaryAttack() or not gamemode.Call("PlayerCanBeHealed", owner) then return end
 

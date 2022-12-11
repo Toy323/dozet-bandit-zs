@@ -1646,6 +1646,11 @@ net.Receive("zs_endround", function(length)
 
 	gamemode.Call("EndRound", winner, nextmap)
 end)
+net.Receive("zs_special_wave", function(length)
+	local special = net.ReadString()
+	GAMEMODE:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", COLOR_RED, translate.Get("sp_"..special), {killicon = "default"})
+	GAMEMODE:CenterNotify({killicon = "default"}, " ", COLOR_RED, translate.Get("sp_d_"..special), {killicon = "default"})
+end)
 
 net.Receive("zs_wavewonby", function(length)
 
