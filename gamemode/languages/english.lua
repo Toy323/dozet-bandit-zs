@@ -36,12 +36,15 @@ LANGUAGE.close_button								= "Close"
 LANGUAGE.back_button								= "Back"
 LANGUAGE.consumables_purchase_button				= "Buy Consumables"
 LANGUAGE.blockeddmg				= "BLOCKED %s DAMAGE"
+--SPECIAL WAVES
 LANGUAGE.sp_1hp				= "Special wave: 1HP"
 LANGUAGE.sp_d_1hp				= "Blood armor and skills deals damage vs yourself don't work!"
 LANGUAGE.sp_anubis				= "Special wave: Anubis Curse"
 LANGUAGE.sp_d_anubis				= "Blind of anubis."
 LANGUAGE.sp_bhop				= "Special wave: BHOP Moment"
 LANGUAGE.sp_d_bhop				= "Auto-jump and damage from fall disabled."
+LANGUAGE.sp_aos				= "Special wave: Attack of smalls man!"
+LANGUAGE.sp_d_aos				= "Model reduced by 50% and damage too,+30% speed."
 
 
 LANGUAGE.option_no_floating_scores					= "Do not show points floaters"

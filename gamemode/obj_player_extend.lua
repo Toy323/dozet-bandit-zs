@@ -441,6 +441,9 @@ function meta:ResetSpeed(noset)
 		self:AddStamina(-1)
 	end
 	]]
+	if GAMEMODE:GetSpecialWave() == "aos" then
+		speed = speed * 1.3
+	end
 	if not noset then
 		self:SetSpeed(math.max(20,speed))
 	end

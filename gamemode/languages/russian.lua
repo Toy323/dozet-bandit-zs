@@ -31,12 +31,15 @@ LANGUAGE.close_button								= "Закрыть"
 LANGUAGE.back_button								= "Назад"
 LANGUAGE.consumables_purchase_button				= "Купить расходники"
 LANGUAGE.blockeddmg				= "ЗАБЛОКИРОВАННО %s УРОНА"
+--SPECIAL WAVES
 LANGUAGE.sp_1hp				= "Специальная волна: 1ХП"
 LANGUAGE.sp_d_1hp				= "Кровавая броня и скиллы наносящие тебе вред не работают!"
 LANGUAGE.sp_anubis				= "Специальная волна: Проклятье анубиса"
 LANGUAGE.sp_d_anubis				= "Слепота анубиса."
 LANGUAGE.sp_bhop				= "Специальная волна: БХОП Момент"
 LANGUAGE.sp_d_bhop				= "Авто-прыжок и урон от падения выключен."
+LANGUAGE.sp_aos				= "Специальная волна: Атака лилипутов!"
+LANGUAGE.sp_d_aos				= "Модель уменьшена на 50% и урон тоже,+30% к скорости."
 
 
 

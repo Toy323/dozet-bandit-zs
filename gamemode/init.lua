@@ -3078,7 +3078,7 @@ function GM:ActivateSpecialWave(force)
 		wave = force or "1hp"
 	end
 	if wave == nil or wave == "" then
-		local specialwaves = {"1hp", "anubis", "bhop"}
+		local specialwaves = {"1hp", "anubis", "bhop", "aos"}
 		wave = table.Random(specialwaves)
 	end
 	
@@ -3088,7 +3088,19 @@ function GM:ActivateSpecialWave(force)
 	self.SpecialWave = wave
 	if wave == "1hp" then
 		for _, pl in pairs(player.GetAll()) do
-			pl:SetHealth(1)
+			timer.Simple(0.5, function() if pl:IsValid() then pl:SetHealth(1) end end)
+		end
+	end
+	if wave == "aos" then
+		for _, pl in pairs(player.GetAll()) do
+			timer.Simple(0.5, function() 
+				if pl:IsValid() then
+					pl:SetModelScale(0.5, 2)
+					pl:SetViewOffset(Vector(0, 0, 32))
+					pl:SetViewOffsetDucked(Vector(0, 0, 16))
+					pl:ResetSpeed()
+				end
+			end)
 		end
 	end
 end
@@ -3099,6 +3111,16 @@ function GM:WaveStateChanged(newstate)
 		end
 		gamemode.Call("WaveStarted")	
 	else
+		for _, pl in pairs(player.GetAll()) do
+			timer.Simple(0.5, function() 
+				if pl:IsValid() then
+					pl:SetModelScale(DEFAULT_MODELSCALE, 2)
+					pl:SetViewOffset(DEFAULT_VIEW_OFFSET)
+					pl:SetViewOffsetDucked(DEFAULT_VIEW_OFFSET_DUCKED)
+					pl:ResetSpeed()
+				end
+			end)
+		end
 		self.SpecialWave = ""
 		gamemode.Call("WaveEnded")
 	end

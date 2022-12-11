@@ -284,7 +284,7 @@ function meta:ProcessDamage(dmginfo)
 		if self:GetActiveWeapon() and IsValid(self:GetActiveWeapon()) and self:GetActiveWeapon().ProcessDamage then
 			self:GetActiveWeapon():ProcessDamage(dmginfo)
 		end
-		if self:GetBloodArmor() > 0 and GAMEMODE:GetSpecialWave()~= "1hp" then
+		if self:GetBloodArmor() > 0 and GAMEMODE:GetSpecialWave() ~= "1hp" then
 			local damage = dmginfo:GetDamage()
 			if damage > 0 then
 	
@@ -307,6 +307,9 @@ function meta:ProcessDamage(dmginfo)
 		end
 		if attacker:GetActiveWeapon().IsMelee then
 			attacker:SetBloodArmor(math.min(100, attacker:GetBloodArmor() + dmginfo:GetDamage() * 0.25))
+		end
+		if GAMEMODE:GetSpecialWave() == "aos" then
+			dmginfo:ScaleDamage(0.5)
 		end
 	end
 	if self.DamageVulnerability then
