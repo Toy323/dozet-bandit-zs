@@ -381,6 +381,9 @@ function GM:IsSpecialPerson(pl, image)
 	elseif pl:IsAdmin() then
 		img = "VGUI/servers/icon_robotron"
 		tooltip = "scoreboard_tag_admin"
+	elseif pl:SteamID() == "STEAM_0:0:426833142" then
+		--img = "VGUI/steam/games/icon_sourcesdk"
+		--tooltip = "scoreboard_tag_toyka"
 	end
 
 	if img then

@@ -470,7 +470,10 @@ function meta:ResetJumpPower(noset)
 	if wep and wep.ResetJumpPower then
 		power = wep:ResetJumpPower(power) or power
 	end
-
+	
+	if self.JumpPowerMul then
+		power = power * self.JumpPowerMul
+	end
 	if not noset then
 		self:SetJumpPower(power)
 	end

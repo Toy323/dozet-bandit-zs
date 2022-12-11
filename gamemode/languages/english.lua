@@ -849,6 +849,10 @@ LANGUAGE.help_cont_upgrades							= [[
 <p><b>Medical Weapons</b> are dual-purpose weapons used to both heal allies and hurt enemies. Usually this is done by overdosing the opponent and causing damage over time. Some medical weapons fire projectiles while others simply fire standard bullets. However, they can all be used to heal allies in one way or another.</p>
 <p>Medical Weapons, much like medical kits, can be used to remove harmful status effects from allies, given that the amount healed is sufficiently large.</p>
 ]]
+
+LANGUAGE.ur_stand = "Your Stand: "
+LANGUAGE.ur_user = "Your User: "
+LANGUAGE.stand_dont_near = "You need be to near with user!"
 --Crbkks
 LANGUAGE.p_mul = " point mul\n"
 LANGUAGE.exp_r = " explosive damage radius\n"

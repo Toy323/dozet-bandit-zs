@@ -181,6 +181,8 @@ function meta:ApplySkills(override)
 
 		if standu:IsValid() then
 			self:SetStandUser(standu)
+			self:GetStandUser():CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", team.GetColor(self:Team()), translate.ClientGet(self:GetStandUser(),"ur_stand"), self,{killicon = "default"})
+			self:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", team.GetColor(self:GetStandUser():Team()), translate.ClientGet(self,"ur_user"), self:GetStandUser(),{killicon = "default"})
 		end
 	end
 end

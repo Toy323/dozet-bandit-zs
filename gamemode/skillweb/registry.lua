@@ -184,6 +184,8 @@ SKILL_NFV = 74
 SKILL_FALONE = 75
 SKILL_BAD_TIMES = 76
 SKILL_BAD_HP = 77
+SKILL_VKID = 78
+
 
 
 SKILLMOD_HEALTH = 1
@@ -406,6 +408,9 @@ GM:AddSkillModifier(SKILL_STAMINA_RUNNER, SKILLMOD_MELEE_DAMAGE_MUL, -0.33)
 GM:AddSkill(SKILL_NFV, translate.Get("skill_nfv"), GOOD..translate.Get("skill_nfv_d1")..BAD..translate.Get("skill_nfv_d2"),
 																-6,			-4,					{}, TREE_SPEEDTREE)
 GM:AddSkillModifier(SKILL_NFV, SKILLMOD_STAMINA_USE, 2)
+GM:AddSkill(SKILL_VKID, translate.Get("skill_vkid"), GOOD.."+50%"..translate.Get("jump")..BAD..translate.Get("skill_vkid_d2"),
+																-8,			-2,					{SKILL_BLOODHELL}, TREE_SPEEDTREE)
+GM:AddSkillModifier(SKILL_VKID, SKILLMOD_JUMPPOWER_MUL, 0.5)
 
 
 

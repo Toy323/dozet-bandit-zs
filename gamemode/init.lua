@@ -822,7 +822,16 @@ function GM:Think()
 				pl:GiveStatus("dimvision",1)
 			end
 			if pl:IsSkillActive(SKILL_2_LIFE) and pl:GetStandUser():IsValid() and pl.FixForFix <= CurTime() then
-				
+				local user = false
+				for _,ent in pairs(ents.FindInSphere(pl:GetPos(), 1028)) do 
+					if ent == pl:GetStandUser() then
+						user = true
+					end
+				end
+				if !user then
+					pl:SetPos(pl:GetStandUser():GetPos())
+					pl:CenterNotify(translate.ClientGet(pl,"stand_dont_near"))
+				end
 				if !pl:GetStandUser():Alive() then
 					pl.FixForFix = CurTime() + 1
 					timer.Create("Death STAND"..pl:Nick(),0.05,1, function() pl:Kill() end)
@@ -845,6 +854,12 @@ function GM:Think()
 				local vector = pl:GetAimVector()
 				vector.z = math.max(5, pl:GetAimVector().z)
 				pl:SetVelocity(Vector(0,0,130) + (vector+Vector(0,0,10))*15 + pl:GetAimVector()*50)
+			end
+			if pl:IsSkillActive(SKILL_VKID) and math.random(1,1500) == 1 then
+				local vector = pl:GetAimVector()
+				vector.z = math.max(50, pl:GetAimVector().z)
+				pl:SetVelocity(Vector(0,0,130) + (vector+Vector(0,0,15))*15 + pl:GetAimVector()*50)
+				timer.Simple(2, function() pl:SetVelocity(Vector(0,0,-1000)+pl:GetVelocity()) end)
 			end
 			if pl:IsSkillActive(SKILL_BAD_TIMES) and pl.BadTimeTime <= CurTime() and self:GetWaveActive() and self:GetSpecialWave() ~= "1hp" then
 				pl.BadTimeTime = CurTime() + 10

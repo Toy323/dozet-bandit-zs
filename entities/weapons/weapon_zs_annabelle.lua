@@ -12,6 +12,42 @@ if CLIENT then
 	SWEP.HUD3DPos = Vector(1.75, 1, -5)
 	SWEP.HUD3DAng = Angle(180, 0, 0)
 	SWEP.HUD3DScale = 0.015
+	local matBeam = Material("effects/laser1")
+	local matGlow = Material("sprites/glow04_noz")
+	local colBeam = Color(80, 80, 255, 255)
+	local COLOR_WHITE = color_white	
+	local temp_angle = Angle(0, 0, 0)
+	function SWEP:PostDrawViewModel(vm, pl, wep)
+		local owner = self:GetOwner()
+		if not MySelf:KeyDown(IN_SPEED) then return end
+		 local beamcol = colBeam
+		 local trace = owner:CompensatedMeleeTrace(20000,1)
+		 local normal = trace.Normal
+		 local hitnormal = trace.HitNormal
+		 local hitpos = trace.HitPos
+		-- render.SetMaterial(matBeam)
+		-- render.DrawBeam(pos, hitpos, 0.2, 0, 1, beamcol)
+		 render.SetMaterial(matBeam)
+			 local dir = hitnormal 
+			temp_angle:Set(dir:Angle())
+			temp_angle:RotateAroundAxis(
+				temp_angle:Forward(),
+				math.Rand(0, 360)
+			)
+			temp_angle:RotateAroundAxis(
+				temp_angle:Up(),
+				math.Rand(0,0)
+			)
+			
+
+			 dir = temp_angle:Forward() 
+			 local endpos = hitpos + (dir + Vector(0.25, 0.25, 0)) * 300
+		 render.DrawBeam(hitpos, endpos, 4, 0, 2, COLOR_WHITE)
+		 render.DrawBeam(hitpos, endpos, 6, 0, 2, beamcol)
+		 render.SetMaterial(matGlow)
+		 render.DrawSprite(hitpos, 12, 12, Color(115, 255, 80))
+		 render.DrawSprite(endpos, 158, 158, beamcol)
+	end
 end
 
 SWEP.Base = "weapon_zs_base"
