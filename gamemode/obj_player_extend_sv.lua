@@ -284,7 +284,7 @@ function meta:ProcessDamage(dmginfo)
 		if self:GetActiveWeapon() and IsValid(self:GetActiveWeapon()) and self:GetActiveWeapon().ProcessDamage then
 			self:GetActiveWeapon():ProcessDamage(dmginfo)
 		end
-		if self:GetBloodArmor() > 0 and GAMEMODE:GetSpecialWave() ~= "1hp" then
+		if self:GetBloodArmor() > 0 and GAMEMODE:GetSpecialWave() ~= "1hp" and attacker:Team() ~= self:Team()  then
 			local damage = dmginfo:GetDamage()
 			if damage > 0 then
 	
@@ -293,7 +293,7 @@ function meta:ProcessDamage(dmginfo)
 				dmginfo:SetDamage(damage - absorb)
 				GAMEMODE:DamageFloater(attacker, self, dmginfo , true, absorb)
 				self:SetBloodArmor(self:GetBloodArmor() - absorb)
-				if (attackweapon and attackweapon.IgnoreDamageScaling) and attacker:Team() ~= self:Team() then
+				if (attackweapon and attackweapon.IgnoreDamageScaling)then
 					self:SetBloodArmor(self:GetBloodArmor() + (absorb * 0.5))
 				end
 	
