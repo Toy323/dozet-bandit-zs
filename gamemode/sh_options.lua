@@ -512,6 +512,10 @@ cvars.AddChangeCallback("zsb_numberofwaves", function(cvar, oldvalue, newvalue)
 	GAMEMODE.NumberOfWaves = tonumber(newvalue) or 1
 end)
 
+GM.ChanceForSpecialWave = CreateConVar("zsb_chance_s_wave", "20", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Chance for special wave."):GetInt()
+cvars.AddChangeCallback("zsb_chance_s_wave", function(cvar, oldvalue, newvalue)
+	GAMEMODE.ChanceForSpecialWave = tonumber(newvalue) or 20
+end)
 GM.RoundLimit = CreateConVar("zsb_roundlimit", "3", FCVAR_ARCHIVE + FCVAR_NOTIFY, "How many times the game can be played on the same map. -1 means infinite or only use time limit. 0 means once."):GetInt()
 cvars.AddChangeCallback("zsb_roundlimit", function(cvar, oldvalue, newvalue)
 	GAMEMODE.RoundLimit = tonumber(newvalue) or 3

@@ -3106,7 +3106,7 @@ function GM:ActivateSpecialWave(force)
 end
 function GM:WaveStateChanged(newstate)
 	if newstate then
-		if math.random(1,20) == 20 then
+		if math.random(1,self.ChanceForSpecialWave) == 1 then
 			self:ActivateSpecialWave()
 		end
 		gamemode.Call("WaveStarted")	
