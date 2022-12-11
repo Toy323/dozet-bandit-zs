@@ -112,7 +112,8 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 	local ent = hitent
 	if ent and ent:IsPlayer() and SERVER and ent:IsSkillActive(SKILL_2_LIFE) then
 		local bleed = ent:GiveStatus("bleed")
-		bleed:AddDamage(self.MeleeDamage * 0.12)
+		bleed:AddDamage(self.MeleeDamage * 0.42)
+		bleed.Damager = self:GetOwner()
 		ent:TakeDamage(self.MeleeDamage,self:GetOwner(),self)
 		self:GetOwner():SetHealth(math.min(self:GetOwner():Health() + self.MeleeDamage *0.05,self:GetOwner():GetMaxHealth()))
 	end
@@ -128,7 +129,8 @@ function SWEP:SecondaryAttack()
 			if ent:IsPlayer() and ent:IsSkillActive(SKILL_2_LIFE) then
 				if SERVER then
 					local bleed = ent:GiveStatus("bleed")
-					bleed:AddDamage(self.MeleeDamage * 0.24)
+					bleed:AddDamage(self.MeleeDamage * 0.64)
+					bleed.Damager = self:GetOwner()
 					ent:TakeDamage(self.MeleeDamage*1.2,self:GetOwner(),self)
 				else
 					self:PlayHitFleshSound()
