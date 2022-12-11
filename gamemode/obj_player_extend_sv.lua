@@ -269,7 +269,7 @@ function meta:ProcessDamage(dmginfo)
 		if self:IsSkillActive(SKILL_DAMN_BRO) and math.random(1,6) == 1 and !inflictor.m_IsProjectile then
 			dmginfo:ScaleDamage(2.5)
 		end
-		if self:GetBodyArmor() and self:GetBodyArmor() > 0 then
+		if self:GetBodyArmor() and self:GetBodyArmor() > 0 and attacker:Team() ~= self:Team() then
 			local ratio = 0.75
 			if dmginfo:IsDamageType(DMG_BLAST) then
 				ratio = ratio * 0.75
@@ -293,7 +293,7 @@ function meta:ProcessDamage(dmginfo)
 				dmginfo:SetDamage(damage - absorb)
 				GAMEMODE:DamageFloater(attacker, self, dmginfo , true, absorb)
 				self:SetBloodArmor(self:GetBloodArmor() - absorb)
-				if (attackweapon and attackweapon.IgnoreDamageScaling) then
+				if (attackweapon and attackweapon.IgnoreDamageScaling) and attacker:Team() ~= self:Team() then
 					self:SetBloodArmor(self:GetBloodArmor() + (absorb * 0.5))
 				end
 	

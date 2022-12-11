@@ -2284,13 +2284,13 @@ function GM:KeyPress(pl, key)
 		end
 	end
 	if key == IN_RELOAD then
-		if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl:IsSkillActive(SKILL_S_STICKY_FINGERS) and pl:KeyDown(IN_SPEED) and pl.NextUseSF + 2 <= CurTime() then
+		if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl:IsSkillActive(SKILL_S_STICKY_FINGERS) and pl:KeyDown(IN_SPEED) and pl.NextUseSF <= CurTime() then
 			local p = pl:GetEyeTrace().Normal * (250 + (pl:IsSkillActive(SKILL_S_STICKY_FINGERS_B1) and 100 or 0))
 			p.z = 0
 			p.y = p.y * (pl:IsSkillActive(SKILL_S_STICKY_FINGERS_B1) and math.random(-2,2) or 1)
 			p.x = p.x * (pl:IsSkillActive(SKILL_S_STICKY_FINGERS_B1) and math.random(-2,2) or 1)
 			pl:SetPos(pl:GetPos()+p)
-			pl.NextUseSF = CurTime()
+			pl.NextUseSF = CurTime() + 2
 		end
 	end
 	if key == IN_USE then
