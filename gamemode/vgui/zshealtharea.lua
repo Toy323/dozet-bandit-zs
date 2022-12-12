@@ -52,38 +52,6 @@ local function ContentsPaint(self, w, h)
 		colHealth.g = 120
 		colHealth.b = 70
 		draw.SimpleTextBlurry(lp:Health(), "ZSHUDFont", 16, self:GetTall() - 12, colHealth, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-		if lp:GetStamina() < 100 then
-			if lp:IsValid() then
-				local screenscale = BetterScreenScale()
-				local health = math.max(lp:GetStamina(), 0)
-				local healthperc = math.Clamp(health / 100, 0.01, 1)
-				local wid, hei = 100 * screenscale, 18 * screenscale
-		 
-				colHealth.r = 255/healthperc
-				colHealth.g = 255 * healthperc
-				colHealth.b = 0
-		
-				local x = 18 * screenscale
-				local y = 15 * screenscale
-		
-				local subwidth = healthperc * wid
-		
-				surface.SetDrawColor(0, 0, 0, 230)
-				surface.DrawRect(x, y, wid, hei)
-		
-				surface.SetDrawColor(colHealth.r * 1, colHealth.g * 0.2, colHealth.b, 40)
-				surface.SetTexture(texDownEdge)
-				surface.DrawTexturedRect(x + 2, y + 1, subwidth - 4, hei - 2)
-				surface.SetDrawColor(colHealth.r * 0.6, colHealth.g * 0.6, colHealth.b, 30)
-				surface.DrawRect(x + 2, y + 1, subwidth - 4, hei - 2)
-		
-				surface.SetMaterial(matGlow)
-				surface.SetDrawColor(255, 255, 255, 255)
-				surface.DrawTexturedRect(x + 2 + subwidth - 6, y + 1 - hei/2, 4, hei * 2)
-				local phantomwidth = (health == 100 and 0 or wid)
-
-			end
-		end
 	end
 end
 function PANEL:Init()

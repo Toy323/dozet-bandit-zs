@@ -78,6 +78,8 @@ LANGUAGE.draw_points_added							= "Draw. You get %d points."
 LANGUAGE.less_players_points_added					= "You get %d points for having less people on your team."
 LANGUAGE.teambalance_shuffle_in_5_seconds			= "Teams will be shuffled for balance in 5 seconds."
 
+LANGUAGE.weapon_fists_name						= "Fists"
+
 LANGUAGE.weapon_aegiskit_name						= "'Aegis' Barricade Kit"
 LANGUAGE.weapon_aegiskit_desc						= "An easy-to-use kit for installing planks.\nCan automatically place planks parallel to most static surfaces."
 LANGUAGE.weapon_boardpack_name 						= "Pack of boards"

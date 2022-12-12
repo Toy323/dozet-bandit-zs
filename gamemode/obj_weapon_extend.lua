@@ -237,6 +237,8 @@ function meta:DrawCrosshairCross()
 	end]]
 end
 
+
+
 function meta:DrawCrosshairDot()
 	local x = ScrW() * 0.5
 	local y = ScrH() * 0.5
