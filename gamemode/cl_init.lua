@@ -484,6 +484,8 @@ function GM:DrawStaminaBar()
 	
 			surface.SetDrawColor(0, 0, 0, 230)
 			surface.DrawRect(x, y, wid, hei)
+
+			
 	
 			surface.SetDrawColor(colHealth.r * 1, colHealth.g * 0.2, colHealth.b, 40)
 			surface.SetTexture(texDownEdge)

@@ -902,6 +902,7 @@ LANGUAGE.spoint = " Skill points!\n"
 --деф
 
 --}
+LANGUAGE.skill_training = "Training "
 LANGUAGE.skill_battler = "Battler "
 LANGUAGE.skill_generator = "Auto-Blood"
 LANGUAGE.skill_generator_d1 = "Generate blood armor every 5 seconds\n"

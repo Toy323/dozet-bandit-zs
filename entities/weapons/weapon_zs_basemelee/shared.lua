@@ -13,6 +13,7 @@ SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "none"
 SWEP.Primary.Delay = 1.2
 SWEP.BlockMode = nil
+SWEP.Charge = true
 
 SWEP.MeleeDamage = 30
 SWEP.MeleeRange = 65
@@ -71,6 +72,7 @@ end
 function SWEP:SetupDataTables()
 	self:NetworkVar("Bool", 21, "Block")
 	self:NetworkVar("Bool", 22, "ChargeBlock")
+	self:NetworkVar("Float", 23, "GetAttackCharge")
 end
 
 function SWEP:SetWeaponSwingHoldType(t)
@@ -193,7 +195,7 @@ function SWEP:PrimaryAttack()
 	if not self:CanPrimaryAttack() then return end
 	self:SetNextPrimaryFire(CurTime() + (self.Primary.Delay / (self:GetOwner():IsSkillActive(SKILL_S_ANUBIS) and (GAMEMODE:GetWave() * (self:GetOwner():IsSkillActive(SKILL_S_ANUBIS_B1) and 0 or 0.04) + 0.6) or 1)) / (math.max(0.25,(math.min(self:GetOwner():GetStamina()+25,100))/100)))
 
-	if self.SwingTime == 0 then
+	if self.SwingTime == 0  then
 		self:MeleeSwing()
 	else
 		self:StartSwinging()
@@ -222,7 +224,9 @@ end
 
 function SWEP:MeleeSwing()
 	local owner = self:GetOwner()
-	self:GetOwner():AddStamina(-(self.Stamina or 10))
+	local formula = -(self.Stamina or 10)*((self:GetBlock() and 2 or 1)*(owner:GetVelocity():LengthSqr() <= 15600 and 0.65 or 1))
+	self:GetOwner():AddStamina(formula)
+	--print(formula)
 	owner:DoAttackEvent()
 	local tr = owner:CompensatedMeleeTrace(self.MeleeRange, self.MeleeSize)
 
@@ -296,7 +300,7 @@ function SWEP:MeleeHitEntity(tr, hitent, damagemultiplier)
 	dmginfo:SetDamageType(self.DamageType)
 	dmginfo:SetDamage(damage)
 	dmginfo:SetDamageForce(math.min(self.MeleeDamage, 50) * 50 * owner:GetAimVector())
-	owner:AddStamina(-(self.Stamina or 20) * 0.1)
+	owner:AddStamina(-(self.Stamina or 20) * 0.3)
 
 	local vel
 	if hitent:IsPlayer() then

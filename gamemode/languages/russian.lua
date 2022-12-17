@@ -906,7 +906,7 @@ LANGUAGE.pshop_other = "Другое"
 LANGUAGE.pshop_magic = "Магия"
 --конец мелочи
 --мили
-
+LANGUAGE.skill_training = "Тренировка "
 LANGUAGE.skill_battler = "Боец "
 LANGUAGE.skill_generator = "Авто-кровь"
 LANGUAGE.skill_generator_d1 = "Генерирует кровавку каждые 5 секунд\n"
@@ -949,6 +949,7 @@ LANGUAGE.skill_r_bullets_d1 = "Дает конфузии при попадани
 LANGUAGE.skill_biggest_boom = "Высший взрыв!"
 LANGUAGE.skill_biggest_boom_d1 = "Стреляя в человека держащего милишное оружие,вы оставляете в нем взрывной патрон.\nВзрывной патрон взрывается и убирает всю кровавую броню и отнимая 10% хп + урон вашего оружия.\n"
 LANGUAGE.skill_biggest_boom_d2 = "+100% получаемый урон от ближнего оружия.\nВзрывной патрон в человеке может быть только 1."
+LANGUAGE.skill_deli = "Обдумка"
 --Skill repairsman
 LANGUAGE.skill_t_buff = "Улучшенный ИИ"
 LANGUAGE.skill_t_buff_d1 = "Туррель быстрее стреляет."

@@ -185,6 +185,10 @@ SKILL_FALONE = 75
 SKILL_BAD_TIMES = 76
 SKILL_BAD_HP = 77
 SKILL_VKID = 78
+SKILL_DELIBRATION = 79
+SKILL_TRAINING1 = 80
+SKILL_TRAINING2 = 81
+SKILL_TRAINING3 = 82
 
 
 
@@ -358,6 +362,10 @@ GM:AddSkill(SKILL_REPULLER, translate.Get("skill_repuller"), GOOD..translate.Get
 GM:AddSkill(SKILL_R_BULLETS, translate.Get("skill_r_bullets"), GOOD..translate.Get("skill_r_bullets_d1")..BAD.."-35%"..translate.Get("b_damage"),
 																3,			3,					{SKILL_FOCUS3}, TREE_GUNTREE)
 GM:AddSkillModifier(SKILL_R_BULLETS, SKILLMOD_DAMAGE, -0.35)
+GM:AddSkill(SKILL_DELIBRATION, translate.Get("skill_deli"), GOOD.."+3%"..translate.Get("w_ac")..GOOD.."+3%"..translate.Get("b_damage"),
+																3,			4,					{SKILL_R_BULLETS}, TREE_GUNTREE)
+GM:AddSkillModifier(SKILL_DELIBRATION, SKILLMOD_DAMAGE, 0.03)
+GM:AddSkillModifier(SKILL_DELIBRATION, SKILLMOD_AIMSPREAD_MUL, -0.08)
 GM:AddSkill(SKILL_DAMN_BRO, translate.Get("skill_anti_proj"), GOOD..translate.Get("skill_anti_proj_d1")..BAD..translate.Get("skill_anti_proj_d2"),
 																-1,			1.25,					{}, TREE_GUNTREE)
 GM:AddSkill(SKILL_QUALITY, translate.Get("skill_quality"), BAD.."-50%"..translate.Get("meleedamage")..GOOD.."+20%"..translate.Get("w_ac"),
@@ -486,11 +494,19 @@ GM:AddSkill(SKILL_BATTLER2, translate.Get("skill_battler").."II", GOOD.."+6%"..t
 																-6,			-4,					{SKILL_BATTLER3}, TREE_MELEETREE)
 GM:AddSkill(SKILL_BATTLER3, translate.Get("skill_battler").."III", GOOD.."+8%"..translate.Get("meleedamage")..BAD.."-9%"..translate.Get("r_speed"),
 																-4,			-2,					{SKILL_BATTLER4}, TREE_MELEETREE)
+GM:AddSkill(SKILL_TRAINING1, translate.Get("skill_training").."I", GOOD.."+1%"..translate.Get("meleedamage"),
+																-4,			-3,					{SKILL_BATTLER3}, TREE_MELEETREE)
+GM:AddSkill(SKILL_TRAINING2, translate.Get("skill_training").."II", GOOD.."+2%"..translate.Get("meleedamage"),
+																-4,			-4,					{SKILL_TRAINING1}, TREE_MELEETREE)
+GM:AddSkill(SKILL_TRAINING3, translate.Get("skill_training").."III", GOOD.."+3%"..translate.Get("meleedamage"),
+																-4,			-5,					{SKILL_TRAINING2}, TREE_MELEETREE)
 GM:AddSkill(SKILL_BATTLER4, translate.Get("skill_battler").."IV", GOOD.."+9%"..translate.Get("meleedamage")..BAD.."-13%"..translate.Get("r_speed"),
 																-2,			0,					{SKILL_BATTLER5}, TREE_MELEETREE)
 GM:AddSkill(SKILL_BATTLER5, translate.Get("skill_battler").."V", GOOD.."+13%"..translate.Get("meleedamage")..BAD.."-16%"..translate.Get("r_speed"),
 																0,			2,					{SKILL_GENERATOR, SKILL_CRUSADER}, TREE_MELEETREE)
-
+GM:AddSkillModifier(SKILL_TRAINING1, SKILLMOD_MELEE_DAMAGE_MUL, 0.01)
+GM:AddSkillModifier(SKILL_TRAINING2, SKILLMOD_MELEE_DAMAGE_MUL, 0.02)
+GM:AddSkillModifier(SKILL_TRAINING3, SKILLMOD_MELEE_DAMAGE_MUL, 0.03)
 --.NeedSkill = SKILL_2_LIFE
 GM:AddSkill(SKILL_CRUSADER, translate.Get("skill_crusader"), BAD.."-50%"..translate.Get("meleedamage")..GOOD..translate.Get("skill_crusader_d1"),
 																0,			4,					{}, TREE_MELEETREE)
