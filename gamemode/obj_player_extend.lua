@@ -39,6 +39,15 @@ end
 function meta:GetStarDust()
 	return self:GetDTVector(DT_PLAYER_VEC_STARDUST)
 end
+function meta:SetDOAMan(b)
+	self:SetNWBool("special_m",b)
+	if b then
+		self:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", translate.ClientGet(self,"you_are_sman"),{killicon = "default"})
+	end
+end
+function meta:GetDOAMan()
+	return self:GetNWBool("special_m",b)
+end
 function meta:UpdateFocus(b)
 	self:SetDTBool(2,b)
 end
@@ -394,6 +403,9 @@ function meta:SetSpeed(speed)
 	if not speed then speed = SPEED_NORMAL end
 	local add = (self:IsSkillActive(SKILL_NFV) and 160 or 60) * (self:IsSkillActive(SKILL_BAD_HP) and math.random(-25,150)/100 or 1)
 	local runspeed = self:GetStamina() > 0 and speed + add or speed
+	if GAMEMODE:GetSpecialWave() == "old" then
+		runspeed = speed
+	end
 
 	self:SetWalkSpeed(speed)
 	self:SetRunSpeed(runspeed)

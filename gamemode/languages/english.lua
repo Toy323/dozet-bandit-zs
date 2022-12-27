@@ -45,6 +45,11 @@ LANGUAGE.sp_bhop				= "Special wave: BHOP Moment"
 LANGUAGE.sp_d_bhop				= "Auto-jump and damage from fall disabled."
 LANGUAGE.sp_aos				= "Special wave: Attack of smalls man!"
 LANGUAGE.sp_d_aos				= "Model reduced by 50% and damage too,+30% speed."
+LANGUAGE.sp_doa				= "Special wave: Dead or alive"
+LANGUAGE.sp_d_doa				= "Random 2 person on death give 90 points."
+LANGUAGE.sp_old				= "Special wave: Old times"
+LANGUAGE.sp_d_old				= "Like a old times...No skills and stamina!"
+LANGUAGE.you_are_sman = "On death you give 90 points!"
 
 
 LANGUAGE.option_no_floating_scores					= "Do not show points floaters"

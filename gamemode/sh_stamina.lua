@@ -37,6 +37,7 @@ function meta:GetStamina()
 	return self:GetDTFloat(DT_PLAYER_FLOAT_STAMINA)
 end
 function meta:AddStamina(stamina, run)
+    if GAMEMODE:GetSpecialWave() == "old" then return end
     if stamina < 0 then
         stamina = stamina * (self.StaminaUse or 1)
     end

@@ -351,6 +351,9 @@ function PANEL:Refresh()
 	if pl:GetStandUser() == MySelf then
 		name = name.."|S"
 	end
+	if pl:GetDOAMan() and MySelf:Team() ~= pl:Team() then
+		name = name.."|90"
+	end
 	self.m_PlayerLabel:SetText(name)
 	
 	if pl == LocalPlayer() then

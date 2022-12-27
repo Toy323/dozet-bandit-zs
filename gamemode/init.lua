@@ -799,10 +799,9 @@ function GM:Think()
 				pl.Think_Stardust = CurTime() + 3
 				pl:UpdateStarDust(pl:GetPos())
 			end
-			if pl:KeyDown(IN_SPEED) and pl:GetVelocity() ~= vector_origin then
+			if pl:KeyDown(IN_SPEED) and pl:GetVelocity() ~= vector_origin and GAMEMODE:GetSpecialWave() ~= "old" then
 				if pl:GetStamina() > 0 then
 					pl:AddStamina(-0.32, true)
-
 				else
 					pl:ResetSpeed()
 				end
@@ -2339,7 +2338,7 @@ function GM:KeyPress(pl, key)
 		if pl:Alive() then
 			if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) then
 				pl:DispatchAltUse()
-				if not pl:IsCarrying() and pl:KeyPressed(IN_SPEED) and pl:GetStamina() > 0 then
+				if not pl:IsCarrying() and pl:KeyPressed(IN_SPEED) and pl:GetStamina() > 0 and self:GetSpecialWave() ~= "old" then
 					pl:AddStamina(-3)
 					pl:EmitSound("player/suit_sprint.wav", 50)
 
@@ -2546,6 +2545,9 @@ function GM:PlayerKilledEnemy(pl, attacker, inflictor, dmginfo, headshot, suicid
 		attacker.BountyModifier = ((attacker.BountyModifier < -3*bountymult) and attacker.BountyModifier + 2 or 0)
 	else
 		attacker.BountyModifier = attacker.BountyModifier + 2
+	end
+	if pl:GetDOAMan() then
+		attacker.m_PointQueue = attacker.m_PointQueue + 90
 	end
 	if mostdamager then
 		attacker:PointCashOut(pl, FM_LOCALKILLOTHERASSIST)
@@ -3093,7 +3095,7 @@ function GM:ActivateSpecialWave(force)
 		wave = force or "1hp"
 	end
 	if wave == nil or wave == "" then
-		local specialwaves = {"1hp", "anubis", "bhop", "aos"}
+		local specialwaves = {"1hp", "anubis", "bhop", "aos", "doa", "old"}
 		wave = table.Random(specialwaves)
 	end
 	
@@ -3102,21 +3104,28 @@ function GM:ActivateSpecialWave(force)
 	net.Broadcast()
 	self.SpecialWave = wave
 	if wave == "1hp" then
-		for _, pl in pairs(player.GetAll()) do
-			timer.Simple(0.5, function() if pl:IsValid() then pl:SetHealth(1) end end)
-		end
+		timer.Simple(0.5, function() for _, pl in pairs(player.GetAll()) do if pl:IsValid() then pl:SetHealth(1) end end end)
+	end
+	if wave == "old" then
+		timer.Simple(2.5, function() for _, pl in pairs(player.GetAll()) do if pl:IsValid() then pl:ApplySkills({}) end end end)
+	end
+	if wave == "doa" then
+		local bdoa = table.Random(team.GetPlayers(TEAM_BANDIT))
+		local hdoa = table.Random(team.GetPlayers(TEAM_HUMAN))
+		bdoa:SetDOAMan(true)
+		hdoa:SetDOAMan(true)
 	end
 	if wave == "aos" then
-		for _, pl in pairs(player.GetAll()) do
-			timer.Simple(0.5, function() 
+		timer.Simple(0.5, function() 
+			for _, pl in pairs(player.GetAll()) do
 				if pl:IsValid() then
 					pl:SetModelScale(0.5, 2)
 					pl:SetViewOffset(Vector(0, 0, 32))
 					pl:SetViewOffsetDucked(Vector(0, 0, 16))
 					pl:ResetSpeed()
 				end
-			end)
-		end
+			end
+		end)
 	end
 end
 function GM:WaveStateChanged(newstate)
@@ -3133,6 +3142,7 @@ function GM:WaveStateChanged(newstate)
 					pl:SetViewOffset(DEFAULT_VIEW_OFFSET)
 					pl:SetViewOffsetDucked(DEFAULT_VIEW_OFFSET_DUCKED)
 					pl:ResetSpeed()
+					pl:SetDOAMan(false)
 				end
 			end)
 		end
