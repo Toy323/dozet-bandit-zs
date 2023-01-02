@@ -67,6 +67,8 @@ LANGUAGE.option_weapon_hud_style					= "Стиль интерфейса оруж
 LANGUAGE.option_music_volume						= "Громкость музыки"
 LANGUAGE.option_ally_transparency_radius			= "Радиус прозрачности союзников"
 LANGUAGE.option_use_model_health_bar                = "Использовать 3D-отображение здоровья"
+LANGUAGE.op_show_node = "Упрощенный F3"
+LANGUAGE.op_show_node_tool = "Убирает модели у скиллов"
 
 LANGUAGE.option_crosshair_color_primary				= "Цвет прицела - Основной"
 LANGUAGE.option_crosshair_color_secondary			= "Цвет прицела - Дополнительный"

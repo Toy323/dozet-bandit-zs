@@ -1068,7 +1068,9 @@ function PANEL:Paint(w, h)
 
 			render_ModelMaterialOverride(matWhite)
 			render_SetBlend(0.95)
-			node:DrawModel()
+			if !GAMEMODE.DisableNode then
+				node:DrawModel()
+			end
 
 			render_SetBlend(1)
 			render_ModelMaterialOverride()

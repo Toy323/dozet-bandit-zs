@@ -23,7 +23,10 @@ cvars.AddChangeCallback("zsb_filmmode", function(cvar, oldvalue, newvalue)
 
 	GAMEMODE:EvaluateFilmMode()
 end)
-
+GM.DisableNode = CreateClientConVar("zsb_disablenode", "0", true, false):GetBool()
+cvars.AddChangeCallback("zsb_disablenode", function(cvar, oldvalue, newvalue)
+	GAMEMODE.DisableNode = tonumber(newvalue) == 1
+end)
 CreateClientConVar("zsb_spectator", "0", true, true)
 cvars.AddChangeCallback("zsb_spectator", function(cvar, oldvalue, newvalue)
 	GAMEMODE.SpectatorMode = tonumber(newvalue) == 1

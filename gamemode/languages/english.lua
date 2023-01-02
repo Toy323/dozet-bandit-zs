@@ -53,6 +53,8 @@ LANGUAGE.you_are_sman = "On death you give 90 points!"
 
 
 LANGUAGE.option_no_floating_scores					= "Do not show points floaters"
+LANGUAGE.op_show_node = "Optimised F3"
+LANGUAGE.op_show_node_tool = "Disable Skill Model"
 LANGUAGE.option_show_team_indicators				= "Show ally team indicators"
 LANGUAGE.option_enable_killstreak_sounds			= "Enable killstreak sounds"
 LANGUAGE.option_spectator_mode						= "Spectator Mode (Applied next wave)"
