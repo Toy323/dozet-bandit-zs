@@ -44,16 +44,16 @@ SWEP.Primary.Damage = 10
 SWEP.Primary.NumShots = 4
 SWEP.Primary.Delay = 0.3
 
-SWEP.Primary.ClipSize = 12
+SWEP.Primary.ClipSize = 10
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "pistol"
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
 
 SWEP.IronSightsPos = Vector(-5.9, 12, 2.3)
 
-SWEP.ConeMax = 0.035
-SWEP.ConeMin = 0.02
-SWEP.Recoil = 0.8
+SWEP.ConeMax = 0.065
+SWEP.ConeMin = 0.03
+SWEP.Recoil = 0.78
 GAMEMODE:SetupAimDefaults(SWEP,SWEP.Primary)
 function SWEP:EmitFireSound()
 	self:EmitSound(self.Primary.Sound, 80, 75)

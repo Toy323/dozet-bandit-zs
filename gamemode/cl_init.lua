@@ -1595,7 +1595,7 @@ end)
 net.Receive("zs_wavestart", function(length)
 	local wave = net.ReadInt(16)
 	local time = net.ReadFloat()
-
+	
 	gamemode.Call("SetWave", wave)
 	gamemode.Call("SetWaveEnd", time)
 	GAMEMODE.RoundEndCamPosition = nil
@@ -1617,6 +1617,7 @@ net.Receive("zs_wavestart", function(length)
 	else
 		surface_PlaySound("ambient/levels/streetwar/city_battle"..math.random(6, 9)..".wav")--"ambient/creatures/town_zombie_call1.wav"
 	end
+	MySelf:ApplySkills()
 end)
 
 net.Receive("zs_suddendeath", function(length)
