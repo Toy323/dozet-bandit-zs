@@ -1,3 +1,4 @@
+
 translate.AddLanguage("ru", "Russian (Русский)")
 local GOOD = "^"..3
 local BAD = "^"..2

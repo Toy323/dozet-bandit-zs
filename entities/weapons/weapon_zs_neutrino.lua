@@ -160,3 +160,7 @@ end
 function SWEP:CanPrimaryAttack()
 	return true
 end
+function SWEP:Holster()
+	self:SetDTInt(4, 0)
+	return self.BaseClass.Holster(self)
+end
