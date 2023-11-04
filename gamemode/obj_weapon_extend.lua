@@ -202,7 +202,6 @@ function meta:DrawCrosshairCross()
 	local owner = self:GetOwner()
 
 	local cone = self:GetCone()
-
 	if cone <= 0 or ironsights and not ironsightscrosshair then return end
 
 	cone = ScrH() / 76.8 * cone
@@ -242,6 +241,34 @@ end
 function meta:DrawCrosshairDot()
 	local x = ScrW() * 0.5
 	local y = ScrH() * 0.5
+	local localx = x*1.95
+	local yadd = 0
+	local screen = BetterScreenScale()
+	if MySelf:IsSkillActive(SKILL_S_STICKY_FINGERS) then
+		local med = math.max(0,math.Round(MySelf:GetNWFloat("sticky_cd")-CurTime(),1))
+		draw.SimpleText("(R + SHIFT) Следующий ТП:"..med,"ZSHUDFontSmallest", localx, y+yadd*BetterScreenScale(), med == 0 and COLOR_GREEN or COLOR_RED, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		yadd = yadd + 20 * screen
+	end
+	if MySelf:IsSkillActive(SKILL_WONDERFUL) then
+		local med = math.max(0,math.Round(MySelf:GetNWFloat("dash_cd")-CurTime(),1))
+		draw.SimpleText("(SHIFT) Следующий рывок:"..med,"ZSHUDFontSmallest", localx, y+yadd*BetterScreenScale(), med == 0 and COLOR_GREEN or COLOR_RED, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		yadd = yadd + 20 * screen
+	end
+	if MySelf:IsSkillActive(SKILL_STARDUST) then
+		local med = math.max(0,math.Round(MySelf:GetNWFloat("star_upd")-CurTime(),1))
+		draw.SimpleText("Следующee сохранение позиции:"..med,"ZSHUDFontSmallest", localx, y+yadd*BetterScreenScale(), med == 0 and COLOR_GREEN or COLOR_RED, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		yadd = yadd + 20 * screen
+	end
+	if MySelf:IsSkillActive(SKILL_STARDUST) then
+		local med = math.max(0,math.Round(MySelf:GetNWFloat("star_cd")-CurTime(),1))
+		draw.SimpleText("(B или "..(input.LookupBinding("+zoom") or "Z")..") Телепорт:"..med,"ZSHUDFontSmallest", localx, y+yadd*BetterScreenScale(), med == 0 and COLOR_GREEN or COLOR_RED, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		yadd = yadd + 20 * screen
+	end
+	if MySelf:IsSkillActive(SKILL_DEEPFOCUS) then
+		local med = math.max(0,math.Round(MySelf:GetNWFloat("deepfocus_cd")-CurTime(),1))
+		draw.SimpleText("(E + R)Войти в фокус:"..med,"ZSHUDFontSmallest", localx, y+yadd*BetterScreenScale(), med == 0 and COLOR_GREEN or COLOR_RED, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		yadd = yadd + 20 * screen
+	end
 
 	surface.SetDrawColor(GAMEMODE.CrosshairColor2)
 	surface.DrawRect(x - 2, y - 2, 4, 4)

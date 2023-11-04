@@ -1189,7 +1189,24 @@ function GM:PreDrawViewModel(vm, pl, wep)
 		return wep:PreDrawViewModel(vm)
 	end
 end
-
+function GM:PreDrawHalos()
+	local marked = {}
+	for k,v in pairs(player.GetAll()) do
+		if v and v:IsValid() and v:Team() ~= MySelf:Team() and v:GetNWFloat("halotime_mark") > CurTime() then
+			marked[#marked+1] = v
+		end
+	end
+	if #marked == 0 then return end
+		halo.Add(
+			marked,
+			Color(255,0,0),
+			4,
+			4,
+			12,
+			true,
+			true
+		)
+end
 function GM:PostDrawViewModel(vm, pl, wep)
 	if wep and wep:IsValid() then
 		if wep.UseHands or not wep:IsScripted() then

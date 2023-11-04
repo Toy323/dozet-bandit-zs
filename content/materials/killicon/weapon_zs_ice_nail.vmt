@@ -1,0 +1,8 @@
+"UnlitGeneric"
+{
+	"$basetexture"	"zombiesurvival/killicons/weapon_zs_ice_nail"
+	"$translucent" "1"
+	"$ignorez" "1"
+	"$vertexcolor" "1"
+	"$vertexalpha" "1"
+}

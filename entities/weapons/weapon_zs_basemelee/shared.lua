@@ -115,9 +115,10 @@ function SWEP:Think()
 end
 function SWEP:Move(mv)
 	if self:GetBlock() and mv:KeyDown(IN_ATTACK2) and not self:GetOwner():GetBarricadeGhosting() then
-		mv:SetMaxSpeed(self.WalkSpeed*(self.SpeedInBlock or 0.45))
-		mv:SetMaxClientSpeed(self.WalkSpeed*(self.SpeedInBlock or 0.45))	
-		mv:SetSideSpeed(mv:GetSideSpeed()*(self.SpeedInBlock or 0.45))
+		local owner3 = self:GetOwner():IsSkillActive(SKILL_TANKIST)
+		mv:SetMaxSpeed(self.WalkSpeed*(self.SpeedInBlock or 0.45)*(owner3 and 0.5 or 1))
+		mv:SetMaxClientSpeed(self.WalkSpeed*(self.SpeedInBlock or 0.45)*(owner3 and 0.5 or 1))	
+		mv:SetSideSpeed(mv:GetSideSpeed()*(self.SpeedInBlock or 0.45)*(owner3 and 0.5 or 1))
 	end
 end
 function SWEP:ProcessDamage(dmginfo)
@@ -129,15 +130,16 @@ function SWEP:ProcessDamage(dmginfo)
 			dmginfo:ScaleDamage(attacker:GetStamina()/100)
 		end
 		if self:GetBlock() then
+			local owner3 = owner:IsSkillActive(SKILL_TANKIST)
 			if dmginfo:IsDamageType(DMG_BULLET) and not (attackweapon and attackweapon.IgnoreDamageScaling) then
-				dmginfo:ScaleDamage(self.BlockVsBullet)
+				dmginfo:ScaleDamage(self.BlockVsBullet*(owner3 and 0 or 1))
 			end
 			if dmginfo:IsDamageType(DMG_CRUSH) or dmginfo:IsDamageType(DMG_SLASH) then
-				dmginfo:ScaleDamage(self.BlockVsMelee)
+				dmginfo:ScaleDamage(self.BlockVsMelee*(owner3 and 0 or 1))
 			end
 			if dmginfo:IsDamageType(DMG_DISSOLVE) then
 				attacker:TakeDamage(dmginfo:GetDamage() * self.BlockVsDissolve)
-				dmginfo:ScaleDamage(self.BlockVsDissolve)
+				dmginfo:ScaleDamage(self.BlockVsDissolve*(owner3 and 0 or 1))
 			end
 			local center = owner:LocalToWorld(owner:OBBCenter())
 			local hitpos = owner:NearestPoint(dmginfo:GetDamagePosition())

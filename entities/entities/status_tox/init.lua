@@ -13,7 +13,8 @@ function ENT:Think()
 
 	local dmg = self.Damage
 	owner:EmitSound("ambient/machines/steam_release_2.wav", 70, 125)
-	owner:TakeSpecialDamage(dmg, DMG_NERVEGAS, self.Damager and self.Damager:IsValid() and self.Damager:IsPlayer() and self.Damager:Team() ~= owner:Team() and self.Damager or owner, self)
+	local who = self.Damager and self.Damager:IsValid() and self.Damager:IsPlayer() and self.Damager:Team() ~= owner:Team() and self.Damager or owner
+	owner:TakeSpecialDamage(dmg * (who:IsSkillActive(SKILL_NEW_FORMULA) and 1.7 or 1), DMG_NERVEGAS, who, self)
 	self:AddTime(-self.TimeInterval)
 	self:NextThink(CurTime() + self.TimeInterval)
 	return true

@@ -76,6 +76,7 @@ GM:AddPointShopWeapon(0,"stbbr", ITEMCAT_GUNS, 15, "weapon_zs_stubber")
 GM:AddPointShopWeapon(0,"doublebarrel", ITEMCAT_GUNS, 15, "weapon_zs_doublebarrel")
 GM:AddPointShopWeapon(0,"jabbr", ITEMCAT_GUNS, 20, "weapon_zs_injector")
 GM:AddPointShopWeapon(0,"nailgun", ITEMCAT_GUNS, 50, "weapon_zs_nailgun").SkillRequirement = SKILL_HANDY3
+GM:AddPointShopWeapon(0,"biopistol", ITEMCAT_GUNS, 10, "weapon_zs_bioticpistol")
 
 local item = GM:AddPointShopWeapon(1,"deagle", ITEMCAT_GUNS, 65, "weapon_zs_deagle")
 GM:AddWeaponPrerequisite(item,"btlax")
@@ -96,7 +97,10 @@ GM:AddWeaponPrerequisite(item,"jabbr")
 local item = GM:AddPointShopWeapon(1,"bioshotgun", ITEMCAT_GUNS, 65, "weapon_zs_bioticshotgun")
 GM:AddWeaponPrerequisite(item,"doublebarrel")
 GM:AddWeaponPrerequisite(item,"slngr")
+GM:AddWeaponPrerequisite(item,"biopistol")
 local item = GM:AddPointShopWeapon(1,"trench", ITEMCAT_GUNS, 70, "weapon_zs_trenchshotgun")
+GM:AddWeaponPrerequisite(item,"doublebarrel")
+local item = GM:AddPointShopWeapon(1,"fracture", ITEMCAT_GUNS, 50, "weapon_zs_fracture")
 GM:AddWeaponPrerequisite(item,"doublebarrel")
 
 local item = GM:AddPointShopWeapon(1,"shredder", ITEMCAT_GUNS, 60, "weapon_zs_smg")
@@ -113,6 +117,9 @@ GM:AddWeaponPrerequisite(item,"slngr")
 GM:AddWeaponPrerequisite(item,"nailgun")
 
 local item = GM:AddPointShopWeapon(2,"magnum", ITEMCAT_GUNS, 140, "weapon_zs_magnum")
+GM:AddWeaponPrerequisite(item,"deagle")
+
+local item = GM:AddPointShopWeapon(2,"dual_deagle", ITEMCAT_GUNS, 140, "weapon_zs_dual_deagle")
 GM:AddWeaponPrerequisite(item,"deagle")
 
 local item = GM:AddPointShopWeapon(2,"glock3", ITEMCAT_GUNS, 135, "weapon_zs_glock3")
@@ -138,12 +145,20 @@ local item = GM:AddPointShopWeapon(2,"biosmg", ITEMCAT_GUNS, 140, "weapon_zs_bio
 GM:AddWeaponPrerequisite(item,"bioshotgun")
 local item = GM:AddPointShopWeapon(2,"sweeper", ITEMCAT_GUNS, 145, "weapon_zs_sweepershotgun")
 GM:AddWeaponPrerequisite(item,"trench")
+GM:AddWeaponPrerequisite(item,"fracture")
+
 
 local item = GM:AddPointShopWeapon(2,"sprayer", ITEMCAT_GUNS, 145, "weapon_zs_sprayersmg")
 GM:AddWeaponPrerequisite(item,"shredder")
 
+local item = GM:AddPointShopWeapon(3,"sprayer_dual", ITEMCAT_GUNS, 155, "weapon_zs_dual_uzi")
+GM:AddWeaponPrerequisite(item,"sprayer")
+GM:AddWeaponPrerequisite(item,"dual_deagle")
+
+
 local item = GM:AddPointShopWeapon(2,"hunter", ITEMCAT_GUNS, 135, "weapon_zs_hunter")
 GM:AddWeaponPrerequisite(item,"annabelle")
+GM:AddWeaponPrerequisite(item,"fracture")
 local item = GM:AddPointShopWeapon(2,"fusilier", ITEMCAT_GUNS, 150, "weapon_zs_fusilier")
 GM:AddWeaponPrerequisite(item,"annabelle")
 
@@ -173,6 +188,10 @@ GM:AddWeaponPrerequisite(item,"rupture")
 GM:AddWeaponPrerequisite(item,"ioncannon")
 GM:AddWeaponPrerequisite(item,"hunter")
 
+local item = GM:AddPointShopWeapon(3,"onyx_mark", ITEMCAT_GUNS, 190, "weapon_zs_onyx")
+GM:AddWeaponPrerequisite(item,"hunter")
+GM:AddWeaponPrerequisite(item,"fusilier")
+GM:AddWeaponPrerequisite(item,"podvodny")
 
 local item = GM:AddPointShopWeapon(3,"medicrifle", ITEMCAT_GUNS, 195, "weapon_zs_medicrifle")
 GM:AddWeaponPrerequisite(item,"practition")
@@ -188,6 +207,10 @@ local item = GM:AddPointShopWeapon(3,"bulletstorm", ITEMCAT_GUNS, 215, "weapon_z
 GM:AddWeaponPrerequisite(item,"sprayer")
 local item = GM:AddPointShopWeapon(3,"reaper", ITEMCAT_GUNS, 200, "weapon_zs_reaper")
 GM:AddWeaponPrerequisite(item,"sprayer")
+
+local item = GM:AddPointShopWeapon(3,"scar_l", ITEMCAT_GUNS, 180, "weapon_zs_scar")
+GM:AddWeaponPrerequisite(item,"sprayer")
+GM:AddWeaponPrerequisite(item,"stalker")
 
 local item = GM:AddPointShopWeapon(3,"zeus", ITEMCAT_GUNS, 205, "weapon_zs_zeus")
 GM:AddWeaponPrerequisite(item,"fusilier")
@@ -228,8 +251,11 @@ GM:AddWeaponPrerequisite(item,"albatross")
 
 local item = GM:AddPointShopWeapon(4,"m249", ITEMCAT_GUNS, 300, "weapon_zs_m249")
 GM:AddWeaponPrerequisite(item,"bulletstorm")
+GM:AddWeaponPrerequisite(item,"scar_l")
 local item = GM:AddPointShopWeapon(4,"tommy", ITEMCAT_GUNS, 290, "weapon_zs_tommy")
 GM:AddWeaponPrerequisite(item,"reaper")
+GM:AddWeaponPrerequisite(item,"scar_l")
+GM:AddWeaponPrerequisite(item,"sprayer_dual")
 
 local item = GM:AddPointShopWeapon(4,"sg550", ITEMCAT_GUNS, 295, "weapon_zs_sg550")
 GM:AddWeaponPrerequisite(item,"zeus")
@@ -299,6 +325,9 @@ GM:AddWeaponPrerequisite(item,"pipe")
 local item = GM:AddPointShopWeapon(3,"lowers", ITEMCAT_MELEE, 150, "weapon_zs_lowers")
 GM:AddWeaponPrerequisite(item,"sawhack")
 GM:AddWeaponPrerequisite(item,"longsword")
+local item = GM:AddPointShopWeapon(3,"fire_nail", ITEMCAT_MELEE, 150, "weapon_zs_fire_nail")
+GM:AddWeaponPrerequisite(item,"longsword")
+GM:AddWeaponPrerequisite(item,"extbaton")
 local item = GM:AddPointShopWeapon(3,"stunbaton", ITEMCAT_MELEE, 135, "weapon_zs_stunbaton")
 GM:AddWeaponPrerequisite(item,"extbaton")
 local item = GM:AddPointShopWeapon(3,"energysword", ITEMCAT_MELEE, 145, "weapon_zs_energysword")

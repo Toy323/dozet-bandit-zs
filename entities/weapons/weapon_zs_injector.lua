@@ -176,7 +176,7 @@ function SWEP:GetClosestTarget()
 	local selectedTarget = nil
 	local mypos = owner:EyePos()
     for _,ent in ipairs(player.GetAll()) do
-		if ent == owner then continue end
+		if ent == owner or !ent:Alive() then continue end
 		local centre = ent:WorldSpaceCenter()
 		local sqrdst = mypos:DistToSqr(centre)
 		if sqrdst > self.HealRangeSqr then continue end

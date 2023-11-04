@@ -1,4 +1,4 @@
-"dozet-bandit-zs"
+"zs_banditwarfare"
 {
 	"base"				"base"
 	"title"				"ZDozet:Bandit Warfare"

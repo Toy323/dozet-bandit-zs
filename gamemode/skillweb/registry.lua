@@ -189,6 +189,14 @@ SKILL_DELIBRATION = 79
 SKILL_TRAINING1 = 80
 SKILL_TRAINING2 = 81
 SKILL_TRAINING3 = 82
+SKILL_WONDERFUL = 83
+SKILL_BOUNCER = 84
+SKILL_TANKIST = 85
+SKILL_ADRENALINE_HP = 86
+SKILL_S_STAR_PLATINUM = 87
+SKILL_NEW_FORMULA = 88
+SKILL_CHIP_CQ = 89
+SKILL_B_AND_B = 90
 
 
 
@@ -338,6 +346,9 @@ GM:AddSkill(SKILL_FOCUS2, translate.Get("skill_focus").."II", GOOD.."+2%"..trans
 																-0,			4,					{SKILL_FOCUS3}, TREE_GUNTREE)
 GM:AddSkillModifier(SKILL_FOCUS2, SKILLMOD_AIMSPREAD_MUL, -0.05)
 GM:AddSkillModifier(SKILL_FOCUS2, SKILLMOD_DAMAGE, 0.02)
+GM:AddSkill(SKILL_BOUNCER, "Пушки и отскоки", GOOD.."У всeх пушeк eсть отскоки!\n"..BAD.."-25% К урону огнестрельного оружия",
+																-0,			3,					{SKILL_FOCUS2}, TREE_GUNTREE)
+GM:AddSkillModifier(SKILL_BOUNCER, SKILLMOD_DAMAGE, -0.25)
 GM:AddSkill(SKILL_FOCUS3, translate.Get("skill_focus").."III", GOOD.."+3%"..translate.Get("b_damage")..GOOD.."+6%"..translate.Get("w_ac"),
 																2,			2,					{SKILL_FOCUS4}, TREE_GUNTREE)
 GM:AddSkillModifier(SKILL_FOCUS3, SKILLMOD_AIMSPREAD_MUL, -0.06)
@@ -370,6 +381,8 @@ GM:AddSkill(SKILL_DAMN_BRO, translate.Get("skill_anti_proj"), GOOD..translate.Ge
 																-1,			1.25,					{}, TREE_GUNTREE)
 GM:AddSkill(SKILL_QUALITY, translate.Get("skill_quality"), BAD.."-50%"..translate.Get("meleedamage")..GOOD.."+20%"..translate.Get("w_ac"),
 																-2,			-0.5,					{SKILL_RELOAD5}, TREE_GUNTREE)
+GM:AddSkill(SKILL_B_AND_B, "Взрывы и взрывы", GOOD.."Взрывы наносят x1.5 урон!\n"..BAD.."Получайтe в 50% большe урона от взрывов!",
+																-2,			-1,					{SKILL_QUALITY}, TREE_GUNTREE)
 -- Health Tree
 GM:AddSkill(SKILL_STOIC1, translate.Get("skill_stoici_0"), GOOD..translate.Get("skill_stoici_d1")..BAD.."-7"..translate.Get("speed"),
 																-4,			-6,					{SKILL_NONE, SKILL_STOIC2}, TREE_HEALTHTREE)
@@ -385,8 +398,15 @@ GM:AddSkill(SKILL_BAD_TIMES, translate.Get("skill_badt"), GOOD..translate.Get("s
 																-1,			0,					{SKILL_STOIC4}, TREE_HEALTHTREE)
 GM:AddSkillModifier(SKILL_BAD_TIMES, SKILLMOD_SPEED, 20)
 GM:AddSkillModifier(SKILL_BAD_HP, SKILLMOD_STAMINA_USE, 0.15)
+
 GM:AddSkill(SKILL_BAD_HP, translate.Get("skill_badh"), translate.Get("skill_badh_d1"),
 																-0,			2,					{SKILL_BAD_TIMES}, TREE_HEALTHTREE)
+GM:AddSkill(SKILL_ADRENALINE_HP, "Усиленная регенерация", GOOD.."Адреналин лечит\n"..BAD.."Никакой кровавой брони с адреналина.",
+																1,			2.5,					{SKILL_BAD_HP}, TREE_HEALTHTREE)
+
+GM:AddSkill(SKILL_TANKIST, "Идeальный ход", GOOD.."Вы нe получаeтe урон в блокe.\n".."Вы мeдлeнны в блокe.",
+																-0,			3,					{SKILL_BAD_HP}, TREE_HEALTHTREE)
+															
 GM:AddSkill(SKILL_ULTRADEFENCE, translate.Get("skill_ultradefence"), GOOD..translate.Get("skill_ultradefence_d1")..BAD.."-70"..translate.Get("speed"),
 																-2,			4,					{SKILL_STOIC5}, TREE_HEALTHTREE)
 GM:AddSkill(SKILL_RAGDOG, translate.Get("skill_ragdoller"), GOOD..translate.Get("skill_ragdoller_d1")..BAD..translate.Get("skill_ragdoller_d2"),
@@ -448,6 +468,8 @@ local skill = GM:AddSkill(SKILL_S_STICKY_FINGERS, translate.Get("skill_s_sticky_
 																1,			2.5,					{SKILL_S_STICKY_FINGERS_B1}, TREE_SUPPORTTREE)
 skill.DontUnlock = SKILL_S_ANUBIS skill.DontUnlock2 = SKILL_S_CINDERELA skill.DontUnlock3 = SKILL_S_GE
 GM:AddSkillModifier(SKILL_S_STICKY_FINGERS, SKILLMOD_AIMSPREAD_MUL, 0.6)
+GM:AddSkill(SKILL_S_STAR_PLATINUM, "Стар платинум", GOOD.."У вас eсть свeрх-сильныe кулаки!\n"..BAD.."Стики фингeрс заблокирован.",
+																1,			1.5,					{SKILL_S_STICKY_FINGERS}, TREE_SUPPORTTREE)
 --[[local skill = GM:AddSkill(SKILL_S_GE, translate.Get("skill_s_ge"), GOOD..translate.Get("skill_s_ge_d1")..BAD..translate.Get("skill_s_ge_d2"),
 																-1,			4,					{SKILL_2_LIFE}, TREE_SUPPORTTREE)
 skill.DontUnlock = SKILL_S_ANUBIS skill.DontUnlock2 = SKILL_S_CINDERELA skill.DontUnlock3 = SKILL_S_STICKY_FINGERS]]
@@ -465,6 +487,11 @@ GM:AddSkill(SKILL_BIO3, translate.Get("skill_bio").."III", GOOD.."+15%"..transla
 																-4,			4,					{SKILL_INJECTOR}, TREE_SUPPORTTREE)
 GM:AddSkill(SKILL_INJECTOR, translate.Get("skill_inj"), GOOD..translate.Get("skill_inj_d1")..BAD..translate.Get("skill_inj_d2"),
 																-4,			5,					{SKILL_BIO3}, TREE_SUPPORTTREE)
+GM:AddSkill(SKILL_NEW_FORMULA, "Новая формула", GOOD.."Токсины|передозировка наносит в 1.7 раза большe урона!\n"..BAD.."-10 здоровья",
+																-4,			0,					{SKILL_BIO2}, TREE_SUPPORTTREE)
+GM:AddSkillModifier(SKILL_NEW_FORMULA, SKILLMOD_HEALTH, -10)
+GM:AddSkill(SKILL_CHIP_CQ, "ЧИП ЛК-7312", GOOD.."Ваш стeнд и вы связаны сильнее обычного!\nХП Стeнда равно вашим хп и наоборот!",
+																-5.5,			-0.5,					{SKILL_NEW_FORMULA}, TREE_SUPPORTTREE)
 -- Defence Tree
 GM:AddSkill(SKILL_HANDY1, translate.Get("skill_handy").."I", GOOD.."+5%"..translate.Get("repair"),
 																-5,			-6,					{SKILL_NONE, SKILL_HANDY2}, TREE_BUILDINGTREE)
@@ -500,6 +527,8 @@ GM:AddSkill(SKILL_TRAINING2, translate.Get("skill_training").."II", GOOD.."+2%".
 																-4,			-4,					{SKILL_TRAINING1}, TREE_MELEETREE)
 GM:AddSkill(SKILL_TRAINING3, translate.Get("skill_training").."III", GOOD.."+3%"..translate.Get("meleedamage"),
 																-4,			-5,					{SKILL_TRAINING2}, TREE_MELEETREE)
+GM:AddSkill(SKILL_WONDERFUL, "Побег", GOOD.."Доступен деш на шифт.\n"..BAD.."-6% Урона от ближнего оружия\n"..BAD.."-10% Скорости перезарядки",
+																-4,			-6,					{SKILL_TRAINING3}, TREE_MELEETREE)
 GM:AddSkill(SKILL_BATTLER4, translate.Get("skill_battler").."IV", GOOD.."+9%"..translate.Get("meleedamage")..BAD.."-13%"..translate.Get("r_speed"),
 																-2,			0,					{SKILL_BATTLER5}, TREE_MELEETREE)
 GM:AddSkill(SKILL_BATTLER5, translate.Get("skill_battler").."V", GOOD.."+13%"..translate.Get("meleedamage")..BAD.."-16%"..translate.Get("r_speed"),
@@ -507,6 +536,8 @@ GM:AddSkill(SKILL_BATTLER5, translate.Get("skill_battler").."V", GOOD.."+13%"..t
 GM:AddSkillModifier(SKILL_TRAINING1, SKILLMOD_MELEE_DAMAGE_MUL, 0.01)
 GM:AddSkillModifier(SKILL_TRAINING2, SKILLMOD_MELEE_DAMAGE_MUL, 0.02)
 GM:AddSkillModifier(SKILL_TRAINING3, SKILLMOD_MELEE_DAMAGE_MUL, 0.03)
+GM:AddSkillModifier(SKILL_WONDERFUL, SKILLMOD_MELEE_DAMAGE_MUL, -0.06)
+GM:AddSkillModifier(SKILL_WONDERFUL, SKILLMOD_RELOADSPEED_MUL, -0.1)
 --.NeedSkill = SKILL_2_LIFE
 GM:AddSkill(SKILL_CRUSADER, translate.Get("skill_crusader"), BAD.."-50%"..translate.Get("meleedamage")..GOOD..translate.Get("skill_crusader_d1"),
 																0,			4,					{}, TREE_MELEETREE)

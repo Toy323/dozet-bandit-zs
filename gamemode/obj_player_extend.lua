@@ -142,10 +142,13 @@ function meta:ApplyAdrenaline()
 	self.HumanSpeedAdder = (self.HumanSpeedAdder or 0) +5
 	self:ResetSpeed() 
 	if SERVER then 
-		self:SetBloodArmor(self:GetBloodArmor() + 15)
 		self.HealthDead = (self.HealthDead or 0) + 10
 		self:SetMaxHealth(self.HealthForADR-self.HealthDead)
-		self:SetHealth(math.min(self:GetMaxHealth() * 0.3 + self:Health(), self:GetMaxHealth()))
+		if self:IsSkillActive(SKILL_ADRENALINE_HP) then
+			self:SetHealth(math.min(self:GetMaxHealth() * 0.3 + self:Health(), self:GetMaxHealth()))
+		else
+			self:SetBloodArmor(self:GetBloodArmor() + 15)
+		end
 	end
 	self:EmitSound("player/suit_sprint.wav")	
 	return true
@@ -425,7 +428,6 @@ function meta:ResetSpeed(noset)
 	if not speed then
 		speed = wep.WalkSpeed or SPEED_NORMAL
 	end
-	
 	if self:GetBodyArmor() > 20 then
 		speed = speed - self:GetBodyArmor() / 2
 	end

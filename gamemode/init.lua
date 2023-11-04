@@ -796,6 +796,7 @@ function GM:Think()
 				pl:SetBloodArmor(math.min(100,pl:GetBloodArmor() + 3))
 			end
 			if pl:IsSkillActive(SKILL_STARDUST) and pl.Think_Stardust <= CurTime() then
+				pl:SetNWFloat("star_upd", CurTime() + 3)
 				pl.Think_Stardust = CurTime() + 3
 				pl:UpdateStarDust(pl:GetPos())
 			end
@@ -814,30 +815,47 @@ function GM:Think()
 			if pl:IsSkillActive(SKILL_OPERATOR) and pl:GetVelocity():LengthSqr() >= 255 then
 				pl.NextUseManhack = CurTime() + 4
 			end
+			
 			if pl:IsSkillActive(SKILL_S_ANUBIS) and !pl:GetStatus("dimvision") then
 				pl:GiveStatus("dimvision",10)
 			end
 			if self:GetSpecialWave() == "anubis" then
-				pl:GiveStatus("dimvision",1)
+				pl:GiveStatus("dimvision",2)
 			end
-			if pl:IsSkillActive(SKILL_2_LIFE) and pl:GetStandUser():IsValid() and pl.FixForFix <= CurTime() then
-				local user = false
-				for _,ent in pairs(ents.FindInSphere(pl:GetPos(), 1028)) do 
-					if ent == pl:GetStandUser() then
-						user = true
+			if pl.FixForFix <= CurTime() and pl:IsSkillActive(SKILL_2_LIFE) then
+				if pl:GetStandUser():IsValid()  then
+					local user = false
+					local user3 = pl:GetStandUser()
+					for _,ent in pairs(ents.FindInSphere(pl:GetPos(), 1028)) do 
+						if ent == user3 then
+							user = true
+						end
 					end
-				end
-				if !user then
-					pl:SetPos(pl:GetStandUser():GetPos())
-					pl:CenterNotify(translate.ClientGet(pl,"stand_dont_near"))
-				end
-				if !pl:GetStandUser():Alive() then
+					if !user then
+						pl:SetPos(user3:GetPos())
+						pl:CenterNotify(translate.ClientGet(pl,"stand_dont_near"))
+					end
+					if !user3:Alive() then
+						timer.Create("Death STAND"..pl:Nick(),0.05,1, function() pl:Kill() end)
+						pl.FixForFix = CurTime() + 1
+					end
+					if user3:IsSkillActive(SKILL_CHIP_CQ) and user3:Alive() then
+						local percu = math.Round(math.Round(pl:Health()/pl:GetMaxHealth(),2)*user3:GetMaxHealth())
+						local percs = math.Round(math.Round(user3:Health()/user3:GetMaxHealth(),2)*pl:GetMaxHealth())
+						--print(percu)
+						--print(percs)
+						if percu < percs then
+							user3:SetHealth(percu)
+						else
+							pl:SetHealth(percs)
+						end
+						
+					end
+				elseif  !pl:GetStandUser():IsValid() and self:GetWaveActive() then
+					timer.Create("Death STAND WITHOUT USER"..pl:Nick(),0.05,1, function() pl:Kill() end)
 					pl.FixForFix = CurTime() + 1
-					timer.Create("Death STAND"..pl:Nick(),0.05,1, function() pl:Kill() end)
 				end
-			elseif  pl:IsSkillActive(SKILL_2_LIFE) and !pl:GetStandUser():IsValid() and pl.FixForFix <= CurTime() and self:GetWaveActive() then
-				pl.FixForFix = CurTime() + 1
-				timer.Create("Death STAND WITHOUT USER"..pl:Nick(),0.05,1, function() pl:Kill() end)
+			
 			end
 
 
@@ -848,11 +866,6 @@ function GM:Think()
 						buff.Applier = pl
 					end
 				end
-			end
-			if self:GetSpecialWave() == "bhop" and pl:OnGround() then
-				local vector = pl:GetAimVector()
-				vector.z = math.max(5, pl:GetAimVector().z)
-				pl:SetVelocity(Vector(0,0,130) + (vector+Vector(0,0,10))*15 + pl:GetAimVector()*50)
 			end
 			if pl:IsSkillActive(SKILL_VKID) and math.random(1,1500) == 1 then
 				local vector = pl:GetAimVector()
@@ -1329,6 +1342,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.WaveJoined = self:GetWave()
 
 	pl.FixForFix = 0
+	pl.NextDash = 0
 	
 	pl.BloodRegen = 0
 	pl.BarricadeDamage = 0
@@ -1374,6 +1388,9 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.StaminaUsed = 0
 	self:LoadVault(pl)
 	pl:ApplySkills()
+	if pl:IsSkillActive(SKILL_S_STAR_PLATINUM) then
+		pl:Give('weapon_zs_fists')
+	end
 
 	pl.SpawnedTime = CurTime()
 	if pl:GetInfo("zsb_spectator") == "1" then
@@ -2298,12 +2315,13 @@ function GM:KeyPress(pl, key)
 		end
 	end
 	if key == IN_RELOAD then
-		if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl:IsSkillActive(SKILL_S_STICKY_FINGERS) and pl:KeyDown(IN_SPEED) and pl.NextUseSF <= CurTime() then
+		if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl:IsSkillActive(SKILL_S_STICKY_FINGERS) and pl:KeyDown(IN_SPEED) and pl.NextUseSF <= CurTime() and !pl:IsSkillActive(SKILL_S_STAR_PLATINUM) then
 			local p = pl:GetEyeTrace().Normal * (250 + (pl:IsSkillActive(SKILL_S_STICKY_FINGERS_B1) and 100 or 0))
 			p.z = 0
 			p.y = p.y * (pl:IsSkillActive(SKILL_S_STICKY_FINGERS_B1) and math.random(-2,2) or 1)
 			p.x = p.x * (pl:IsSkillActive(SKILL_S_STICKY_FINGERS_B1) and math.random(-2,2) or 1)
 			pl:SetPos(pl:GetPos()+p)
+			pl:SetNWFloat("sticky_cd", CurTime() + 2)
 			pl.NextUseSF = CurTime() + 2
 		end
 	end
@@ -2317,14 +2335,15 @@ function GM:KeyPress(pl, key)
 		end
 		if pl:KeyDown(IN_RELOAD) and pl:IsSkillActive(SKILL_DEEPFOCUS) then
 			if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl.DeepFocus_Time <= CurTime() then
-				pl.DeepFocus_Time = CurTime() + 25
+				pl:SetNWFloat("deepfocus_cd", CurTime() + 15)
+				pl.DeepFocus_Time = CurTime() + 15
 				pl.DeepFocuses = true
 				pl:UpdateFocus(true)
 				pl:Fire( "alpha", 0, 0 )
 				pl:ResetSpeed()
 				pl:DrawWorldModel( false )
 				pl:DrawShadow( false )
-				timer.Simple(6, function()
+				timer.Simple(7, function()
 					pl.DeepFocuses = false
 					pl:UpdateFocus(false)
 					pl:ResetSpeed()
@@ -2335,6 +2354,15 @@ function GM:KeyPress(pl, key)
 		end
 	elseif key == IN_SPEED then
 		--pl:ResetSpeed()
+		if not pl:IsCarrying() and pl.NextDash < CurTime() and pl:IsSkillActive(SKILL_WONDERFUL) and !pl:GetBarricadeGhosting() and !pl:KeyDown(IN_RELOAD) and pl:GetWalkSpeed() > 150 then
+			if pl:GetStamina() < 33 then return end
+			local pos = pl:GetPos()
+			local pushvel = pl:GetEyeTrace().Normal * 0 + (pl:GetAngles():Forward()*(pl:OnGround() and 900 or 300))
+			pl:SetVelocity(pushvel)
+			pl:SetNWFloat("dash_cd", CurTime() + 3)
+			pl.NextDash = CurTime() + 3
+			pl:AddStamina(-13)
+		end 
 		if pl:Alive() then
 			if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) then
 				pl:DispatchAltUse()
@@ -2353,6 +2381,7 @@ function GM:KeyPress(pl, key)
 		end
 	elseif key == IN_ZOOM and pl:IsSkillActive(SKILL_STARDUST) then
 		if (pl:Team() == TEAM_HUMAN or pl:Team() == TEAM_BANDIT) and pl:Alive() and pl.NextStarC <= CurTime() then
+			pl:SetNWFloat("star_cd", CurTime() + 2)
 			pl.NextStarC = CurTime() + 2
 			pl:EmitSound("npc/env_headcrabcanister/incoming.wav")
 			local effectdata = EffectData()
@@ -2851,6 +2880,9 @@ function GM:PlayerSpawn(pl)
 		pl:SetNoTarget(false)
 		pl.SkillUsed = false
 		pl:ApplySkills()
+		if pl:IsSkillActive(SKILL_S_STAR_PLATINUM) then
+			pl:Give('weapon_zs_fists')
+		end
 		local current = pl:GetMaxHealth()
 		local new = 100 + math.Clamp(pl.HealthForADR - 100, -99, 1000)
 		pl:SetMaxHealth(new)

@@ -372,10 +372,12 @@ function GenericBulletCallback(attacker, tr, dmginfo)
 				local power = (dmginfo:GetDamage() / 7) / (attacker:GetActiveWeapon() and attacker:GetActiveWeapon().Primary.NumShots or 1)
 				local conf = ent:GiveStatus("confusion",(d and power * 5 or power))
 			end
-			if attacker:IsSkillActive(SKILL_BIG_BOOM) and ent:GetActiveWeapon() and ent:GetActiveWeapon().IsMelee then
+			if attacker:IsSkillActive(SKILL_BIG_BOOM) and ent:GetActiveWeapon() then
 				local pl = ent
 				timer.Create(ent:Nick().." Explode Ammo",1.2,1, function()
+					pl:GodEnable()
 					util.BlastDamage2(dmginfo:GetInflictor(), attacker, pl:GetPos(), 45, (pl:Health() or 1) * 0.1 + dmginfo:GetDamage())
+					pl:GodDisable()
 					pl:EmitSound("c4.explode")
 					local effectdata = EffectData()
 						effectdata:SetOrigin(pl:GetPos())
@@ -396,6 +398,7 @@ function GenericBulletCallback(attacker, tr, dmginfo)
 			end
 		end
 	end
+
 end
 
 function SWEP:SendWeaponAnimation()
@@ -631,7 +634,7 @@ function SWEP:ShootCSBullets(owner, dmg, numbul, cone, hit_own_team)
 	temp_shooter = self
 	temp_attacker = owner
 
-	bullet_trace.start = owner:GetShootPos()
+	bullet_trace.start = pos or owner:GetShootPos()
 	bullet_trace.filter = BaseBulletFilter
 	if not hit_own_team and owner:IsPlayer() then
 		temp_ignore_team = owner:Team()
@@ -678,6 +681,22 @@ function SWEP:ShootCSBullets(owner, dmg, numbul, cone, hit_own_team)
 end
 
 SWEP.BulletCallback = GenericBulletCallback
+local function DoRicochet(attacker, hitpos, hitnormal, normal, damage)
+	attacker.RicochetBullet = true
+	attacker:FireBullets({Num = 1, Src = hitpos, Dir = hitnormal, Spread = Vector(0.25, 0.25, 0), Tracer = 1, TracerName = "rico_trace", Force = damage * 0.15, Damage = damage, Callback = GenericBulletCallback})
+	attacker.RicochetBullet = nil
+end
+function SWEP.BulletCallback(attacker, tr, dmginfo)
+	if tr.HitWorld and not tr.HitSky then
+		local hitpos, hitnormal, normal= tr.HitPos, tr.HitNormal, tr.Normal 
+		if SERVER then
+			timer.Simple(0, function() 
+				DoRicochet(attacker, hitpos, hitnormal, normal, dmginfo:GetDamage()/2) 
+			end)
+		end
+	end
+	GenericBulletCallback(attacker, tr, dmginfo)
+end
 function SWEP:ShootBullets(dmg, numbul, cone)
 	
 	self:SetConeAndFire()

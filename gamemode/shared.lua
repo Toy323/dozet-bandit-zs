@@ -215,7 +215,12 @@ function GM:OnPlayerHitGround(pl, inwater, hitfloater, speed)
 	local damage = math.max(0,0.165*(speed-512))
 	damage = damage * mul
 	if hitfloater then damage = damage / 2 end
-	if self:GetSpecialWave() == "bhop" then return end
+	if self:GetSpecialWave() == "bhop" then 
+			local vector = pl:GetAimVector()
+			vector.z = math.max(5, pl:GetAimVector().z)
+			pl:SetVelocity(Vector(0,0,130) + (vector+Vector(0,0,10))*15 + pl:GetAimVector()*50)
+		return true
+	end
 	if math.floor(damage) > 0 then
 		pl:SetVelocity(- pl:GetVelocity() / 4)
 		if SERVER then

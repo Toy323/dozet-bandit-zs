@@ -411,6 +411,7 @@ function meta:RemoveNail(nail, dontremoveentity, removedby)
 		if cons:IsValid() then
 			cons:Remove()
 		end
+		self.m_CachedIsNailed = nil
 	end
 
 	local ent2 = GetNailOwner(nail, self)

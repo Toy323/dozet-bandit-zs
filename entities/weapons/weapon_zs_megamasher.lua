@@ -89,6 +89,9 @@ function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 end
 
 function SWEP:Move(mv)
+	if self.BaseClass.Move then
+		self.BaseClass.Move(self,mv)
+	end
 	if self:IsSwinging() then
 		local ratio = math.Clamp((self:GetSwingEnd()-CurTime())/self.SwingTime,0,1)
 		local speed = self.WalkSpeed + (self.SwingWalkSpeed)*ratio

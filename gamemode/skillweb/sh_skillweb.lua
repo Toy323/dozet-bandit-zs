@@ -179,7 +179,7 @@ function meta:ApplySkills(override)
 	if self:IsSkillActive(SKILL_2_LIFE) then
 		local standu = self:ShakeUser()
 
-		if standu:IsValid() then
+		if standu:IsValid() and SERVER then
 			self:SetStandUser(standu)
 			self:GetStandUser():CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", team.GetColor(self:Team()), translate.ClientGet(self:GetStandUser(),"ur_stand"), self,{killicon = "default"})
 			self:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", team.GetColor(self:GetStandUser():Team()), translate.ClientGet(self,"ur_user"), self:GetStandUser(),{killicon = "default"})

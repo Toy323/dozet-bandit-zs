@@ -226,6 +226,9 @@ function SWEP:Deploy()
 end
 
 function SWEP:Move(mv)
+	if self.BaseClass.Move then
+		self.BaseClass.Move(self,mv)
+	end
 	local perc = self:GetChargePerc()
 	if self:GetChargeStart() == 0 then
 		return
@@ -237,6 +240,7 @@ function SWEP:Move(mv)
 		mv:SetMaxSpeed(speed)
 		mv:SetMaxClientSpeed(speed)	
 	end
+	
 end
 
 if not CLIENT then return end

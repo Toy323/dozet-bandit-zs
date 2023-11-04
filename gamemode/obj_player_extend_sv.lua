@@ -269,6 +269,9 @@ function meta:ProcessDamage(dmginfo)
 		if self:IsSkillActive(SKILL_DAMN_BRO) and math.random(1,6) == 1 and !inflictor.m_IsProjectile then
 			dmginfo:ScaleDamage(2.5)
 		end
+		if (self:IsSkillActive(SKILL_B_AND_B) or attacker:IsSkillActive(SKILL_B_AND_B)) and (bit.band(dmginfo:GetDamageType(), DMG_ALWAYSGIB) ~= 0 or bit.band(dmginfo:GetDamageType(), DMG_BLAST) ~= 0 ) then
+			dmginfo:ScaleDamage(1.5)
+		end
 		if self:GetBodyArmor() and self:GetBodyArmor() > 0 and attacker:Team() ~= self:Team() then
 			local ratio = 0.75
 			if dmginfo:IsDamageType(DMG_BLAST) then

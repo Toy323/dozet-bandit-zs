@@ -141,7 +141,7 @@ end
 
 function ENT:OnRemove()
 	if self.m_IsRemoving then return end
-
+	
 	local baseent = self:GetBaseEntity()
 	if baseent:IsValid() and not baseent:IsWorld() then
 		baseent:RemoveNail(self, nil, nil, true)

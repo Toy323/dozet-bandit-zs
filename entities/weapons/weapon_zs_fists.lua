@@ -30,7 +30,7 @@ SWEP.OldWalkSpeed = 0
 SWEP.MeleeDamage = 9
 SWEP.DamageType = DMG_CLUB
 SWEP.UppercutDamageMultiplier = 3
-SWEP.HitDistance = 40
+SWEP.HitDistance = 60
 SWEP.MeleeKnockBack = 0
 
 SWEP.ViewModelFOV = 52
@@ -48,7 +48,7 @@ SWEP.NoPickupNotification = true
 SWEP.NoDismantle = true
 SWEP.NoGlassWeapons = true
 
-SWEP.Primary.Delay = 0.67
+SWEP.Primary.Delay = 0.1
 
 SWEP.Weight = 2 -- This is the second crappiest weapon you could hope for, besides food
 SWEP.SlotPos = 100
