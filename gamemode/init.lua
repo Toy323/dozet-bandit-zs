@@ -3112,8 +3112,9 @@ function GM:WaveEnded()
 	table.Add(deployables, ents.FindByClass("prop_gunturret"))
 	table.Add(deployables, ents.FindByClass("prop_detpack"))
 	for _, ent in pairs(deployables) do
-		if ent.GetOwner and ent:GetOwner():IsPlayer() and (ent:GetOwner():Team() == TEAM_BANDIT or ent:GetOwner():Team() == TEAM_HUMAN) then
-			ent:OnPackedUp(ent:GetOwner())
+		local owner = ent.GetOwner and ent:GetOwner():IsValid() and ent:GetOwner():IsPlayer() and ent:GetOwner() or ent.GetObjectOwner and ent:GetObjectOwner():IsValid() and ent:GetObjectOwner():IsPlayer() and ent:GetObjectOwner()
+		if owner and (owner:Team() == TEAM_BANDIT or owner:Team() == TEAM_HUMAN) then
+			ent:OnPackedUp(owner)
 		else
 			ent:Remove()
 		end

@@ -18,7 +18,7 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 	if ent ~= self:GetOwner() then return end
 	if (attacker:IsValid() and attacker:IsPlayer() and self:GetOwner():IsPlayer() and attacker:Team() == self:GetOwner():Team()) then return end
 	if attacker:IsPlayer() and self.Applier:Alive() then
-		local protect = 0.5
+		local protect = 0.2
 
 		local dmgfraction = dmginfo:GetDamage() * protect
 		dmginfo:SetDamage(dmginfo:GetDamage() * (1 - protect))
@@ -27,7 +27,7 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 		local points = dmgfraction / hpperpoint
 
 		if self.Applier and self.Applier:IsValid() and self.Applier:IsPlayer() then
-			self.Applier:AddPoints(points)
+			self.Applier:AddPoints(math.max(0,points))
 		end
 	end
 end

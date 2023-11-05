@@ -73,6 +73,7 @@ function SWEP:SetupDataTables()
 	self:NetworkVar("Bool", 21, "Block")
 	self:NetworkVar("Bool", 22, "ChargeBlock")
 	self:NetworkVar("Float", 23, "GetAttackCharge")
+	self:NetworkVar("Float", 24, "ParryTime")
 end
 
 function SWEP:SetWeaponSwingHoldType(t)
@@ -105,8 +106,17 @@ function SWEP:Think()
 			self:SetBlock(false)
 			self:SetHoldType(self.HoldType)
 			self:SetWeaponSwingHoldType(self.SwingHoldType)
-			self:SetChargeBlock(false) 
+			self:SetChargeBlock(false)
+			self:SetParryTime(0)  
+			self.UsedParry = false
 		end
+	end
+	if self:GetParryTime() > CurTime() and SERVER and !self.UsedParry then
+		local owner = self:GetOwner()
+		local parry = owner:GiveStatus("parry_state")
+		parry:SetTime(0.6+(owner:IsSkillActive(SKILL_PARRY_SLOW) and 0.3 or 0))
+		self:SetParryTime(0)
+		self.UsedParry = true
 	end
 
 	--[[if CLIENT then
@@ -164,6 +174,12 @@ function SWEP:SecondaryAttack()
 			self:SetHoldType("revolver")
 			self:SetWeaponSwingHoldType("revolver")
 			self:SetChargeBlock(true) 
+			local owner = self:GetOwner()
+			if owner:IsSkillActive(SKILL_PARRY_SLOW) then
+				self:SetNextSecondaryFire(CurTime()+0.7)
+			end
+			if owner:KeyDown(IN_RELOAD) then return end
+			self:SetParryTime(CurTime()+0.1)
 		end
 	end
 end
@@ -226,8 +242,8 @@ end
 
 function SWEP:MeleeSwing()
 	local owner = self:GetOwner()
-	local formula = -(self.Stamina or 10)*((self:GetBlock() and 2 or 1)*(owner:GetVelocity():LengthSqr() <= 15600 and 0.65 or 1))
-	self:GetOwner():AddStamina(formula)
+	local formula = -(self.Stamina or 10)*((self:GetBlock() and 2 or 1)*(owner:GetVelocity():LengthSqr() <= 15600 and 0.65 or 1))*(owner:IsSkillActive(SKILL_S_ANUBIS) and  math.max(0.2,1-(GAMEMODE:GetWave() * 0.06)) or 1 )
+	owner:AddStamina(formula)
 	--print(formula)
 	owner:DoAttackEvent()
 	local tr = owner:CompensatedMeleeTrace(self.MeleeRange, self.MeleeSize)
@@ -244,7 +260,7 @@ function SWEP:MeleeSwing()
 		return
 	end
 
-	local damagemultiplier = (owner.MeleeDamageMultiplier or 1) * (self:GetOwner():IsSkillActive(SKILL_S_ANUBIS) and (GAMEMODE:GetWave() * (self:GetOwner():IsSkillActive(SKILL_S_ANUBIS_B1) and 0.06 or 0.03) + 0.6) or 1)
+	local damagemultiplier = (owner.MeleeDamageMultiplier or 1) * (owner:IsSkillActive(SKILL_S_ANUBIS) and (GAMEMODE:GetWave() * (owner:IsSkillActive(SKILL_S_ANUBIS_B1) and 0.06 or 0.03) + 0.6) or 1)
 	local damage = ((self:GetBlock() and self.MeleeDamage * (self.DamageMulBlock or 0.4) or self.MeleeDamage) * damagemultiplier )
 	if owner:GetStamina() >= 99 then
 		damage = damage * 1.35

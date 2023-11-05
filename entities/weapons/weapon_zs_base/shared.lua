@@ -369,10 +369,10 @@ function GenericBulletCallback(attacker, tr, dmginfo)
 		if ent:IsPlayer() then
 			if attacker:IsSkillActive(SKILL_R_BULLETS) then
 				local d = tr.Hit and tr.HitGroup == HITGROUP_HEAD
-				local power = (dmginfo:GetDamage() / 7) / (attacker:GetActiveWeapon() and attacker:GetActiveWeapon().Primary.NumShots or 1)
+				local power = (dmginfo:GetDamage() / 16) / (attacker:GetActiveWeapon() and attacker:GetActiveWeapon().Primary.NumShots or 1)
 				local conf = ent:GiveStatus("confusion",(d and power * 5 or power))
 			end
-			if attacker:IsSkillActive(SKILL_BIG_BOOM) and ent:GetActiveWeapon() then
+			if attacker:IsSkillActive(SKILL_BIG_BOOM) and ent:GetActiveWeapon() and SERVER then
 				local pl = ent
 				timer.Create(ent:Nick().." Explode Ammo",1.2,1, function()
 					pl:GodEnable()
@@ -689,7 +689,7 @@ end
 function SWEP.BulletCallback(attacker, tr, dmginfo)
 	if tr.HitWorld and not tr.HitSky then
 		local hitpos, hitnormal, normal= tr.HitPos, tr.HitNormal, tr.Normal 
-		if SERVER then
+		if SERVER and attacker:IsSkillActive(SKILL_BOUNCER) then--
 			timer.Simple(0, function() 
 				DoRicochet(attacker, hitpos, hitnormal, normal, dmginfo:GetDamage()/2) 
 			end)

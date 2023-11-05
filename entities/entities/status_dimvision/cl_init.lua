@@ -26,7 +26,7 @@ end
 local colModDimVision = {
 	["$pp_colour_colour"] = 0.01,
 	["$pp_colour_brightness"] = 0,
-	["$pp_colour_contrast"] = 0.01,
+	["$pp_colour_contrast"] = 0.07,
 	["$pp_colour_mulr"]	= -122,
 	["$pp_colour_mulg"] = 255,
 	["$pp_colour_mulb"] = 0,

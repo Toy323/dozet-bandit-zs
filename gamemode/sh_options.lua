@@ -151,6 +151,9 @@ GM:AddWeaponPrerequisite(item,"fracture")
 local item = GM:AddPointShopWeapon(2,"sprayer", ITEMCAT_GUNS, 145, "weapon_zs_sprayersmg")
 GM:AddWeaponPrerequisite(item,"shredder")
 
+local item = GM:AddPointShopWeapon(2,"abakan", ITEMCAT_GUNS, 125, "weapon_zs_abakan")
+GM:AddWeaponPrerequisite(item,"kalash")
+
 local item = GM:AddPointShopWeapon(3,"sprayer_dual", ITEMCAT_GUNS, 155, "weapon_zs_dual_uzi")
 GM:AddWeaponPrerequisite(item,"sprayer")
 GM:AddWeaponPrerequisite(item,"dual_deagle")
@@ -246,6 +249,8 @@ local item = GM:AddPointShopWeapon(4,"blightcaster", ITEMCAT_GUNS, 280, "weapon_
 GM:AddWeaponPrerequisite(item,"biorifle")
 local item = GM:AddPointShopWeapon(4,"boomstick", ITEMCAT_GUNS, 285, "weapon_zs_boomstick")
 GM:AddWeaponPrerequisite(item,"severance")
+local item = GM:AddPointShopWeapon(4,"fire_shotgun", ITEMCAT_GUNS, 285, "weapon_zs_fire_shotgun")
+GM:AddWeaponPrerequisite(item,"severance")
 local item = GM:AddPointShopWeapon(4,"ender",  ITEMCAT_GUNS, 290, "weapon_zs_ender")
 GM:AddWeaponPrerequisite(item,"albatross")
 
@@ -269,6 +274,10 @@ local item = GM:AddPointShopWeapon(4,"crossbow", ITEMCAT_GUNS, 300, "weapon_zs_c
 GM:AddWeaponPrerequisite(item,"arbalest")
 local item = GM:AddPointShopWeapon(4,"classic", ITEMCAT_GUNS, 320, "weapon_zs_classic")
 GM:AddWeaponPrerequisite(item,"renegade")
+
+local item = GM:AddPointShopWeapon(5,"silencer_dual", ITEMCAT_GUNS, 390, "weapon_zs_dual_uzi2")
+GM:AddWeaponPrerequisite(item,"silencer")
+
 
 --GM:AddPointShopWeapon(2,"grenadelauncher", ITEMCAT_GUNS, 120, "weapon_zs_grenadelauncher")
 

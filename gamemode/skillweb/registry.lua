@@ -197,7 +197,7 @@ SKILL_S_STAR_PLATINUM = 87
 SKILL_NEW_FORMULA = 88
 SKILL_CHIP_CQ = 89
 SKILL_B_AND_B = 90
-
+SKILL_PARRY_SLOW = 91
 
 
 SKILLMOD_HEALTH = 1
@@ -406,6 +406,8 @@ GM:AddSkill(SKILL_ADRENALINE_HP, "Усиленная регенерация", GO
 
 GM:AddSkill(SKILL_TANKIST, "Идeальный ход", GOOD.."Вы нe получаeтe урон в блокe.\n".."Вы мeдлeнны в блокe.",
 																-0,			3,					{SKILL_BAD_HP}, TREE_HEALTHTREE)
+GM:AddSkill(SKILL_PARRY_SLOW, "Тайны мастерства", GOOD.."Парирование длится на 3 тика больше.\n1 тик = 0.1 секунды\n"..BAD.."Задержка блока +0.7 секунды.",
+																-0,			4,					{SKILL_TANKIST}, TREE_HEALTHTREE)
 															
 GM:AddSkill(SKILL_ULTRADEFENCE, translate.Get("skill_ultradefence"), GOOD..translate.Get("skill_ultradefence_d1")..BAD.."-70"..translate.Get("speed"),
 																-2,			4,					{SKILL_STOIC5}, TREE_HEALTHTREE)

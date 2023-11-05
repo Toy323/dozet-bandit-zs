@@ -1,31 +1,31 @@
 AddCSLuaFile()
 
 if CLIENT then
-	SWEP.TranslateName = "weapon_deagle2_name"
-	SWEP.TranslateDesc = "weapon_deagle2_desc"
+	SWEP.TranslateName = "weapon_silencer2_name"
+	SWEP.TranslateDesc = "weapon_silencer2_desc"
 	SWEP.Slot = 1
 	SWEP.SlotPos = 1
 
 	SWEP.ViewModelFlip = false
 	SWEP.ViewModelFOV = 55
 	SWEP.ViewModelBoneMods = {
-		["ValveBiped.Bip01_L_Finger1"] = { scale = Vector(1, 1, 1), pos = Vector(-1.047, 0, 0), angle = Angle(0, 0, 0) },
-		["ValveBiped.Bip01_L_Hand"] = { scale = Vector(0.825, 0.825, 0.825), pos = Vector(-1.243, -2.474, 0.036), angle = Angle(-4.22, -5.174, 15.443) },
-		["ValveBiped.Bip01_R_Hand"] = { scale = Vector(0.978, 0.978, 0.978), pos = Vector(-0.237, -4.484, 0.304), angle = Angle(3.321, -5.28, -13.303) },
-		["ValveBiped.Bip01_Spine4"] = { scale = Vector(1, 1, 1), pos = Vector(0, 1.078, 0), angle = Angle(0, 0, 0) }
+		["ValveBiped.Bip01_L_Hand"] = { scale = Vector(1, 1, 1), pos = Vector(-0.056, 0.7, 0.371), angle = Angle(-6.928, -8.379, 28.998) },
+		["ValveBiped.Bip01_R_Hand"] = { scale = Vector(1, 1, 1), pos = Vector(-0.4, -0.288, -0.356), angle = Angle(9.571, 2.583, -42.366) },
+		["ValveBiped.Bip01_Spine4"] = { scale = Vector(1, 1, 1), pos = Vector(0, 0.212, 0), angle = Angle(-0.175, 0, 0) }
 	}
 	SWEP.HUD3DBone = "v_weapon.elite_right"
-	SWEP.HUD3DPos = Vector(0, -1, 2)
+	SWEP.HUD3DPos = Vector(0, -3, 4)
 	SWEP.HUD3DAng = Angle(180, 0, 0)
 	SWEP.HUD3DScale = 0.015
 
 	SWEP.VElements = {
-		["uzi1"] = { type = "Model", model = "models/weapons/w_smg_mac10.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(3.793, 0.964, 2.83), angle = Angle(-12.693, -8.724, 180), size = Vector(0.9, 0.9, 0.9), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "", skin = 0, bodygroup = {} },
-		["uzi2"] = { type = "Model", model = "models/weapons/w_smg_mac10.mdl", bone = "ValveBiped.Bip01_L_Hand", rel = "", pos = Vector(4.417, 1.616, -2.926), angle = Angle(17.451, -7.045, -3.522), size = Vector(0.9, 0.9, 0.9), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "", skin = 0, bodygroup = {} }
+		["tmp1"] = { type = "Model", model = "models/weapons/w_smg_tmp.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(6.492, 1.429, 2.176), angle = Angle(-7.335, -6.632, 180), size = Vector(0.8, 0.8, 0.8), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "", skin = 0, bodygroup = {} },
+		["tmp1+"] = { type = "Model", model = "models/weapons/w_smg_tmp.mdl", bone = "ValveBiped.Bip01_L_Hand", rel = "", pos = Vector(5.254, 1.165, -2.372), angle = Angle(3.319, 5.289, 0.168), size = Vector(0.8, 0.8, 0.8), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "", skin = 0, bodygroup = {} }
 	}
-	 
+	
 	SWEP.WElements = {
-		["uzi"] = { type = "Model", model = "models/weapons/w_smg_mac10.mdl", bone = "ValveBiped.Bip01_L_Hand", rel = "", pos = Vector(3.603, 1.94, -2.357), angle = Angle(0, 0, 0), size = Vector(0.846, 0.846, 0.846), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "", skin = 0, bodygroup = {} }
+		["tmp1"] = { type = "Model", model = "models/weapons/w_smg_tmp.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(5.963, 1.04, 2.008), angle = Angle(0, -4.001, -180), size = Vector(0.729, 0.729, 0.729), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "", skin = 0, bodygroup = {} },
+		["tmp1+"] = { type = "Model", model = "models/weapons/w_smg_tmp.mdl", bone = "ValveBiped.Bip01_L_Hand", rel = "", pos = Vector(6.118, 2.057, -1.872), angle = Angle(-2.098, -7.478, -10.31), size = Vector(0.729, 0.729, 0.729), color = Color(255, 255, 255, 255), surpresslightning = false, bonemerge = false, material = "", skin = 0, bodygroup = {} }
 	}
 end
 
@@ -35,25 +35,30 @@ SWEP.HoldType = "duel"
 
 SWEP.ViewModel = "models/weapons/cstrike/c_pist_elite.mdl"
 SWEP.WorldModel = "models/weapons/w_pist_elite.mdl"
+SWEP.HoldType = "duel"
 SWEP.UseHands = true
 SWEP.ShowViewModel = false
 SWEP.ShowWorldModel = false
-SWEP.Primary.Sound = Sound("Weapon_Deagle.Single")
-SWEP.Primary.Damage = 26
+SWEP.Primary.Sound = Sound("Weapon_TMP.Single")
+SWEP.Primary.Damage = 9
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 0.14
-SWEP.Primary.KnockbackScale = 2
-SWEP.Recoil = 2
-SWEP.Primary.ClipSize = 14
-SWEP.Primary.Automatic = false
-SWEP.Primary.Ammo = "pistol"
+SWEP.Primary.Delay = 0.07
+
+SWEP.Primary.ClipSize = 50
+SWEP.Primary.Automatic = true
+SWEP.Primary.Ammo = "smg1"
+
 GAMEMODE:SetupDefaultClip(SWEP.Primary)
 
-SWEP.ConeMax = 0.014
-SWEP.ConeMin = 0.009
-SWEP.MovingConeOffset = 0.15
-GAMEMODE:SetupAimDefaults(SWEP,SWEP.Primary)
+SWEP.Primary.Gesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_SMG1
+SWEP.ReloadGesture = ACT_HL2MP_GESTURE_RELOAD_SMG1
 
+SWEP.ConeMax = 0.12
+SWEP.ConeMin = 0.025
+SWEP.MovingConeOffset = -0.02
+SWEP.Recoil = 0.2
+GAMEMODE:SetupAimDefaults(SWEP,SWEP.Primary)
+SWEP.WalkSpeed = SPEED_FAST
 
 if not CLIENT then return end
 
