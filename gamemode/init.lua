@@ -260,6 +260,8 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_skills_all_desired")
 	util.AddNetworkString("zs_skill_set_desired")
 	util.AddNetworkString("zs_secret")
+	
+	util.AddNetworkString("zs_stand_become")
 	util.AddNetworkString("zs_skills_init")
 	util.AddNetworkString("zs_skills_reset")
 	util.AddNetworkString("zs_skills_remort")
@@ -292,6 +294,8 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_honmention")
 	util.AddNetworkString("zs_floatscore")
 	util.AddNetworkString("zs_floatscore_vec")
+	util.AddNetworkString("zs_skill_is_destroyed")
+
 
 	util.AddNetworkString("zs_insure_weapon")
 	util.AddNetworkString("zs_remove_insured_weapon")
@@ -791,39 +795,21 @@ function GM:Think()
 			pl:BarricadeGhostingThink()
 		end
 		if pl:Alive() then
-			if pl:IsSkillActive(SKILL_GENERATOR) and pl.BloodRegen <=  CurTime() then
-				pl.BloodRegen = CurTime() + 5
-				pl:SetBloodArmor(math.min(100,pl:GetBloodArmor() + 3))
-			end
-			if pl:IsSkillActive(SKILL_STARDUST) and pl.Think_Stardust <= CurTime() then
-				pl:SetNWFloat("star_upd", CurTime() + 3)
-				pl.Think_Stardust = CurTime() + 3
-				pl:UpdateStarDust(pl:GetPos())
-			end
-			if pl:KeyDown(IN_SPEED) and pl:GetVelocity() ~= vector_origin and GAMEMODE:GetSpecialWave() ~= "old" then
-				if pl:GetStamina() > 0 then
-					pl:AddStamina(-0.32, true)
-				else
-					pl:ResetSpeed()
-				end
-			end
 
-			if pl.StaminaUsed <= CurTime() then
-				pl.StaminaUsed = CurTime() + 0.015 * pl:GetStamina()/25
+
+			if pl.StaminaUsed <= time then
+				pl.StaminaUsed = time + 0.015 * pl:GetStamina()/25
 				pl:AddStamina(1)
 			end
-			if pl:IsSkillActive(SKILL_OPERATOR) and pl:GetVelocity():LengthSqr() >= 255 then
-				pl.NextUseManhack = CurTime() + 4
-			end
+
 			
-			if pl:IsSkillActive(SKILL_S_ANUBIS) and !pl:GetStatus("dimvision") then
-				pl:GiveStatus("dimvision",10)
-			end
-			if self:GetSpecialWave() == "anubis" then
+			if self:GetSpecialWave() == "anubis" or pl:IsSkillActive(SKILL_S_ANUBIS)  then
 				pl:GiveStatus("dimvision",2)
 			end
-			if pl.FixForFix <= CurTime() and pl:IsSkillActive(SKILL_2_LIFE) then
+			if pl.FixForFix <= time and pl:IsSkillActive(SKILL_2_LIFE) then
 				if pl:GetStandUser():IsValid()  then
+
+					pl.FixForFix  = time + 0.1
 					local user = false
 					local user3 = pl:GetStandUser()
 					for _,ent in pairs(ents.FindInSphere(pl:GetPos(), 1028)) do 
@@ -837,23 +823,23 @@ function GM:Think()
 					end
 					if !user3:Alive() then
 						timer.Create("Death STAND"..pl:Nick(),0.05,1, function() pl:Kill() end)
-						pl.FixForFix = CurTime() + 1
+						pl.FixForFix = time + 1
 					end
 					if user3:IsSkillActive(SKILL_CHIP_CQ) and user3:Alive() then
 						local percu = math.Round(math.Round(pl:Health()/pl:GetMaxHealth(),2)*user3:GetMaxHealth())
 						local percs = math.Round(math.Round(user3:Health()/user3:GetMaxHealth(),2)*pl:GetMaxHealth())
 						--print(percu)
 						--print(percs)
-						if percu < percs then
-							user3:SetHealth(percu)
-						else
+						--if percu < percs then
+						--	user3:SetHealth(percu)
+					--	else
 							pl:SetHealth(percs)
-						end
-						
+					--	end
 					end
+					
 				elseif  !pl:GetStandUser():IsValid() and self:GetWaveActive() then
 					timer.Create("Death STAND WITHOUT USER"..pl:Nick(),0.05,1, function() pl:Kill() end)
-					pl.FixForFix = CurTime() + 1
+					pl.FixForFix = time + 1
 				end
 			
 			end
@@ -861,7 +847,7 @@ function GM:Think()
 
 			if pl:IsSkillActive(SKILL_CRUSADER) then
 				for _, ent in pairs(ents.FindInSphere(pl:GetPos(), 128)) do
-					if ent ~= pl and ent:IsValid() and ent:IsPlayer() and ent:Team() == pl:Team() then
+					if ent ~= pl and ent:IsValid() and ent:IsPlayer() and ent:Team() == pl:Team() and ent:Alive() then
 						local buff = ent:GiveStatus("crusader_buff", 0.2)
 						buff.Applier = pl
 					end
@@ -873,9 +859,11 @@ function GM:Think()
 				pl:SetVelocity(Vector(0,0,130) + (vector+Vector(0,0,15))*15 + pl:GetAimVector()*50)
 				timer.Simple(2, function() pl:SetVelocity(Vector(0,0,-1000)+pl:GetVelocity()) end)
 			end
-			if pl:IsSkillActive(SKILL_BAD_TIMES) and pl.BadTimeTime <= CurTime() and self:GetWaveActive() and self:GetSpecialWave() ~= "1hp" then
-				pl.BadTimeTime = CurTime() + 10
-				pl:TakeDamage(10, pl,pl:GetActiveWeapon())
+			if pl:KeyDown(IN_SPEED) and pl:GetVelocity() ~= vector_origin and GAMEMODE:GetSpecialWave() ~= "old" then
+				if pl:GetStamina() > 0 then
+					pl:AddStamina(-0.6, true)
+					pl:ResetSpeed()
+				end
 			end
 		end
 		if pl:IsSpectator() then
@@ -890,9 +878,10 @@ function GM:Think()
 				end
 			end
 			if numoutsidespawns >= #teamspawns then
-				pl:SetPos(teamspawns[ math.random(#teamspawns) ]:GetPos())
-				pl:SetAbsVelocity(Vector(0,0,0))
-				pl:CenterNotify(COLOR_RED, translate.ClientGet(pl, "before_wave_cant_go_outside_spawn"))
+				local rand = teamspawns[ math.random(#teamspawns) ]
+		--		pl:SetPos((teamspawns and rand and rand:IsValid() and rand:GetPos() or Vector(0,0,0)))
+		--		pl:SetAbsVelocity(Vector(0,0,0))
+				--pl:CenterNotify(COLOR_RED, translate.ClientGet(pl, "before_wave_cant_go_outside_spawn"))
 			end
 		end
 		if pl.m_PointQueue >= 1 and time >= pl.m_LastDamageDealt + 2 then
@@ -908,6 +897,42 @@ function GM:Think()
 				if pl:WaterLevel() >= 3 and not (pl.status_drown and pl.status_drown:IsValid()) then
 					pl:GiveStatus("drown")
 				end
+				if pl:IsSkillActive(SKILL_GENERATOR) and pl.BloodRegen <=  time then
+					pl.BloodRegen = time + 5
+					pl:SetBloodArmor(math.min(100,pl:GetBloodArmor() + 3))
+				end
+				if pl:IsSkillActive(SKILL_BAD_TIMES) and pl.BadTimeTime <= time and self:GetWaveActive() and self:GetSpecialWave() ~= "1hp" then
+					pl.BadTimeTime = time + 10
+					pl:TakeDamage(10, pl,pl:GetActiveWeapon())
+				end
+				if pl:IsSkillActive(SKILL_OPERATOR) and pl:GetVelocity():LengthSqr() >= 255 then
+					pl.NextUseManhack = time + 4
+				end
+				if pl:IsSkillActive(SKILL_STARDUST) and pl.Think_Stardust <= time then
+					pl:SetNWFloat("star_upd", time+ 3)
+					pl.Think_Stardust = time + 3
+					pl:UpdateStarDust(pl:GetPos())
+				end
+				if pl:IsSkillActive(SKILL_S_GE) and pl.NextGEUse < time then
+					pl.NextGEUse = time + 45
+					local geruse = {}
+					for k,v in pairs(player.GetAll()) do
+						if v ~= pl and v:IsValid() and v:Alive() then
+							geruse[#geruse+1] = v
+						end
+					end
+					if #geruse > 0 then
+						local whoheal = geruse[math.random(1,#geruse)]
+						whoheal:CenterNotify(COLOR_GREEN, "Вас вылечил ",pl)
+						if whoheal:Team() == pl:Team() then
+							pl:AddPoints(math.Clamp((whoheal:GetMaxHealth()-whoheal:Health())/15,0,30))
+						end
+						whoheal:SetHealth(whoheal:GetMaxHealth())
+						whoheal:SetBloodArmor(whoheal:GetBloodArmor() + 50)
+						pl:CenterNotify(COLOR_GREEN, "Вы вылечили ",whoheal)
+					end
+				end
+				pl:ResetSpeed()
 				pl:PreventSkyCade()
 			end
 		end
@@ -1355,6 +1380,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.LastLegDamageThink = 0
 
 	pl.BadTimeTime = 0
+	pl.NextGEUse = 0
 	
 	pl.DamageDealt = 0
 	pl.TimeCapping = 0
@@ -2355,7 +2381,7 @@ function GM:KeyPress(pl, key)
 	elseif key == IN_SPEED then
 		--pl:ResetSpeed()
 		if not pl:IsCarrying() and pl.NextDash < CurTime() and pl:IsSkillActive(SKILL_WONDERFUL) and !pl:GetBarricadeGhosting() and !pl:KeyDown(IN_RELOAD) and pl:GetWalkSpeed() > 150 then
-			if pl:GetStamina() < 33 then return end
+			if pl:GetStamina() < 13 then return end
 			local pos = pl:GetPos()
 			local pushvel = pl:GetEyeTrace().Normal * 0 + (pl:GetAngles():Forward()*(pl:OnGround() and 900 or 300))
 			pl:SetVelocity(pushvel)
@@ -3199,3 +3225,14 @@ end
 function GM:PlayerStepSoundTime(pl, iType, bWalking)
 	return 350
 end
+net.Receive("zs_stand_become", function(length, pl)
+	if !GAMEMODE:GetWaveActive()  then
+		local user = net.ReadEntity()
+		if user:IsValid() and user:IsPlayer() and user ~= pl and !user:IsSkillActive(SKILL_2_LIFE) and pl:IsSkillActive(SKILL_2_LIFE) and (pl.NextUserChange or 0) < CurTime() then
+			pl:SetStandUser(user)
+			user:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", team.GetColor(pl:Team()), translate.ClientGet(user,"ur_stand"), pl,{killicon = "default"})
+			pl:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", team.GetColor(user:Team()), translate.ClientGet(pl,"ur_user"), user,{killicon = "default"})
+			pl.NextUserChange = CurTime() + 5
+		end
+	end
+end)

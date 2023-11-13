@@ -64,15 +64,42 @@ end
 function SWEP:PlayHitFleshSound()
 	self:EmitSound("physics/body/body_medium_break"..math.random(2, 4)..".wav")
 end
+function SWEP:GetRotateAttack()
+	return self:GetDTFloat(12)
+end
+function SWEP:SetRotateAttack(num)
+	self:SetDTFloat(12,num)
+end
+function SWEP:RotateAttack()
+
+end
+SWEP._SoundNext = 0
 function SWEP:SecondaryAttack()
-	if self:GetOwner():HasGodMode() then return end
-	timer.Create("lmao", 0.05, 1, function() if SERVER and !GAMEMODE:GetWaveActive() then self:GetOwner():TakeDamage(99, self:GetOwner(), self) 
-			self.MeleeDamage = self.MeleeDamage + 21
-			local effectdata = EffectData()
-				effectdata:SetOrigin(self:GetOwner():GetPos())
-			util.Effect("explosion_bonemesh", effectdata)
-		end
+	if not self:CanPrimaryAttack() then return end
+	self:SetNextSecondaryFire(CurTime() + 8)
+	self:SetRotateAttack(CurTime() + 4)
+	self._OldD = self.SwingHoldType
+	self:SetHoldType("revolver")
+	self:SetWeaponSwingHoldType("revolver")
+	timer.Simple(4, function(arguments)
+		self:SetHoldType(self.SwingHoldType)
+		self:SetWeaponSwingHoldType( self.SwingHoldType)
 	end)
+	if CLIENT then return end
+	local bruh = self:GetOwner():GiveStatus("murasama_ro")
+	bruh:AddTime(4)
+end
+function SWEP:Think()
+	self.BaseClass.Think(self)
+	local owner = self:GetOwner()
+	if self:GetRotateAttack() > CurTime() then
+		owner:SetEyeAngles(Angle(0,CurTime()*720,0))
+		if self._SoundNext < CurTime() then
+			self._SoundNext = CurTime() + 0.4
+			self:EmitSound('physics/metal/sawblade_stick'..math.random(1, 3)..'.wav', nil,math.Rand(65,90))
+		end
+
+	end
 end
 function SWEP:PlayerHitUtil(owner, damage, hitent, dmginfo)
 	if SERVER then
@@ -81,5 +108,25 @@ function SWEP:PlayerHitUtil(owner, damage, hitent, dmginfo)
 		else
             owner:SetHealth(owner:Health()+hitent:Health() * 0.05)	
 		end
+	end
+end
+if CLIENT then 
+	SWEP._CacheW = SWEP.WElements
+	function SWEP:DrawWorldModel()
+		local owner = self:GetOwner()
+		if !owner:IsValid() then return end
+		local weles = self.WElements
+		if self:GetRotateAttack() > CurTime()  then
+			weles["hand"].angle = Angle(0,90,0)
+			weles["hand"].pos = Vector(0,0,0)
+			weles["sword"].angle = Angle(0,90,0)
+			weles["sword"].pos = Vector(30,0,0)
+		else
+			weles["sword"].angle =  self._CacheW["sword"].angle
+			weles["sword"].pos =  self._CacheW["sword"].pos
+			weles["hand"].angle =  self._CacheW["hand"].angle
+			weles["hand"].pos = self._CacheW["hand"].pos
+		end
+		self:Anim_DrawWorldModel()
 	end
 end

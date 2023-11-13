@@ -462,19 +462,19 @@ GM:AddSkill(SKILL_2_LIFE, translate.Get("skill_2_life"), GOOD..translate.Get("sk
 .AlwaysActive = true
 local skill = GM:AddSkill(SKILL_S_CINDERELA, translate.Get("skill_s_cinder"), GOOD..translate.Get("skill_s_cinder_d1")..BAD..translate.Get("skill_s_cinder_d2"),
 																-1,			-1,					{SKILL_S_CINDERELA_B1}, TREE_SUPPORTTREE)
-skill.DontUnlock = SKILL_S_STICKY_FINGERS skill.DontUnlock2 = SKILL_S_ANUBIS skill.DontUnlock3 = SKILL_S_GE
+skill.DontUnlockTbl = {SKILL_S_STICKY_FINGERS, SKILL_S_ANUBIS, SKILL_S_GE}
 local skill = GM:AddSkill(SKILL_S_ANUBIS, translate.Get("skill_s_anubis"), GOOD..translate.Get("skill_s_anubis_d1")..BAD..translate.Get("skill_s_anubis_d2"),
 																1,			-0,					{SKILL_S_ANUBIS_B1}, TREE_SUPPORTTREE)
-skill.DontUnlock = SKILL_S_STICKY_FINGERS skill.DontUnlock2 = SKILL_S_CINDERELA skill.DontUnlock3 = SKILL_S_GE
+skill.DontUnlockTbl = {SKILL_S_STICKY_FINGERS,SKILL_S_CINDERELA,SKILL_S_GE}
 local skill = GM:AddSkill(SKILL_S_STICKY_FINGERS, translate.Get("skill_s_sticky_f"), GOOD..translate.Get("skill_s_sticky_f_d1")..BAD..translate.Get("skill_s_sticky_f_d2"),
 																1,			2.5,					{SKILL_S_STICKY_FINGERS_B1}, TREE_SUPPORTTREE)
-skill.DontUnlock = SKILL_S_ANUBIS skill.DontUnlock2 = SKILL_S_CINDERELA skill.DontUnlock3 = SKILL_S_GE
+skill.DontUnlockTbl = { SKILL_S_ANUBIS,SKILL_S_CINDERELA,SKILL_S_GE}
 GM:AddSkillModifier(SKILL_S_STICKY_FINGERS, SKILLMOD_AIMSPREAD_MUL, 0.6)
 GM:AddSkill(SKILL_S_STAR_PLATINUM, "Стар платинум", GOOD.."У вас eсть свeрх-сильныe кулаки!\n"..BAD.."Стики фингeрс заблокирован.",
 																1,			1.5,					{SKILL_S_STICKY_FINGERS}, TREE_SUPPORTTREE)
---[[local skill = GM:AddSkill(SKILL_S_GE, translate.Get("skill_s_ge"), GOOD..translate.Get("skill_s_ge_d1")..BAD..translate.Get("skill_s_ge_d2"),
+local skill = GM:AddSkill(SKILL_S_GE, translate.Get("skill_s_ge"), GOOD..translate.Get("skill_s_ge_d1")..BAD..translate.Get("skill_s_ge_d2"),
 																-1,			4,					{SKILL_2_LIFE}, TREE_SUPPORTTREE)
-skill.DontUnlock = SKILL_S_ANUBIS skill.DontUnlock2 = SKILL_S_CINDERELA skill.DontUnlock3 = SKILL_S_STICKY_FINGERS]]
+skill.DontUnlockTbl = { SKILL_S_ANUBIS,SKILL_S_CINDERELA, SKILL_S_STICKY_FINGERS}
 GM:AddSkill(SKILL_S_STICKY_FINGERS_B1, translate.Get("skill_s_sticky_f_branch_1"), GOOD..translate.Get("skill_s_sticky_f_branch_1_d1")..BAD..translate.Get("skill_s_sticky_f_branch_1_d2"),
 																1,			3,					{}, TREE_SUPPORTTREE)
 GM:AddSkill(SKILL_S_CINDERELA_B1, translate.Get("skill_s_cinder_b1"), GOOD..translate.Get("skill_s_cinder_b1_d1")..BAD..translate.Get("skill_s_cinder_b1_d2"),
@@ -492,7 +492,7 @@ GM:AddSkill(SKILL_INJECTOR, translate.Get("skill_inj"), GOOD..translate.Get("ski
 GM:AddSkill(SKILL_NEW_FORMULA, "Новая формула", GOOD.."Токсины|передозировка наносит в 1.7 раза большe урона!\n"..BAD.."-10 здоровья",
 																-4,			0,					{SKILL_BIO2}, TREE_SUPPORTTREE)
 GM:AddSkillModifier(SKILL_NEW_FORMULA, SKILLMOD_HEALTH, -10)
-GM:AddSkill(SKILL_CHIP_CQ, "ЧИП ЛК-7312", GOOD.."Ваш стeнд и вы связаны сильнее обычного!\nХП Стeнда равно вашим хп и наоборот!",
+GM:AddSkill(SKILL_CHIP_CQ, "ЧИП ЛК-7312", GOOD.."Ваш стeнд и вы связаны сильнее обычного!\nХП Стeнда равно вашим хп!",
 																-5.5,			-0.5,					{SKILL_NEW_FORMULA}, TREE_SUPPORTTREE)
 -- Defence Tree
 GM:AddSkill(SKILL_HANDY1, translate.Get("skill_handy").."I", GOOD.."+5%"..translate.Get("repair"),

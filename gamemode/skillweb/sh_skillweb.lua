@@ -46,14 +46,15 @@ function GM:SkillCanUnlock(pl, skillid, skilllist)
 
 
 		local connections = skill.Connections
-		if skill.DontUnlock and pl:IsSkillUnlocked(skill.DontUnlock) then
-			return false
-		end
-		if skill.DontUnlock2 and pl:IsSkillUnlocked(skill.DontUnlock2) then
-			return false
-		end
-		if skill.DontUnlock3 and pl:IsSkillUnlocked(skill.DontUnlock3) then
-			return false
+		if skill.DontUnlockTbl and  istable(skill.DontUnlockTbl)  then
+			local no = false
+			for k,v in pairs( skill.DontUnlockTbl ) do
+				if pl:IsSkillUnlocked(v) then 
+					no = true
+					break 
+				end
+			end
+			if no then return false end
 		end
 		if connections[SKILL_NONE] then
 			return true
@@ -62,6 +63,35 @@ function GM:SkillCanUnlock(pl, skillid, skilllist)
 
 		for _, myskillid in pairs(skilllist) do
 			if connections[myskillid] then
+				return true
+			end
+		end
+	end
+
+	return false
+end
+function GM:GetConnectedSkills(pl,myskillid,connections)
+	local counted = 0
+	for k,v in pairs(pl:GetUnlockedSkills()) do
+		if connections[v] then
+			counted = counted + 1
+			if counted > 1 then
+				return false
+			end
+		end
+	end
+	return true
+end
+function GM:SkillCanDeUnlock(pl, skillid, skilllist)
+	local skill = self.Skills[skillid]
+	if skill then
+		local connections = skill.Connections
+
+		if connections[SKILL_NONE] then
+			return false
+		end
+		for _, myskillid in pairs(skilllist) do
+			if self:GetConnectedSkills(pl,myskillid,connections) then
 				return true
 			end
 		end
@@ -91,7 +121,9 @@ end
 function meta:HasTrinket(trinket)
 	return self:HasInventoryItem("trinket_" .. trinket)
 end
-
+function meta:SkillCanDeUnlock2(skillid)
+	return GAMEMODE:SkillCanDeUnlock(self, skillid, self:GetUnlockedSkills())
+end
 function meta:CreateTrinketStatus(status)
 	for _, ent in pairs(ents.FindByClass("status_" .. status)) do
 		if ent:GetOwner() == self then return end
@@ -179,7 +211,7 @@ function meta:ApplySkills(override)
 	if self:IsSkillActive(SKILL_2_LIFE) then
 		local standu = self:ShakeUser()
 
-		if standu:IsValid() and SERVER then
+		if standu:IsValid() and SERVER and (!self:GetStandUser() or !self:GetStandUser():IsValid() or self:GetStandUser():Team() ~= self:Team()) then
 			self:SetStandUser(standu)
 			self:GetStandUser():CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", team.GetColor(self:Team()), translate.ClientGet(self:GetStandUser(),"ur_stand"), self,{killicon = "default"})
 			self:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", team.GetColor(self:GetStandUser():Team()), translate.ClientGet(self,"ur_user"), self:GetStandUser(),{killicon = "default"})

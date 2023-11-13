@@ -404,13 +404,12 @@ end
 
 function meta:SetSpeed(speed)
 	if not speed then speed = SPEED_NORMAL end
-	local add = (self:IsSkillActive(SKILL_NFV) and 160 or 60) * (self:IsSkillActive(SKILL_BAD_HP) and math.random(-25,150)/100 or 1)
-	local runspeed = self:GetStamina() > 0 and speed + add or speed
+	local runspeed = self:GetStamina() > 0 and speed + (self:IsSkillActive(SKILL_NFV) and 160 or 60) * (self:IsSkillActive(SKILL_BAD_HP) and math.random(-25,150)/100 or 1) or speed
 	if GAMEMODE:GetSpecialWave() == "old" then
 		runspeed = speed
 	end
 
-	self:SetWalkSpeed(speed)
+	self:SetWalkSpeed(self:KeyDown(IN_SPEED) and runspeed or speed)
 	self:SetRunSpeed(runspeed)
 	self:SetMaxSpeed(runspeed)
 end

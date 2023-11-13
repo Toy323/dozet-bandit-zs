@@ -160,7 +160,17 @@ local function SaveSkillLoadout(name)
 	GAMEMODE.SavedSkillLoadouts[#GAMEMODE.SavedSkillLoadouts + 1] = {name, MySelf:GetDesiredActiveSkills()}
 	file.Write(GAMEMODE.SkillLoadoutsFile, Serialize(GAMEMODE.SavedSkillLoadouts))
 end
+local function DestroySkill(self, skill) 
+	if !MySelf:SkillCanDeUnlock2(skill) and !MySelf:IsSkillUnlocked(skill) then return end
+	local name = GAMEMODE.Skills[skill].Name
+	net.Start("zs_skill_is_destroyed")
+	net.WriteUInt(skill, 16)
+	net.WriteBool(true)
+	net.SendToServer()
+	
+	self:DisplayMessage(name.." скилл успешно откачен!", COLOR_GREEN)
 
+end
 -- For getting the positions of skill webs. See skillwebgrid.png
 -- The file is not used in the gamemode so feel free to edit it.
 function GM:GenerateFromSkillWebGrid()
@@ -1269,22 +1279,8 @@ function PANEL:OnMousePressed(mc)
 		else
 			contextmenu:SetVisible(false)
 		end
-	elseif MOUSE_RIGHT then
-		local contextmenu = self.UpgradeMenu
-		if MySelf:IsSkillUnlocked(hoveredskill) and (GAMEMODE.Skills[hoveredskill].CanUpgrade or 0) >= 1 then
-			local mx, my = gui.MousePos()
-			if MySelf:GetZSSPRemaining() >= 1 then
-				contextmenu:SetPos(mx - contextmenu:GetWide() / 2, my - contextmenu:GetTall() / 2)
-				contextmenu.Button:SetText("Upgrade")
-				contextmenu:SetVisible(true)
-			else
-				self:DisplayMessage("You need SP to upgrade this skill!", COLOR_RED)
-				surface.PlaySound("buttons/button8.wav")
-
-				return
-			end
-		end
-		contextmenu.SkillID = hoveredskill
+	elseif mc == MOUSE_RIGHT and hoveredskill then
+		DestroySkill(self, hoveredskill) 
 	end
 end
 

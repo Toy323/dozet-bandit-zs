@@ -367,7 +367,7 @@ function GenericBulletCallback(attacker, tr, dmginfo)
 			attacker.ShotsHit = attacker.ShotsHit + 1
 		end
 		if ent:IsPlayer() then
-			if attacker:IsSkillActive(SKILL_R_BULLETS) then
+			if attacker:IsSkillActive(SKILL_R_BULLETS) and ent:Team() ~= attacker:Team() then
 				local d = tr.Hit and tr.HitGroup == HITGROUP_HEAD
 				local power = (dmginfo:GetDamage() / 16) / (attacker:GetActiveWeapon() and attacker:GetActiveWeapon().Primary.NumShots or 1)
 				local conf = ent:GiveStatus("confusion",(d and power * 5 or power))
@@ -384,7 +384,7 @@ function GenericBulletCallback(attacker, tr, dmginfo)
 					util.Effect("Explosion", effectdata)
 					if SERVER then
 						pl:TakeDamage((pl:Health() or 1) * 0.1, attacker,dmginfo:GetInflictor() )
-						pl:SetBloodArmor(0)
+						pl:SetBloodArmor(pl:GetBloodArmor()*0.5)
 					end
 				 end)
 			end

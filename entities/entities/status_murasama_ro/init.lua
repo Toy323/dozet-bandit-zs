@@ -2,7 +2,7 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
 include("shared.lua")
-
+ENT.NextResnya = 0
 function ENT:Think()
 	local owner = self:GetOwner()
 
@@ -14,6 +14,15 @@ function ENT:Think()
 	--print(math.Round(self:GetTime()/0.3/1.6,1))
 	self:AddTime(-0.1)
 	self:NextThink(CurTime() + 0.1)
+	if self.NextResnya < CurTime() then
+		for k,v in pairs(ents.FindInSphere(owner:GetPos(),80)) do
+			if v and v:IsPlayer() and v:Team() ~= owner:Team() and v:Alive() then
+				v:TakeDamage(12,owner,owner:GetActiveWeapon())
+			end
+		end
+		self.NextResnya = CurTime() + 0.4
+	end
+	--print( math.Round(self:GetTime()/0.3/1.6,1))
 	return true
 end
 local steeringratio = 0.8
@@ -26,19 +35,17 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 		self:SetDTVector(12,dmginfo:GetDamagePosition() )
 	end
 	local gd = math.Round(self:GetTime()/0.3/1.6,1)
+	
 	local mul = 1-gd
 	if mul < 0 then
 		mul = mul * -1
 	end
+	mul = math.Clamp(mul,0.1,0.9)
 	local olddamage = dmginfo:GetDamage()
 	dmginfo:SetDamage(olddamage*mul) 
 	own:AddStamina(math.Clamp(40/gd,0,100))
 	local inflictor = dmginfo:GetInflictor()
 	local bruh = inflictor:GetClass()
-	if string.sub(bruh,1,6) ~= 'status' then
-		own:ConCommand('-attack2')
-		own:GetActiveWeapon():SetNextSecondaryFire(CurTime()+2)
-	end
 	--print(bruh)
 	if string.sub(bruh,1,10) == 'projectile' then
 			local ent1 = ents.Create(inflictor:GetClass())
@@ -71,5 +78,4 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 			own.ParryBullets = CurTime() + 0.03
 		end)
 	end
-	timer.Simple(0.7, function() if self:IsValid() then self:Remove() end end)
 end

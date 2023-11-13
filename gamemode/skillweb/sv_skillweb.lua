@@ -83,6 +83,16 @@ net.Receive("zs_skills_refunded", function(length, pl)
 
 	pl.SkillsRefunded = false
 end)
+net.Receive("zs_skill_is_destroyed", function(length, pl)
+	local skillid = net.ReadUInt(16)
+	local activate = net.ReadBool()
+	local skill = GAMEMODE.Skills[skillid]
+
+	if skill and pl:IsSkillUnlocked(skillid) and pl:SkillCanDeUnlock2(skillid) and not skill.Disabled then
+		pl:SetSkillUnlocked(skillid, false)
+		pl:SetSkillDesired(skillid, false)
+	end
+end)
 
 function GM:WriteSkillBits(t)
 	t = table.ToAssoc(t)

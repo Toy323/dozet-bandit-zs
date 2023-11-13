@@ -157,8 +157,23 @@ GM.Beats = {
 "music/HL1_song17.mp3",
 "music/HL1_song10.mp3"
 }
-
+function GM:GivePoints(pl)
+	net.Start("zs_stand_become")
+		net.WriteEntity(pl)
+	net.SendToServer()
+end
 function GM:ClickedPlayerButton(pl, button)
+	surface.PlaySound("buttons/button15.wav")
+    local menu = DermaMenu(true)
+    menu:AddOption(pl:GetName(), function() end)
+    if not pl:IsBot() then
+        menu:AddOption("Профиль в стиме", function() pl:ShowProfile() end)
+    end
+    if pl:Team() == MySelf:Team() and pl ~= MySelf and MySelf:IsSkillActive(SKILL_2_LIFE) and !pl:IsSkillActive(SKILL_2_LIFE) and !self:GetWaveActive() and MySelf:GetStandUser() ~= pl then
+        menu:AddOption("Стать его стендом", function() timer.Simple(0, function() self:GivePoints(pl) end) end)
+    end
+
+    menu:Open()
 end
 
 function GM:ClickedEndBoardPlayerButton(pl, button)

@@ -857,6 +857,7 @@ end
 
 function meta:AddPoints(points)
 	--self:AddFrags(points)
+	points = math.max(points,0)
 	self:AddZSXP(points * 3)
 	self:SetPoints(self:GetPoints() + points)
 	self:SetFullPoints(self:GetFullPoints() + points)
