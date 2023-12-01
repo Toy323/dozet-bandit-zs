@@ -36,6 +36,7 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 	local inflictor = dmginfo:GetInflictor()
 	local bruh = inflictor:GetClass()
 	if string.sub(bruh,1,6) ~= 'status' then
+		own:EmitSound('zombiesurvival/parry_sound.wav')
 		own:ConCommand('-attack2')
 		own:GetActiveWeapon():SetNextSecondaryFire(CurTime()+2)
 	end

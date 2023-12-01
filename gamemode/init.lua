@@ -809,7 +809,6 @@ function GM:Think()
 			if pl.FixForFix <= time and pl:IsSkillActive(SKILL_2_LIFE) then
 				if pl:GetStandUser():IsValid()  then
 
-					pl.FixForFix  = time + 0.1
 					local user = false
 					local user3 = pl:GetStandUser()
 					for _,ent in pairs(ents.FindInSphere(pl:GetPos(), 1028)) do 
@@ -826,10 +825,9 @@ function GM:Think()
 						pl.FixForFix = time + 1
 					end
 					if user3:IsSkillActive(SKILL_CHIP_CQ) and user3:Alive() then
-						local percu = math.Round(math.Round(pl:Health()/pl:GetMaxHealth(),2)*user3:GetMaxHealth())
 						local percs = math.Round(math.Round(user3:Health()/user3:GetMaxHealth(),2)*pl:GetMaxHealth())
 						--print(percu)
-						--print(percs)
+						--print(percs)	
 						--if percu < percs then
 						--	user3:SetHealth(percu)
 					--	else
@@ -861,7 +859,7 @@ function GM:Think()
 			end
 			if pl:KeyDown(IN_SPEED) and pl:GetVelocity() ~= vector_origin and GAMEMODE:GetSpecialWave() ~= "old" then
 				if pl:GetStamina() > 0 then
-					pl:AddStamina(-0.6, true)
+					pl:AddStamina(-0.1, true)
 					pl:ResetSpeed()
 				end
 			end
@@ -878,10 +876,9 @@ function GM:Think()
 				end
 			end
 			if numoutsidespawns >= #teamspawns then
-				local rand = teamspawns[ math.random(#teamspawns) ]
-		--		pl:SetPos((teamspawns and rand and rand:IsValid() and rand:GetPos() or Vector(0,0,0)))
-		--		pl:SetAbsVelocity(Vector(0,0,0))
-				--pl:CenterNotify(COLOR_RED, translate.ClientGet(pl, "before_wave_cant_go_outside_spawn"))
+				pl:SetPos(teamspawns[ math.random(#teamspawns) ]:GetPos())
+				pl:SetAbsVelocity(Vector(0,0,0))
+				pl:CenterNotify(COLOR_RED, translate.ClientGet(pl, "before_wave_cant_go_outside_spawn"))
 			end
 		end
 		if pl.m_PointQueue >= 1 and time >= pl.m_LastDamageDealt + 2 then
@@ -913,6 +910,10 @@ function GM:Think()
 					pl.Think_Stardust = time + 3
 					pl:UpdateStarDust(pl:GetPos())
 				end
+				if pl:IsSkillActive(SKILL_SHISHKA) and pl:GetBloodArmor() > 0 then
+					pl:SetBloodArmor(pl:GetBloodArmor() - 1)
+					pl:GiveStatus("shiska",1):AddTime(4)
+				end
 				if pl:IsSkillActive(SKILL_S_GE) and pl.NextGEUse < time then
 					pl.NextGEUse = time + 45
 					local geruse = {}
@@ -932,7 +933,6 @@ function GM:Think()
 						pl:CenterNotify(COLOR_GREEN, "Вы вылечили ",whoheal)
 					end
 				end
-				pl:ResetSpeed()
 				pl:PreventSkyCade()
 			end
 		end
@@ -1342,7 +1342,6 @@ function GM:PlayerInitialSpawn(pl)
 end
 
 function GM:PlayerInitialSpawnRound(pl)
-	pl:SprintDisable()
 	--pl:RemoveSuit()
 	if pl:KeyDown(IN_WALK) then
 		pl:ConCommand("-walk")
@@ -1352,6 +1351,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl:SetCanZoom(false)
 	pl:SetNoCollideWithTeammates(true)
 	pl:SetCustomCollisionCheck(true)
+
 	pl:DoHulls()
 	pl.BloodDead = 0
 	pl.BountyModifier = 0

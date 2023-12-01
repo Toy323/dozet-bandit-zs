@@ -7,6 +7,7 @@ ENT.LastHitSomething = 0
 ENT.ConeAdder = 0
 ENT.ConeMax = 0.065
 ENT.ConeMin = 0.015
+ENT.NextAmmoGive = 0
 
 local function RefreshTurretOwners(pl)
 	for _, ent in pairs(ents.FindByClass("prop_gunturret")) do
@@ -143,6 +144,10 @@ function ENT:Think()
 	self:CalculatePoseAngles()
 
 	local owner = self:GetObjectOwner()
+	if self.NextAmmoGive < CurTime() and self:GetAmmo() < 300 then
+		self.NextAmmoGive = CurTime() + 0.7
+		self:SetAmmo(self:GetAmmo()+1)
+	end
 	if owner:IsValid() and self:GetAmmo() > 0 and self:GetMaterial() == "" and GAMEMODE:GetWaveActive() then
 		if self:GetManualControl() then
 			if owner:KeyDown(IN_ATTACK) then
@@ -158,7 +163,7 @@ function ENT:Think()
 			if self:IsFiring() then self:SetFiring(false) end
 			local target = self:GetTarget()
 			if target:IsValid() then
-				if self:IsValidTarget(target) and CurTime() < self.LastHitSomething + 0.5 then
+				if self:IsValidTarget(target) and CurTime() < self.LastHitSomething + 0.5 and !target:GetFocusD() then
 					local shootpos = self:ShootPos()
 					self:FireTurret(shootpos, (self:GetTargetPos(target) - shootpos):GetNormalized())
 				else

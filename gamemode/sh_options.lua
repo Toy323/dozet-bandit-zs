@@ -295,7 +295,6 @@ GM:AddPointShopWeapon(0,"hook", ITEMCAT_MELEE, 38, "weapon_zs_hook")
 
 local item = GM:AddPointShopWeapon(1,"electrohmr", ITEMCAT_MELEE, 85, "weapon_zs_electrohammer")
 GM:AddWeaponPrerequisite(item,"crphmr")
-item.NoClassicMode = true
 local item = GM:AddPointShopWeapon(1,"breenbust", ITEMCAT_MELEE, 65, "weapon_zs_bust")
 GM:AddWeaponPrerequisite(item,"zpplnk")
 local item = GM:AddPointShopWeapon(1,"keyboard", ITEMCAT_MELEE, 50, "weapon_zs_keyboard")

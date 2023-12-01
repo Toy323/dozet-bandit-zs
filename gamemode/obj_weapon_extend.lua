@@ -269,6 +269,12 @@ function meta:DrawCrosshairDot()
 		draw.SimpleText("(E + R)Войти в фокус:"..med,"ZSHUDFontSmallest", localx, y+yadd*BetterScreenScale(), med == 0 and COLOR_GREEN or COLOR_RED, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		yadd = yadd + 20 * screen
 	end
+	local mich = MySelf:GetDTEntity(5)
+	if MySelf:IsSkillActive(SKILL_S_CINDERELA_B2) and mich:IsValid() and mich:GetStatus('c_buff') then
+		local med = mich:GetStatus('c_buff')
+		draw.SimpleText("Сила баффа:"..(math.Round(med:GetDTFloat(12)/625,3)*100).."%","ZSHUDFontSmallest", localx, y+yadd*BetterScreenScale(), COLOR_GREEN, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		yadd = yadd + 20 * screen
+	end
 
 	surface.SetDrawColor(GAMEMODE.CrosshairColor2)
 	surface.DrawRect(x - 2, y - 2, 4, 4)

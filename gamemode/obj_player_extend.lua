@@ -202,10 +202,20 @@ function meta:HealHealth(toheal,healer, wep)
 	if SERVER and toheal >= 5 then
 		self:PurgeStatusEffects()
 	end
-	if healer:IsPlayer() and self ~= healer and healer:IsSkillActive(SKILL_S_CINDERELA) then
-		self:GiveStatus("c_debuff",1)
-		local g = self:GiveStatus("c_buff",(healer:IsSkillActive(SKILL_S_CINDERELA_B1) and 10 or 30))
-		g.Applier = healer
+	if healer:IsPlayer() and self ~= healer and healer:IsSkillActive(SKILL_S_CINDERELA) and self:GetMaxHealth() ~= oldhealth	then
+		self:GiveStatus("c_debuff",0.01)
+		local bruhich = healer:GetDTEntity(5)
+		local buff = toheal or 1
+		if bruhich:IsValid() then
+			buff = bruhich:GetStatus('c_buff') and  bruhich:GetStatus('c_buff'):IsValid() and bruhich:GetStatus('c_buff'):GetDTFloat(12) + buff
+			bruhich:GiveStatus('c_buff',0.01)
+		end
+		healer:SetDTEntity(5,self)
+		local g = self:GiveStatus("c_buff",(healer:IsSkillActive(SKILL_S_CINDERELA_B2) and 9999 or healer:IsSkillActive(SKILL_S_CINDERELA_B1) and 10 or 30))
+		if g and g:IsValid() then
+			g:SetDTFloat(12,buff or 1)
+			g.Applier = healer
+		end
 	end
 	if healer:IsPlayer() and healer~=self and newhealth != oldhealth and healer:Team() == self:Team() then
 		gamemode.Call("PlayerHealedTeamMember", healer, self, newhealth - oldhealth, wep)
@@ -409,7 +419,7 @@ function meta:SetSpeed(speed)
 		runspeed = speed
 	end
 
-	self:SetWalkSpeed(self:KeyDown(IN_SPEED) and runspeed or speed)
+	self:SetWalkSpeed(speed)
 	self:SetRunSpeed(runspeed)
 	self:SetMaxSpeed(runspeed)
 end
@@ -443,8 +453,13 @@ function meta:ResetSpeed(noset)
 	if self:IsSkillActive(SKILL_2_LIFE) then
 		speed = speed * 0.86
 	end
-	if self:GetStatus("c_buff") then
-		speed = speed * (self:GetStatus("c_buff").Applier and self:GetStatus("c_buff").Applier:IsSkillActive(SKILL_S_CINDERELA_B1) and 1.35 or 1.25)
+	local buff = self:GetStatus("c_buff")
+	if buff then
+		if buff.Applier and buff.Applier:IsValid() and buff.Applier:IsSkillActive(SKILL_S_CINDERELA_B2) and buff:GetDTInt(12) > 0 then
+			speed = speed * (1+buff:GetDTFloat(12)/625)
+		else
+			speed = speed * (buff.Applier and buff.Applier:IsSkillActive(SKILL_S_CINDERELA_B1) and 1.35 or 1.25)
+		end
 	end
 	if self:GetStatus("c_debuff") then
 		speed = speed * 0.65

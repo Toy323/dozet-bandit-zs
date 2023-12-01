@@ -2,6 +2,7 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
 include("shared.lua")
+local steeringratio = 0.8
 ENT.NextResnya = 0
 function ENT:Think()
 	local owner = self:GetOwner()
@@ -22,10 +23,35 @@ function ENT:Think()
 		end
 		self.NextResnya = CurTime() + 0.4
 	end
+	for k,inflictor in pairs(ents.FindInSphere(self:GetPos(), 178)) do
+		if string.sub(inflictor:GetClass(),1,10) == 'projectile' then
+			local ent1 = ents.Create(inflictor:GetClass())
+			if ent1:IsValid() then
+				ent1:SetPos(inflictor:GetPos()+Vector(0,0,12))
+				ent1:SetAngles(owner:EyeAngles())
+				ent1:SetOwner(owner)
+				ent1.ProjDamage = inflictor.ProjDamage
+				ent1.Damage = inflictor.Damage
+				ent1.ProjSource = inflictor
+				ent1.Team = owner:Team()
+				local projcenter = inflictor:GetPos()
+				local fireorigin = owner:GetShootPos()
+				local firevec = ( projcenter - fireorigin ):GetNormalized()
+				ent1:Spawn()
+				local phys = ent1:GetPhysicsObject()
+				if phys:IsValid() then
+					local aimvec = owner:GetAimVector()
+					phys:Wake()
+					local dir = (aimvec*steeringratio+firevec*(1-steeringratio))
+					phys:AddVelocity(dir*2200)
+				end
+			end
+			inflictor:Remove()
+		end
+	end
 	--print( math.Round(self:GetTime()/0.3/1.6,1))
 	return true
 end
-local steeringratio = 0.8
 function ENT:EntityTakeDamage(ent, dmginfo)
 	local attacker = dmginfo:GetAttacker()
 	local own = self:GetOwner()

@@ -73,6 +73,9 @@ end
 function SWEP:RotateAttack()
 
 end
+function SWEP:Holster()
+	return self:GetRotateAttack() < CurTime() 
+end
 SWEP._SoundNext = 0
 function SWEP:SecondaryAttack()
 	if not self:CanPrimaryAttack() then return end
@@ -82,8 +85,10 @@ function SWEP:SecondaryAttack()
 	self:SetHoldType("revolver")
 	self:SetWeaponSwingHoldType("revolver")
 	timer.Simple(4, function(arguments)
-		self:SetHoldType(self.SwingHoldType)
-		self:SetWeaponSwingHoldType( self.SwingHoldType)
+		if self:IsValid() then
+			self:SetHoldType(self.SwingHoldType)
+			self:SetWeaponSwingHoldType( self.SwingHoldType)
+		end
 	end)
 	if CLIENT then return end
 	local bruh = self:GetOwner():GiveStatus("murasama_ro")

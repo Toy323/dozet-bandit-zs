@@ -198,6 +198,7 @@ SKILL_NEW_FORMULA = 88
 SKILL_CHIP_CQ = 89
 SKILL_B_AND_B = 90
 SKILL_PARRY_SLOW = 91
+SKILL_SHISHKA = 92
 
 
 SKILLMOD_HEALTH = 1
@@ -366,8 +367,8 @@ GM:AddSkill(SKILL_CONC_DMG, translate.Get("skill_conc_damage"), GOOD.."+35%"..tr
 GM:AddSkillModifier(SKILL_CONC_DMG, SKILLMOD_DAMAGE, 0.35)
 GM:AddSkill(SKILL_DEEPFOCUS, translate.Get("skill_deepfocus"), BAD..translate.Get("skill_deepfocus_d2")..GOOD..translate.Get("skill_deepfocus_d1"),
 																1.5,			-1,					{}, TREE_GUNTREE)
-GM:AddSkillModifier(SKILL_DEEPFOCUS, SKILLMOD_DAMAGE, -0.45)
-GM:AddSkillModifier(SKILL_DEEPFOCUS, SKILLMOD_MELEE_DAMAGE_MUL, -0.45)
+GM:AddSkillModifier(SKILL_DEEPFOCUS, SKILLMOD_DAMAGE, -0.11)
+GM:AddSkillModifier(SKILL_DEEPFOCUS, SKILLMOD_MELEE_DAMAGE_MUL, -0.11)
 GM:AddSkill(SKILL_REPULLER, translate.Get("skill_repuller"), GOOD..translate.Get("skill_repuller_d1")..BAD.."-10%"..translate.Get("w_ac"),
 																-1,			2,					{SKILL_RELOAD3,SKILL_DAMN_BRO}, TREE_GUNTREE)
 GM:AddSkill(SKILL_R_BULLETS, translate.Get("skill_r_bullets"), GOOD..translate.Get("skill_r_bullets_d1")..BAD.."-35%"..translate.Get("b_damage"),
@@ -393,7 +394,10 @@ GM:AddSkill(SKILL_STOIC3, translate.Get("skill_stoiciii_0"), GOOD..translate.Get
 GM:AddSkill(SKILL_STOIC4, translate.Get("skill_stoiciv_0"), GOOD..translate.Get("skill_stoiciv_d1")..BAD.."-11"..translate.Get("speed"),
 																-3,			0,					{SKILL_STOIC5,SKILL_RAGDOG}, TREE_HEALTHTREE)
 GM:AddSkill(SKILL_STOIC5, translate.Get("skill_stoicv_0"), GOOD..translate.Get("skill_stoicv_d1")..BAD.."-15"..translate.Get("speed"),
-																-3,			2,					{SKILL_BLOODARMOR, SKILL_ULTRADEFENCE}, TREE_HEALTHTREE)
+																-3,			2,					{SKILL_BLOODARMOR, SKILL_ULTRADEFENCE, SKILL_SHISHKA}, TREE_HEALTHTREE)
+GM:AddSkill(SKILL_SHISHKA, "Ошишкуение", GOOD.."За вами растут острые шишки!\n"..BAD.."-20 к скорости и шишки тратят кровку чтобы появится!",
+																-3,			3,					{}, TREE_HEALTHTREE)
+GM:AddSkillModifier(SKILL_SHISHKA, SKILLMOD_SPEED, 20)
 GM:AddSkill(SKILL_BAD_TIMES, translate.Get("skill_badt"), GOOD..translate.Get("skill_badt_d1")..BAD..translate.Get("skill_badt_d2"),
 																-1,			0,					{SKILL_STOIC4}, TREE_HEALTHTREE)
 GM:AddSkillModifier(SKILL_BAD_TIMES, SKILLMOD_SPEED, 20)
@@ -479,6 +483,8 @@ GM:AddSkill(SKILL_S_STICKY_FINGERS_B1, translate.Get("skill_s_sticky_f_branch_1"
 																1,			3,					{}, TREE_SUPPORTTREE)
 GM:AddSkill(SKILL_S_CINDERELA_B1, translate.Get("skill_s_cinder_b1"), GOOD..translate.Get("skill_s_cinder_b1_d1")..BAD..translate.Get("skill_s_cinder_b1_d2"),
 																-1,			-2,					{}, TREE_SUPPORTTREE)
+GM:AddSkill(SKILL_S_CINDERELA_B2, translate.Get("skill_s_cinder_b2"), GOOD..translate.Get("skill_s_cinder_b2_d1")..BAD..translate.Get("skill_s_cinder_b2_d2"),
+																-0,			-1.5,					{SKILL_S_CINDERELA}, TREE_SUPPORTTREE)
 GM:AddSkill(SKILL_S_ANUBIS_B1, translate.Get("skill_s_anubis_b1"), GOOD..translate.Get("skill_s_anubis_b1_d1")..BAD..translate.Get("skill_s_anubis_b1_d2"),
 																1,			-0.5,					{}, TREE_SUPPORTTREE)
 GM:AddSkill(SKILL_BIO1, translate.Get("skill_bio").."I", GOOD.."+6%"..translate.Get("med_effect"),
@@ -492,7 +498,7 @@ GM:AddSkill(SKILL_INJECTOR, translate.Get("skill_inj"), GOOD..translate.Get("ski
 GM:AddSkill(SKILL_NEW_FORMULA, "Новая формула", GOOD.."Токсины|передозировка наносит в 1.7 раза большe урона!\n"..BAD.."-10 здоровья",
 																-4,			0,					{SKILL_BIO2}, TREE_SUPPORTTREE)
 GM:AddSkillModifier(SKILL_NEW_FORMULA, SKILLMOD_HEALTH, -10)
-GM:AddSkill(SKILL_CHIP_CQ, "ЧИП ЛК-7312", GOOD.."Ваш стeнд и вы связаны сильнее обычного!\nХП Стeнда равно вашим хп!",
+GM:AddSkill(SKILL_CHIP_CQ, "ЧИП ЛК-7312", GOOD.."Ваш стeнд и вы связаны сильнее обычного!\nХП Стeнда равно вашим хп!"..BAD.."\nВЫ получаете урон когда стенд получает урон!",
 																-5.5,			-0.5,					{SKILL_NEW_FORMULA}, TREE_SUPPORTTREE)
 -- Defence Tree
 GM:AddSkill(SKILL_HANDY1, translate.Get("skill_handy").."I", GOOD.."+5%"..translate.Get("repair"),
@@ -503,7 +509,7 @@ GM:AddSkill(SKILL_HANDY3, translate.Get("skill_handy").."III", GOOD.."+8%"..tran
 																-5,			-1,					{SKILL_TURRET_BUFF,SKILL_STARDUST}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_STARDUST, translate.Get("skill_stardust"), GOOD..translate.Get("skill_stardust_d1")..BAD..translate.Get("skill_stardust_d2"),
 																-4,			1,					{}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_TURRET_BUFF, translate.Get("skill_t_buff"), GOOD..translate.Get("skill_t_buff_d1"),
+GM:AddSkill(SKILL_TURRET_BUFF, translate.Get("skill_t_buff"), GOOD..translate.Get("skill_t_buff_d1")..BAD..translate.Get("skill_t_buff_d2"),
 																-6,			-3,					{SKILL_AUTOSCAN}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_AUTOSCAN, translate.Get("skill_module_autoscan"), GOOD..translate.Get("skill_module_autoscan_d1")..BAD..translate.Get("skill_module_autoscan_d2"),
 																-8,			-5,					{SKILL_MODE_WHIRLWHIND,SKILL_MANHUNT}, TREE_BUILDINGTREE)

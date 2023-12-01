@@ -226,9 +226,13 @@ function meta:ProcessDamage(dmginfo)
 	local attacker, inflictor = dmginfo:GetAttacker(), dmginfo:GetInflictor()
 	local attackweapon = (attacker:IsPlayer() and attacker:GetActiveWeapon() or nil)
 	local lasthitgroup = self:LastHitGroup()
-	if self:IsSkillActive(SKILL_2_LIFE) and attacker:IsPlayer() and !attacker:IsSkillActive(SKILL_2_LIFE) or self:IsSkillActive(SKILL_2_LIFE) and !attacker:IsPlayer() then
+	if self:IsSkillActive(SKILL_2_LIFE) and (attacker:IsPlayer() and !attacker:IsSkillActive(SKILL_2_LIFE) or !attacker:IsPlayer()) then
 		if attacker:IsPlayer() and attacker:GetActiveWeapon().IsMelee then
 			attacker:SetBloodArmor(math.min(100, attacker:GetBloodArmor() + dmginfo:GetDamage() * 0.25))
+		end
+		local user = self:GetStandUser()
+		if user:IsSkillActive(SKILL_CHIP_CQ) then
+			user:TakeDamage(3,attacker,inflictor)
 		end
 		dmginfo:ScaleDamage(0.5)
 	end
@@ -240,9 +244,13 @@ function meta:ProcessDamage(dmginfo)
 				net.WriteBool( head )
 			net.Send( attacker )
 		end
-		if attacker:IsSkillActive(SKILL_2_LIFE) and attacker:GetStandUser():IsValid() and GAMEMODE:GetSpecialWave() ~= "1hp" then
-			dmginfo:ScaleDamage(attacker:GetStandUser():Health()/attacker:GetStandUser():GetMaxHealth())
+		local owner = attacker:GetStandUser()
+		if attacker:IsSkillActive(SKILL_2_LIFE) and owner:IsValid() then
+			if  GAMEMODE:GetSpecialWave() ~= "1hp" then
+				dmginfo:ScaleDamage(owner:Health()/owner:GetMaxHealth())
+			end
 		end
+		
 		if attacker:LessPlayersOnTeam() and attackweapon and not attackweapon.NoScaleToLessPlayers and not attackweapon.IgnoreDamageScaling then
 			dmginfo:ScaleDamage(1.25)
 		end
