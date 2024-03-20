@@ -23,7 +23,7 @@ function ENT:Think()
 	dir = dir:GetNormalized()
 
 	owner:SetGroundEntity(NULL)
-	owner:SetVelocity(dir * 380)
+	owner:SetVelocity(dir * 880)
 	self:SetDamage(self:GetDamage() - 1)
 
 	self:NextThink(CurTime() + 0.12)

@@ -161,34 +161,58 @@ function SWEP:Reload()
 
 		self:SendReloadAnimation()
 		self:ProcessReloadEndTime()
-
 		self:GetOwner():DoReloadEvent()
 		self.IdleAnimation = CurTime() + self:SequenceDuration()
 		self:SetNextReload(self.IdleAnimation)
 		self:EmitReloadSound()
+		self:SetDTBool(12,false)
 	end
 end
 function SWEP:PrimaryAttack()
-	if not self:CanPrimaryAttack() or self.NextShoot > CurTime() then return end
+	if not self:CanPrimaryAttack() or self.NextShoot > CurTime()  then  return end
 	self:SendWeaponAnimation()
-	self:SetRemainingShots(self.AddTime and self.AddTime < 0.3 and 1 or 5)
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	self.IdleAnimation = CurTime() + self:SequenceDuration()
 	self.NextShoot = CurTime() + (self.AddTime or 0.4)
+	self:SetNextShot(CurTime())
+	self:SetShotsLeft(5)
+
+	self.IdleAnimation = CurTime() + self:SequenceDuration()
 end
+function SWEP:SetNextShot(nextshot)
+	self:SetDTFloat(5, nextshot)
+end
+
+function SWEP:GetNextShot()
+	return self:GetDTFloat(5)
+end
+
+function SWEP:SetShotsLeft(shotsleft)
+	self:SetDTInt(1, shotsleft)
+end
+
+function SWEP:GetShotsLeft()
+	return self:GetDTInt(1)
+end
+
 function SWEP:Think()
 	local curtime = CurTime()
 	local firedelay = math.min((self.Primary.Delay)/self.Primary.NumShots,0.1)
-	if self:GetRemainingShots() > 0 then
-		if (self:GetNextFireXD() < curtime) then
-			self:EmitFireSound()
-			self:ShootBullets(self.Primary.Damage, 1, self:GetCone())
-			self:GetOwner():DoAttackEvent()
-			self:TakeAmmo()
-			self:SetRemainingShots(self:GetRemainingShots()-1)
-			self:SetNextFireXD(curtime + firedelay)
+		local shotsleft = self:GetShotsLeft()
+		if shotsleft > 0 and curtime >= self:GetNextShot() then
+			self:SetShotsLeft(shotsleft - 1)
+			self:SetNextShot(curtime + math.min(self.Primary.Delay,0.1))
+
+			if self:Clip1() > 0 then
+				self:EmitFireSound()
+				self:TakeAmmo()
+				self:ShootBullets(self.Primary.Damage, self.Primary.NumShots, self:GetCone())
+
+				self.IdleAnimation = CurTime() + self:SequenceDuration()
+			else
+				self:SetShotsLeft(0)
+			end
 		end
-	end
 	if self.BaseClass.Think then
 		self.BaseClass.Think(self)
 	end
@@ -220,6 +244,7 @@ function SWEP:Think()
 					self.Recoil = self.Recoil * 1.15
 				end
 			end
+			self:SetDTBool(12,false)
 			if SERVER then
 				owner:GiveAmmo(self:Clip1() or 0,self.Primary.Ammo)
 			end
@@ -262,7 +287,9 @@ function SWEP.BulletCallback(attacker, tr, dmginfo)
 			end
 		end
 	end
+	
 end
+
 if CLIENT then
 	local rad,cos,sin,abs = math.rad, math.cos, math.sin, math.abs
     function DrawHollowCircle(x, y, inRadius, exRadius, startAng, endAng, color)

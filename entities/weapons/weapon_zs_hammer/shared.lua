@@ -18,7 +18,7 @@ SWEP.Secondary.ClipSize = 1
 SWEP.Secondary.DefaultClip = 1
 SWEP.Secondary.Ammo = "dummy"
 
-SWEP.MeleeDamage = 45
+SWEP.MeleeDamage = 11
 SWEP.MeleeRange = 50
 SWEP.MeleeSize = 0.875
 

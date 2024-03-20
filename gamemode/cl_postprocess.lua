@@ -160,7 +160,7 @@ function GM:DrawNearestEnemy()
 	for _, pl in pairs(team_GetPlayers(myteam)) do
 		range = 196028
 		dist = pl:GetPos():DistToSqr(eyepos)
-		if pl:Alive() and dist <= range then
+		if pl:Alive() and dist <= range and !pl:GetFocusD() and !pl:GetActiveWeapon().m_IsStealthWeapon  then
 			healthfrac = math_max(pl:Health(), 0) / pl:GetMaxHealth()
 			colHealth.r = math_Approach(colHealthEmpty.r, colHealthFull.r, math_abs(colHealthEmpty.r - colHealthFull.r) * healthfrac)
 			colHealth.g = math_Approach(colHealthEmpty.g, colHealthFull.g, math_abs(colHealthEmpty.g - colHealthFull.g) * healthfrac)

@@ -54,7 +54,7 @@ function SWEP:Reload()
 		owner:GiveAmmo(1, self.Primary.Ammo)
 	end
 end
-
+SWEP.NoUseStamina = true
 function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 	if hitent:IsValid() then
 		local healstrength = GAMEMODE.NailHealthPerRepair * (self:GetOwner().RepairRateMul or 1) * (self.HealStrength or 1)

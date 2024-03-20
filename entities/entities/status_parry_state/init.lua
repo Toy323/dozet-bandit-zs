@@ -66,9 +66,9 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 			inflictor:Remove()
 		end
 
-	if bit.band(dmginfo:GetDamageType(), DMG_BULLET) ~= 0 and (own.ParryBullets or 0) < CurTime() then
+	if bit.band(dmginfo:GetDamageType(), DMG_BULLET) ~= 0 and (own.ParryBullets or 0) < CurTime() and gd ~= 0 then
 		timer.Simple(0, function()
-			own:FireBullets({Num = 1, Src = own:GetPos(), Dir = (attacker:LocalToWorld(attacker:OBBCenter()) - own:GetPos()):GetNormalized(), Spread = Vector(0, 0, 0), Tracer = 1, TracerName = "rico_trace", Force = olddamage * 0.15, Damage = olddamage/gd, Callback = inflictor.BulletCallback})
+			own:FireBullets({Num = 1, Src = own:GetPos(), Dir = (attacker:LocalToWorld(attacker:OBBCenter()) - own:GetPos() + Vector(math.random(-17,17),math.random(-30,30),math.random(-17,17))):GetNormalized(), Spread = Vector(0, 0, 0), Tracer = 1, TracerName = "rico_trace", Force = olddamage * 0.15, Damage = olddamage/gd, Callback = inflictor.BulletCallback})
 			own.ParryBullets = CurTime() + 0.03
 		end)
 	end

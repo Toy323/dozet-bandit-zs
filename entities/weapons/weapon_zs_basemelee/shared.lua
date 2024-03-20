@@ -242,8 +242,10 @@ end
 
 function SWEP:MeleeSwing()
 	local owner = self:GetOwner()
-	local formula = -(self.Stamina or 10)*((self:GetBlock() and 2 or 1)*(owner:GetVelocity():LengthSqr() <= 15600 and 0.65 or 1))*(owner:IsSkillActive(SKILL_S_ANUBIS) and  math.max(0.2,1-(GAMEMODE:GetWave() * 0.06)) or 1 )
-	owner:AddStamina(formula)
+	if !self.NoUseStamina then
+		local formula = -(self.Stamina or 10)*((self:GetBlock() and 2 or 1)*(owner:GetVelocity():LengthSqr() <= 15600 and 0.65 or 1))*(owner:IsSkillActive(SKILL_S_ANUBIS) and  math.max(0.2,1-(GAMEMODE:GetWave() * 0.06)) or 1 )
+		owner:AddStamina(formula)
+	end
 	--print(formula)
 	owner:DoAttackEvent()
 	local tr = owner:CompensatedMeleeTrace(self.MeleeRange, self.MeleeSize)
@@ -301,6 +303,7 @@ function SWEP:MeleeSwing()
 	end
 
 	self:MeleeHitEntity(tr, hitent, damagemultiplier)
+	
 
 	if self.PostOnMeleeHit then self:PostOnMeleeHit(hitent, hitflesh, tr) end
 end
@@ -318,7 +321,9 @@ function SWEP:MeleeHitEntity(tr, hitent, damagemultiplier)
 	dmginfo:SetDamageType(self.DamageType)
 	dmginfo:SetDamage(damage)
 	dmginfo:SetDamageForce(math.min(self.MeleeDamage, 50) * 50 * owner:GetAimVector())
-	owner:AddStamina(-(self.Stamina or 20) * 0.3)
+	if !self.NoUseStamina then
+		owner:AddStamina(-(self.Stamina or 20) * 0.3)
+	end
 
 	local vel
 	if hitent:IsPlayer() then
@@ -353,8 +358,8 @@ function SWEP:PostHitUtil(owner, hitent, dmginfo, tr, vel)
 	-- Perform our own knockback vs. players
 	if hitent:IsPlayer() then
 		local knockback = self.MeleeKnockBack
-		if knockback > 0 then
-			hitent:ThrowFromPositionSetZ(tr.StartPos, knockback, nil, true)
+		if knockback > 0 or owner:IsSkillActive(SKILL_WHEE_WHEE) then
+			hitent:ThrowFromPositionSetZ(tr.StartPos, knockback + (owner:IsSkillActive(SKILL_WHEE_WHEE) and 700 or 1), nil, true)
 		end
 	end
 

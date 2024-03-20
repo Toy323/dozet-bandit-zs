@@ -1245,6 +1245,7 @@ function GM:_PrePlayerDraw(pl)
 	local shadowman = false
 	local myteam = MySelf:Team()
 	if myteam != pl:Team() and pl ~= MySelf and MySelf:Alive() and pl:Alive() and (pl:Team() == TEAM_BANDIT or pl:Team() == TEAM_HUMAN) then
+		
 		local wep = pl:GetActiveWeapon()
 		if pl:GetFocusD() then
 			render.SetBlend(0)

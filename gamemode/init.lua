@@ -798,7 +798,7 @@ function GM:Think()
 
 
 			if pl.StaminaUsed <= time then
-				pl.StaminaUsed = time + 0.015 * pl:GetStamina()/25
+				pl.StaminaUsed = time + 0.015 * pl:GetStamina()/40
 				pl:AddStamina(1)
 			end
 
@@ -912,7 +912,7 @@ function GM:Think()
 				end
 				if pl:IsSkillActive(SKILL_SHISHKA) and pl:GetBloodArmor() > 0 then
 					pl:SetBloodArmor(pl:GetBloodArmor() - 1)
-					pl:GiveStatus("shiska",1):AddTime(4)
+					pl:GiveStatus("shiska",1):AddTime(3)
 				end
 				if pl:IsSkillActive(SKILL_S_GE) and pl.NextGEUse < time then
 					pl.NextGEUse = time + 45
@@ -1142,7 +1142,7 @@ local function CheckBroken()
 		end
 	end
 end
-
+GM.MethUsed = {}
 function GM:DoRestartGame()
 	self.RoundEnded = nil
 
@@ -1155,6 +1155,7 @@ function GM:DoRestartGame()
 	end
 	self.CurrentMapLoadedPlayers = 0
 	self.ShuffledPlayersThisRound = false
+	self.MethUsed = {}
 
 	self:SetWave(0)
 	self:SetHumanScore(0)
@@ -1428,6 +1429,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	end
 	
 	pl:SetPoints(0)
+	
 	pl:SetFullPoints(0)
 	if self.PreviousPoints[pl:SteamID64()] then
 		pl:AddPoints(self.PreviousPoints[pl:SteamID64()])
@@ -3189,7 +3191,7 @@ function GM:ActivateSpecialWave(force)
 end
 function GM:WaveStateChanged(newstate)
 	if newstate then
-		if math.random(1,self.ChanceForSpecialWave) == 1 then
+		if math.random(1,100) <= self.ChanceForSpecialWave then
 			self:ActivateSpecialWave()
 		end
 		gamemode.Call("WaveStarted")	

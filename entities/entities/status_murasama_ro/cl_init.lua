@@ -7,7 +7,7 @@ local matWhite = Material("models/debug/debugwhite")
 local vector_origin = vector_origin
 local function GetRandomBonePos(pl)
 	local wep = pl:GetActiveWeapon()
-	if !wep.WElements then return Vector(0,0,0) end
+	if !wep.WElements or !wep.WElements['sword'] then return Vector(0,0,0) end
 	local need = wep.WElements['sword'].modelEnt
 	return  need:GetPos() + pl:GetForward() * 37
 end

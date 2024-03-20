@@ -66,11 +66,16 @@ function ENT:Hit(vHitPos, vHitNormal, ent)
 
 				ent:TakeSpecialDamage(4,DMG_GENERIC, owner, self)
 				ent:SetVelocity(Vector(0,0,150))
+				local ent0 = owner
+				if owner:KeyDown(IN_ATTACK2) then
+					ent0 = ent
+					ent = owner
 
+				end
 				local status = ent:GiveStatus("devourer")
 				if status and status:IsValid() then
 					status:SetDamage(15)
-					status:SetPuller(owner)
+					status:SetPuller(ent0)
 					--local oldpos = self:LocalToWorld(self:OBBCenter())
 					self:SetParent(status)
 					--self:SetPos(oldpos)

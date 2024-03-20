@@ -139,12 +139,13 @@ function SWEP:PrimaryAttack()
 			local invuln = curtgt:GetStatus("spawnbuff")
 			local repull = curtgt:IsSkillActive(SKILL_REPULLER)
 			if not (invuln and invuln:IsValid()) then
-				if repull and math.random(1,10) == 2 then
+				local getblock = (curtgt:GetActiveWeapon().IsMelee and curtgt:GetActiveWeapon():GetBlock())
+				if repull and math.random(1,10 / (getblock and 2 or 1)) == 2 then
 					owner = curtgt
 					curtgt = self:GetOwner()				
 				end
 				local tox = curtgt:GetStatus("tox")
-				local getblock = (curtgt:GetActiveWeapon().IsMelee and curtgt:GetActiveWeapon():GetBlock())
+
 				local ultra = owner:IsSkillActive(SKILL_INJECTOR)
 				local time = (ultra and 4 or  self.ToxDuration) * (getblock and 0.3 or 1)
 				if (tox and tox:IsValid()) then

@@ -122,11 +122,13 @@ function ENT:FireTurret(src, dir)
 		local curammo = self:GetAmmo()
 		if curammo > 0 then
 			self:UpdateCone()
-			self:SetNextFire(CurTime() + (self:GetObjectOwner():IsSkillActive(SKILL_TURRET_BUFF) and 0.01 or 0.12))
+			local owner  = self:GetObjectOwner()
+			self:SetNextFire(CurTime() + (owner:IsSkillActive(SKILL_TURRET_BUFF) and 0.01 or 0.12))
 			self:SetAmmo(curammo - 1)
 			self:StartBulletKnockback()
 			self:PlayShootSound()
-			self:FireBullets({Num = 1, Src = src, Dir = dir, Spread = Vector(self:GetCone(), self:GetCone(), 0), Tracer = 1, Force = 1, Damage = 4, Callback = BulletCallback, IgnoreEntity = self:GetObjectOwner() or nil})
+			local da = owner:IsSkillActive(SKILL_TURRET_MAN)
+			self:FireBullets({Num = 1, Src = src, Dir = dir, Spread = Vector(self:GetCone() * (da and 12 or 1), self:GetCone()* (da and 12 or 1), 0), Tracer = 1, Force = 1, Damage = 4 * (da and 2 or 1), Callback = BulletCallback, IgnoreEntity = owner or nil})
 			self:DoBulletKnockback(0.01)
 			self:EndBulletKnockback()
 		else
@@ -145,7 +147,7 @@ function ENT:Think()
 
 	local owner = self:GetObjectOwner()
 	if self.NextAmmoGive < CurTime() and self:GetAmmo() < 300 then
-		self.NextAmmoGive = CurTime() + 0.7
+		self.NextAmmoGive = CurTime() + 0.5
 		self:SetAmmo(self:GetAmmo()+1)
 	end
 	if owner:IsValid() and self:GetAmmo() > 0 and self:GetMaterial() == "" and GAMEMODE:GetWaveActive() then
@@ -162,8 +164,8 @@ function ENT:Think()
 		else
 			if self:IsFiring() then self:SetFiring(false) end
 			local target = self:GetTarget()
-			if target:IsValid() then
-				if self:IsValidTarget(target) and CurTime() < self.LastHitSomething + 0.5 and !target:GetFocusD() then
+			if target:IsValid() and (target:IsPlayer() and !target:GetFocusD() or !target:IsPlayer()) then
+				if self:IsValidTarget(target) and CurTime() < self.LastHitSomething + 0.5 then
 					local shootpos = self:ShootPos()
 					self:FireTurret(shootpos, (self:GetTargetPos(target) - shootpos):GetNormalized())
 				else

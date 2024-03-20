@@ -201,6 +201,9 @@ GM:AddWeaponPrerequisite(item,"practition")
 
 local item = GM:AddPointShopWeapon(3,"biorifle", ITEMCAT_GUNS, 195, "weapon_zs_bioticrifle")
 GM:AddWeaponPrerequisite(item,"biosmg")
+local item = GM:AddPointShopWeapon(3,"lipuchka", ITEMCAT_GUNS, 215, "weapon_zs_lipuchka")
+GM:AddWeaponPrerequisite(item,"biosmg")
+GM:AddWeaponPrerequisite(item,"fusilier")
 local item = GM:AddPointShopWeapon(3,"albatross",  ITEMCAT_GUNS, 195, "weapon_zs_albatross")
 GM:AddWeaponPrerequisite(item,"sweeper")
 local item = GM:AddPointShopWeapon(3,"severance", ITEMCAT_GUNS, 200, "weapon_zs_severance")
@@ -247,10 +250,12 @@ GM:AddWeaponPrerequisite(item,"medicrifle")
 
 local item = GM:AddPointShopWeapon(4,"blightcaster", ITEMCAT_GUNS, 280, "weapon_zs_blightcaster")
 GM:AddWeaponPrerequisite(item,"biorifle")
+GM:AddWeaponPrerequisite(item,"lipuchka")
 local item = GM:AddPointShopWeapon(4,"boomstick", ITEMCAT_GUNS, 285, "weapon_zs_boomstick")
 GM:AddWeaponPrerequisite(item,"severance")
 local item = GM:AddPointShopWeapon(4,"fire_shotgun", ITEMCAT_GUNS, 285, "weapon_zs_fire_shotgun")
 GM:AddWeaponPrerequisite(item,"severance")
+GM:AddWeaponPrerequisite(item,"lipuchka")
 local item = GM:AddPointShopWeapon(4,"ender",  ITEMCAT_GUNS, 290, "weapon_zs_ender")
 GM:AddWeaponPrerequisite(item,"albatross")
 
@@ -279,7 +284,7 @@ local item = GM:AddPointShopWeapon(5,"silencer_dual", ITEMCAT_GUNS, 390, "weapon
 GM:AddWeaponPrerequisite(item,"silencer")
 
 
---GM:AddPointShopWeapon(2,"grenadelauncher", ITEMCAT_GUNS, 120, "weapon_zs_grenadelauncher")
+GM:AddPointShopWeapon(2,"grenadelauncher", ITEMCAT_GUNS, 120, "weapon_zs_grenadelauncher")
 
 
 
@@ -354,8 +359,6 @@ local item = GM:AddPointShopWeapon(nil,"empgun", ITEMCAT_TOOLS, 355, "weapon_zs_
 item.NoSampleCollectMode = true
 GM:AddPointShopWeapon(nil,"hooker", ITEMCAT_TOOLS, 125, "weapon_zs_hookinator_300")
 
-local item = GM:AddPointShopWeapon(nil,"grenadelauncher", ITEMCAT_TOOLS, 70, "weapon_zs_grenadelauncher")
-item.NoClassicMode = true
 GM:AddPointShopWeapon(nil,"whirlwind", ITEMCAT_TOOLS, 70, "weapon_zs_whirlwind")
 local item = GM:AddPointShopWeapon(nil,"backdoor", ITEMCAT_TOOLS, 45, "weapon_zs_backdoor")
 item.NoClassicMode = true
@@ -547,16 +550,16 @@ end
 GM.MaxTransmitters = 3
 GM.NumberOfWaves = CreateConVar("zsb_numberofwaves", "20", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Number of waves in a game."):GetInt()
 cvars.AddChangeCallback("zsb_numberofwaves", function(cvar, oldvalue, newvalue)
-	GAMEMODE.NumberOfWaves = tonumber(newvalue) or 1
+	GAMEMODE.NumberOfWaves = tonumber(newvalue) or 20
 end)
 
-GM.ChanceForSpecialWave = CreateConVar("zsb_chance_s_wave", "20", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Chance for special wave."):GetInt()
+GM.ChanceForSpecialWave = CreateConVar("zsb_chance_s_wave", "20", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Chance in % for special wave."):GetInt()
 cvars.AddChangeCallback("zsb_chance_s_wave", function(cvar, oldvalue, newvalue)
 	GAMEMODE.ChanceForSpecialWave = tonumber(newvalue) or 20
 end)
-GM.RoundLimit = CreateConVar("zsb_roundlimit", "3", FCVAR_ARCHIVE + FCVAR_NOTIFY, "How many times the game can be played on the same map. -1 means infinite or only use time limit. 0 means once."):GetInt()
+GM.RoundLimit = CreateConVar("zsb_roundlimit", "2", FCVAR_ARCHIVE + FCVAR_NOTIFY, "How many times the game can be played on the same map. -1 means infinite or only use time limit. 0 means once."):GetInt()
 cvars.AddChangeCallback("zsb_roundlimit", function(cvar, oldvalue, newvalue)
-	GAMEMODE.RoundLimit = tonumber(newvalue) or 3
+	GAMEMODE.RoundLimit = tonumber(newvalue) or 2
 end)
 
 GM.ClientSideHitscan = CreateConVar("zsb_clientsidehitscan", "0", FCVAR_REPLICATED + FCVAR_ARCHIVE + FCVAR_NOTIFY, "Enable clientside hitscan detection instead of serverside. Helps with detection but can be exploited more easily."):GetBool()
@@ -594,7 +597,7 @@ GM.TimeLostPerWave = 15
 GM.WaveZeroLength = 60
 
 -- Time players have between waves to do stuff.
-GM.WaveIntermissionLength = 30
+GM.WaveIntermissionLength = 20
 
 -- Time in seconds between end round and next map.
 GM.EndGameTime = 25

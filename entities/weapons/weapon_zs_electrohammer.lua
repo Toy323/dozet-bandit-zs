@@ -19,9 +19,10 @@ if CLIENT then
 end
 
 SWEP.Base = "weapon_zs_hammer"
+SWEP.NoUseStamina = true
 SWEP.Primary.Delay = 0.5
 SWEP.SwingTime = 0.15
-SWEP.MeleeDamage = 32
+SWEP.MeleeDamage = 5
 SWEP.HealStrength = 1.5
 
 SWEP.MeleeRange = 60

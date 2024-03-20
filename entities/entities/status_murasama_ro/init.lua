@@ -68,7 +68,7 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 	end
 	mul = math.Clamp(mul,0.1,0.9)
 	local olddamage = dmginfo:GetDamage()
-	dmginfo:SetDamage(olddamage*mul) 
+	dmginfo:SetDamage(0) 
 	own:AddStamina(math.Clamp(40/gd,0,100))
 	local inflictor = dmginfo:GetInflictor()
 	local bruh = inflictor:GetClass()
