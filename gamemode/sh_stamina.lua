@@ -20,11 +20,7 @@ function GM:GetPercGlobalStamina(teamed, reverse)
     local ply = teamed and team.GetPlayers(teamed) or player.GetAll()
     local gstamina = 0
 	for _, pl in pairs(ply) do
-        if reverse then
-            gstamina = gstamina - pl:GetStamina()
-        else
-            gstamina = gstamina + pl:GetStamina()
-        end
+        gstamina = gstamina + pl:GetStamina() * (reverse and -1 or 1)
     end
     return gstamina/#ply
 end

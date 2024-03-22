@@ -108,6 +108,8 @@ SWEP.TracerName = "AR2Tracer"
 
 function SWEP:EmitFireSound(omega)
 	self:EmitSound("npc/waste_scanner/grenade_fire.wav", 75 * (omega and 2 or 1), math.random(182, 228), 0.4, CHAN_WEAPON + 20)
+	self:EmitSound("^weapons/mortar/mortar_fire1.wav", 70, math.random(65, 77) * (omega and 3 or 1), 0.65)
+	self:EmitSound("npc/barnacle/barnacle_gulp2.wav", 70, 70* (omega and 3 or 1), 0.85, CHAN_WEAPON + 21)
 end
 
 function SWEP:PrimaryAttack()

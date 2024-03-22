@@ -475,9 +475,7 @@ net.Receive( "zs_hitmarker", function( iLen )
 	GAMEMODE.LastHitMarkerHeadshot = head
 	LocalPlayer():EmitSound("bandit/hitsound.wav", 500, 100, 1,CHAN_ITEM)
 end )
-function GM:DrawStaminaBar()
-	local x = ScrW() * 0.45
-	local y = ScrH() * 0.78
+function GM:DrawStaminaBar(y)
 
 	local lp = MySelf
 
@@ -513,6 +511,52 @@ function GM:DrawStaminaBar()
 			surface.DrawTexturedRect(x + 2 + subwidth - 6, y + 1 - hei/2, 4, hei * 2)
 			local phantomwidth = (health == 100 and 0 or wid)
 			draw.SimpleTextBlurry(math.Round(lp:GetStamina()) , "ZSHUDFontSmall", x, y - 12, colHealth, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+		end
+		return y - ScrW() * 0.05
+	end
+	return y
+end
+
+function GM:DrawColdBar(x,y)
+
+	local lp = MySelf
+
+	if lp:GetCold() > 0 then
+		if lp:IsValid() then
+			local matGlow = Material("sprites/glow04_noz")
+			local texDownEdge = surface.GetTextureID("gui/gradient_down")
+			local colHealth = Color(0,216,216)
+			local coldMax = lp:GetMaximumCold()
+			local screenscale = BetterScreenScale()
+			local health = math.max(lp:GetCold(), 0)
+			local healthperc = math.Clamp(health / coldMax, 0.01, 1)
+			local wid, hei = 250 * screenscale, 30 * screenscale
+	 
+			colHealth.r = 55/healthperc
+			colHealth.g = 255 * healthperc
+			colHealth.b = 255 * healthperc
+	
+			local subwidth = healthperc * wid
+	
+			surface.SetDrawColor(0, 0, 0, 230)
+			surface.DrawRect(x, y, wid, hei)
+
+			
+	
+			surface.SetDrawColor(colHealth.r * 1, colHealth.g * 0.2, colHealth.b, 40)
+			surface.SetTexture(texDownEdge)
+			surface.DrawTexturedRect(x + 2, y + 1, subwidth - 4, hei - 2)
+			surface.SetDrawColor(colHealth.r * 0.6, colHealth.g * 0.6, colHealth.b, 30)
+			surface.DrawRect(x + 2, y + 1, subwidth - 4, hei - 2)
+	
+			surface.SetMaterial(matGlow)
+			surface.SetDrawColor(255, 255, 255, 255)
+			surface.DrawTexturedRect(x + 2 + subwidth - 6, y + 1 - hei/2, 4, hei * 2)
+			local phantomwidth = (coldMax == 100 and 0 or wid)
+			draw.SimpleTextBlurry(math.Round(lp:GetCold()) , "ZSHUDFontSmall", x, y - 12, colHealth, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+
+			draw.SimpleTextBlurry("ЗАМОРОЗКА", "ZSHUDFontSmall", wid + x, y+28, colHealth, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
 
 		end
 	end
@@ -595,7 +639,9 @@ function GM:HumanHUD(screenscale)
 		local y = ScrH() * 0.3
 		draw_SimpleTextBlur(translate.Get("waiting_for_next_wave"), "ZSHUDFont", x, y, COLOR_DARKRED, TEXT_ALIGN_CENTER)
 	end
-	self:DrawStaminaBar()
+	x,y = ScrW() * 0.45, ScrH() * 0.78
+	y = self:DrawStaminaBar(y)
+	self:DrawColdBar(x,y)
 end
 
 function GM:HUDPaint()
@@ -1251,6 +1297,13 @@ function GM:_PrePlayerDraw(pl)
 			render.SetBlend(0)
 			render.ModelMaterialOverride(matWhite)
 			render.SetColorModulation(0.067, 0.067, 0.067)
+		end
+		local cold = pl:GetCold()
+		if cold > 15 then
+			local mod = (cold/pl:GetMaximumCold())
+			render.SuppressEngineLighting(true)
+			render.ModelMaterialOverride(matWhite)
+			render.SetColorModulation(0.1, 0.1 * mod, 1*mod - math.abs(math.sin((CurTime() + pl:EntIndex()) * 3)) * 0.1)
 		end
 		if wep.m_IsStealthWeapon then
 			local blend = wep:GetStealthWepBlend()

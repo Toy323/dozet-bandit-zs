@@ -164,7 +164,6 @@ function SWEP:ProcessDamage(dmginfo)
 			dmginfo:ScaleDamage(0)
 		end
 	end
-	
 end
 
 function SWEP:SecondaryAttack()
@@ -359,7 +358,7 @@ function SWEP:PostHitUtil(owner, hitent, dmginfo, tr, vel)
 	if hitent:IsPlayer() then
 		local knockback = self.MeleeKnockBack
 		if knockback > 0 or owner:IsSkillActive(SKILL_WHEE_WHEE) then
-			hitent:ThrowFromPositionSetZ(tr.StartPos, knockback + (owner:IsSkillActive(SKILL_WHEE_WHEE) and 700 or 1), nil, true)
+			hitent:ThrowFromPositionSetZ(tr.StartPos, knockback + (owner:IsSkillActive(SKILL_WHEE_WHEE) and 900 or 1), nil, true)
 		end
 	end
 

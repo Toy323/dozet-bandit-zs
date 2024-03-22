@@ -223,7 +223,7 @@ function meta:ChangeTeam(teamid)
 end
 
 function meta:ProcessDamage(dmginfo)
-	local attacker, inflictor = dmginfo:GetAttacker(), dmginfo:GetInflictor()
+	local attacker, inflictor = dmginfo:GetAttacker(), dmginfo:GetInflictor() 
 	local attackweapon = (attacker:IsPlayer() and attacker:GetActiveWeapon() or nil)
 	local lasthitgroup = self:LastHitGroup()
 	if self:IsSkillActive(SKILL_2_LIFE) and (attacker:IsPlayer() and !attacker:IsSkillActive(SKILL_2_LIFE) or !attacker:IsPlayer()) then
@@ -252,7 +252,7 @@ function meta:ProcessDamage(dmginfo)
 		end
 		
 		if attacker:LessPlayersOnTeam() and attackweapon and not attackweapon.NoScaleToLessPlayers and not attackweapon.IgnoreDamageScaling then
-			dmginfo:ScaleDamage(1.25)
+			dmginfo:ScaleDamage(1.15)
 		end
 		if self:IsSkillActive(SKILL_ULTRADEFENCE) then
 			dmginfo:ScaleDamage(0.75)
@@ -294,6 +294,9 @@ function meta:ProcessDamage(dmginfo)
 		end
 		if self:GetActiveWeapon() and IsValid(self:GetActiveWeapon()) and self:GetActiveWeapon().ProcessDamage then
 			self:GetActiveWeapon():ProcessDamage(dmginfo)
+		end
+		if inflictor and IsValid(inflictor) and inflictor.DamageThink then
+			inflictor:DamageThink(dmginfo, self)
 		end
 		if self:GetBloodArmor() > 0 and GAMEMODE:GetSpecialWave() ~= "1hp" and attacker:Team() ~= self:Team()  then
 			local damage = dmginfo:GetDamage()

@@ -423,6 +423,19 @@ function meta:SetSpeed(speed)
 	self:SetRunSpeed(runspeed)
 	self:SetMaxSpeed(runspeed)
 end
+function meta:SetCold(cold)
+	self:SetDTFloat(DT_PLAYER_FLOAT_COLD,cold)
+end
+function meta:GetCold()
+	return self:GetDTFloat(DT_PLAYER_FLOAT_COLD)
+end
+function meta:GetMaximumCold()
+	return self.MaximumCold or 85
+end
+function meta:AddCold(cold)
+    if CLIENT then return end
+	self:SetCold(math.Clamp(self:GetCold() + cold,0,self:GetMaximumCold()+5))
+end
 
 function meta:ResetSpeed(noset)
 	if not self:IsValid() then return end
@@ -442,6 +455,10 @@ function meta:ResetSpeed(noset)
 	end
 	if self.SkillSpeedAdd then
 		speed = speed + self.SkillSpeedAdd
+	end
+	local cold = self:GetCold()
+	if cold > 15 then
+		speed = speed - cold
 	end
 	
 	if self.HumanSpeedAdder and (self:Team() == TEAM_HUMAN or self:Team() == TEAM_BANDIT) and 32 < speed then

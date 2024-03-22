@@ -795,11 +795,18 @@ function GM:Think()
 			pl:BarricadeGhostingThink()
 		end
 		if pl:Alive() then
-
-
-			if pl.StaminaUsed <= time then
+			if pl.StaminaUsed < time then
 				pl.StaminaUsed = time + 0.015 * pl:GetStamina()/40
 				pl:AddStamina(1)
+			end
+
+			if pl.ColdUsed < time then
+				pl.ColdUsed = time + 0.76
+				if pl:GetCold() > pl:GetMaximumCold() then
+					pl:Kill()
+					return
+				end
+				pl:AddCold(-1 * (self:GetSpecialWave() == "coldera" and -0.25 or 1))
 			end
 
 			
@@ -843,25 +850,11 @@ function GM:Think()
 			end
 
 
-			if pl:IsSkillActive(SKILL_CRUSADER) then
-				for _, ent in pairs(ents.FindInSphere(pl:GetPos(), 128)) do
-					if ent ~= pl and ent:IsValid() and ent:IsPlayer() and ent:Team() == pl:Team() and ent:Alive() then
-						local buff = ent:GiveStatus("crusader_buff", 0.2)
-						buff.Applier = pl
-					end
-				end
-			end
 			if pl:IsSkillActive(SKILL_VKID) and math.random(1,1500) == 1 then
 				local vector = pl:GetAimVector()
 				vector.z = math.max(50, pl:GetAimVector().z)
 				pl:SetVelocity(Vector(0,0,130) + (vector+Vector(0,0,15))*15 + pl:GetAimVector()*50)
 				timer.Simple(2, function() pl:SetVelocity(Vector(0,0,-1000)+pl:GetVelocity()) end)
-			end
-			if pl:KeyDown(IN_SPEED) and pl:GetVelocity() ~= vector_origin and GAMEMODE:GetSpecialWave() ~= "old" then
-				if pl:GetStamina() > 0 then
-					pl:AddStamina(-0.1, true)
-					pl:ResetSpeed()
-				end
 			end
 		end
 		if pl:IsSpectator() then
@@ -876,9 +869,12 @@ function GM:Think()
 				end
 			end
 			if numoutsidespawns >= #teamspawns then
-				pl:SetPos(teamspawns[ math.random(#teamspawns) ]:GetPos())
-				pl:SetAbsVelocity(Vector(0,0,0))
-				pl:CenterNotify(COLOR_RED, translate.ClientGet(pl, "before_wave_cant_go_outside_spawn"))
+				local validate = IsValid(teamspawns[ math.random(#teamspawns) ]) and teamspawns[ math.random(#teamspawns) ] or NULL 
+				if validate:IsValid() then
+					pl:SetPos(validate:GetPos())
+					pl:SetAbsVelocity(Vector(0,0,0))
+					pl:CenterNotify(COLOR_RED, translate.ClientGet(pl, "before_wave_cant_go_outside_spawn"))
+				end
 			end
 		end
 		if pl.m_PointQueue >= 1 and time >= pl.m_LastDamageDealt + 2 then
@@ -893,6 +889,20 @@ function GM:Think()
 			if pl:Alive() then
 				if pl:WaterLevel() >= 3 and not (pl.status_drown and pl.status_drown:IsValid()) then
 					pl:GiveStatus("drown")
+				end
+				if pl:KeyDown(IN_SPEED) and pl:GetVelocity() ~= vector_origin and GAMEMODE:GetSpecialWave() ~= "old" then
+					if pl:GetStamina() > 0 then
+						pl:AddStamina(-6, true)
+						pl:ResetSpeed()
+					end
+				end
+				if pl:IsSkillActive(SKILL_CRUSADER) then
+					for _, ent in pairs(ents.FindInSphere(pl:GetPos(), 128)) do
+						if ent ~= pl and ent:IsValid() and ent:IsPlayer() and ent:Team() == pl:Team() and ent:Alive() then
+							local buff = ent:GiveStatus("crusader_buff", 2)
+							buff.Applier = pl
+						end
+					end
 				end
 				if pl:IsSkillActive(SKILL_GENERATOR) and pl.BloodRegen <=  time then
 					pl.BloodRegen = time + 5
@@ -1413,6 +1423,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.DeepFocuses = nil
 	pl.DeepFocus_Time = 0
 	pl.StaminaUsed = 0
+	pl.ColdUsed = 0
 	self:LoadVault(pl)
 	pl:ApplySkills()
 	if pl:IsSkillActive(SKILL_S_STAR_PLATINUM) then
@@ -1893,7 +1904,6 @@ end
 
 function GM:PlayerDeathThink(pl)
 	if self.RoundEnded then return end
-
 	if pl:GetObserverMode() == OBS_MODE_CHASE or pl:GetObserverMode() == OBS_MODE_IN_EYE then
 		local target = pl:GetObserverTarget()
 		if not target or not target:IsValid() or not target:IsPlayer() then
@@ -2485,6 +2495,8 @@ end
 
 function GM:PlayerDeath(pl, inflictor, attacker)
 	self:SaveVault(pl)
+	pl:SetCold(0)
+	pl:SetStamina(100)
 	if pl:IsSkillActive(SKILL_KAMIKAZE) then
 		util.BlastDamage2(pl, pl, pl:GetPos(), 256, 310)
 		pl:EmitSound("c4.explode")
@@ -3156,7 +3168,7 @@ function GM:ActivateSpecialWave(force)
 		wave = force or "1hp"
 	end
 	if wave == nil or wave == "" then
-		local specialwaves = {"1hp", "anubis", "bhop", "aos", "doa", "old"}
+		local specialwaves = {"1hp", "anubis", "bhop", "aos", "doa", "old", 'coldera'}
 		wave = table.Random(specialwaves)
 	end
 	

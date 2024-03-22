@@ -34,7 +34,7 @@ SWEP.MeleeKnockBack = 0
 SWEP.DefaultMeleeKnockBack = 0
 SWEP.UseMelee1 = true
 
-SWEP.Stamina = 12
+SWEP.Stamina = 34
 
 SWEP.HitGesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_MELEE
 SWEP.MissGesture = SWEP.HitGesture

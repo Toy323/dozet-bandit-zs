@@ -201,6 +201,8 @@ SKILL_PARRY_SLOW = 91
 SKILL_SHISHKA = 92
 SKILL_TURRET_MAN = 93
 SKILL_WHEE_WHEE = 94
+SKILL_COLD_REFUSION = 95
+SKILL_FOLGA = 96
 
 
 SKILLMOD_HEALTH = 1
@@ -313,6 +315,7 @@ SKILLMOD_M_REG = 111
 SKILLMOD_ADD_STATUS = 112
 SKILLMOD_FALLDAMAGE_RECOVERY_MUL = 113
 SKILLMOD_FIRE_DELAY = 114
+SKILLMOD_COLD_MAX = 115
 
 local GOOD = "^"..COLORID_GREEN
 local BAD = "^"..COLORID_RED
@@ -394,7 +397,7 @@ GM:AddSkill(SKILL_STOIC5, translate.Get("skill_stoicv_0"), GOOD..translate.Get("
 																-3,			2,					{SKILL_BLOODARMOR, SKILL_ULTRADEFENCE, SKILL_SHISHKA}, TREE_HEALTHTREE)
 GM:AddSkill(SKILL_SHISHKA, "Ошишкуение", GOOD.."За вами растут острые шишки которые дают кровоток врагам!\n"..BAD.."-20 к скорости и шишки тратят кровку чтобы появится!",
 																-3,			3,					{}, TREE_HEALTHTREE)
-GM:AddSkillModifier(SKILL_SHISHKA, SKILLMOD_SPEED, 20)
+GM:AddSkillModifier(SKILL_SHISHKA, SKILLMOD_SPEED, -20)
 GM:AddSkill(SKILL_BAD_TIMES, translate.Get("skill_badt"), GOOD..translate.Get("skill_badt_d1")..BAD..translate.Get("skill_badt_d2"),
 																-1,			0,					{SKILL_STOIC4}, TREE_HEALTHTREE)
 GM:AddSkillModifier(SKILL_BAD_TIMES, SKILLMOD_SPEED, 20)
@@ -510,6 +513,7 @@ GM:AddSkill(SKILL_TURRET_MAN, "Титаническая туррель", GOOD.."
 																-4,			2,					{SKILL_STARDUST}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_TURRET_BUFF, translate.Get("skill_t_buff"), GOOD..translate.Get("skill_t_buff_d1")..BAD..translate.Get("skill_t_buff_d2"),
 																-6,			-3,					{SKILL_AUTOSCAN}, TREE_BUILDINGTREE)
+GM:AddSkillModifier(SKILL_TURRET_BUFF, SKILLMOD_DAMAGE, -0.6)
 GM:AddSkill(SKILL_AUTOSCAN, translate.Get("skill_module_autoscan"), GOOD..translate.Get("skill_module_autoscan_d1")..BAD..translate.Get("skill_module_autoscan_d2"),
 																-8,			-5,					{SKILL_MODE_WHIRLWHIND,SKILL_MANHUNT}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_MANHUNT, translate.Get("skill_manhunt"), GOOD..translate.Get("skill_manhunt_d1")..BAD..translate.Get("skill_manhunt_d2"),
@@ -517,7 +521,11 @@ GM:AddSkill(SKILL_MANHUNT, translate.Get("skill_manhunt"), GOOD..translate.Get("
 GM:AddSkill(SKILL_OPERATOR, translate.Get("skill_operator"), GOOD..translate.Get("skill_operator_d1")..BAD..translate.Get("skill_operator_d2"),
 																-8,			0,					{SKILL_DANGER_RADIOWAVES}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_DANGER_RADIOWAVES, translate.Get("skill_radiodanger"), GOOD..translate.Get("skill_radiodanger_d1")..BAD.."-25%"..translate.Get("meleedamage"),
-																-9,			-1,					{}, TREE_BUILDINGTREE)
+																-9,			-1,					{SKILL_COLD_REFUSION}, TREE_BUILDINGTREE)
+GM:AddSkill(SKILL_COLD_REFUSION, "Холодный распад", GOOD.."Радар наносит холод врагам.\n"..BAD.."Радар не наносит урона",
+																-9,			-2,					{SKILL_FOLGA}, TREE_BUILDINGTREE)
+GM:AddSkill(SKILL_FOLGA, "Шапочка из фольги", GOOD.."Урон от радиактивной силы отражается противнику.\n"..BAD.."Кулдаун радара +150%.",
+																-9,			-3,					{}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_MODE_WHIRLWHIND, translate.Get("skill_mode_whirlwind"), GOOD..translate.Get("skill_mode_whirlwind_d1")..BAD..translate.Get("skill_mode_whirlwind_d2"),
 																-6,			-7,					{}, TREE_BUILDINGTREE)
 
@@ -827,6 +835,8 @@ GM:SetSkillModifierFunction(SKILLMOD_FIRE_DELAY, function(pl, amount)
 	pl.M_FireDelay = math.Clamp(amount + 1.0, 0.1, 1000.0)
 end)
 
+
+
 GM:SetSkillModifierFunction(SKILLMOD_MELEE_LEG_DAMAGE_ADD, function(pl, amount)
 	pl.MeleeLegDamageAdd = math.Clamp(amount, 0, 1000.0)
 end)
@@ -882,6 +892,12 @@ GM:SetSkillModifierFunction(SKILLMOD_BLOODARMOR_MUL, function(pl, amount)
 		end
 	end
 end)
+
+GM:SetSkillModifierFunction(SKILLMOD_COLD_MAX, function(pl, amount)
+	local mul = math.Clamp(amount + 85, 0.0, 1000.0)
+	pl.MaximumCold = mul
+end)
+
 
 GM:SetSkillModifierFunction(SKILLMOD_BLOODARMOR_GAIN_MUL, GM:MkGenericMod("BloodarmorGainMul"))
 GM:SetSkillModifierFunction(SKILLMOD_LOW_HEALTH_SLOW_MUL, GM:MkGenericMod("LowHealthSlowMul"))
