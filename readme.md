@@ -10,7 +10,7 @@ Mod by  Jooho 'air rice' Lee
 | Board Kit model |  Samuel (samuel_games@hotmail.com) |
 | Original Korean Translation |  Honsal |
 | Additional Code Snippets	  | Sunrust Community (Benjy, The Darker One, Raox, Scott), Original Git Repo, Honsal |
-| \Modified Version\ | More weapons,skills from NoxZS and more melee techniques   | D-Z Toy |
+| *Modified Version* More weapons,skills from NoxZS and more melee techniques   | D-Z Toy |
 | Translators | [Link to Translators](translation_credits.md) |
 ### Story (If you're into that kind of thing...)
 The devastating Zombie outbreaks, which led to hulking beasts and otherworldly monsters threatening mankind, has been put to rest. Whether by tenacity or pure miracle, the humans have survived to see another day
