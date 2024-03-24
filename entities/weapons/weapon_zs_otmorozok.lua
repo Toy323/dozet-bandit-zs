@@ -202,7 +202,7 @@ function SWEP:Think()
 	end
 	local pl = self:GetOwner()
 
-	if pl:KeyDown(IN_ATTACK) and self:Ammo1() >= 1 then
+	if pl:KeyDown(IN_ATTACK) and self:Ammo1() >= 1 and !pl:GetFocusD() then
 		if self.NextEmit < CurTime() then
 			self.NextEmit = CurTime() + self.Primary.Delay
 			pl.LastRangedAttack = CurTime()
@@ -297,12 +297,12 @@ function SWEP:SecondaryAttack()
 				phys:Wake()
 				phys:SetVelocity(aimvec *2300)
 			end
-			owner:SetVelocity(aimvec *-700)
+			owner:SetVelocity(aimvec *-400)
 			ent:EmitSound("physics/glass/glass_sheet_break3.wav")
 		end
-		owner:TakeDamage(25)
+		owner:AddCold(45)
     end
-	self:SetNextSecondaryFire(CurTime() + 15)
+	self:SetNextSecondaryFire(CurTime() + 9)
 end
 function SWEP:Reload()
 end

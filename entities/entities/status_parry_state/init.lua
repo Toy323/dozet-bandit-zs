@@ -41,7 +41,7 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 		own:GetActiveWeapon():SetNextSecondaryFire(CurTime()+2)
 	end
 	--print(bruh)
-	if string.sub(bruh,1,10) == 'projectile' then
+	if string.sub(bruh,1,10) == 'projectile' and !(inflictor.NextAmmoTake or inflictor.NoWhirlWhind )  then -- and !inflictor.NoWhirlWhind  
 			local ent1 = ents.Create(inflictor:GetClass())
 			if ent1:IsValid() then
 				ent1:SetPos(inflictor:GetPos()+Vector(0,0,5))

@@ -2616,7 +2616,7 @@ function GM:PlayerKilledEnemy(pl, attacker, inflictor, dmginfo, headshot, suicid
 		attacker.BountyModifier = attacker.BountyModifier + 2
 	end
 	if pl:GetDOAMan() then
-		attacker.m_PointQueue = attacker.m_PointQueue + 90
+		attacker.m_PointQueue = attacker.m_PointQueue + GAMEMODE:GetWave()*20
 	end
 	if mostdamager then
 		attacker:PointCashOut(pl, FM_LOCALKILLOTHERASSIST)

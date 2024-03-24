@@ -352,7 +352,7 @@ function PANEL:Refresh()
 		name = name.."|S"
 	end
 	if pl:GetDOAMan() and MySelf:Team() ~= pl:Team() then
-		name = name.."|90"
+		name = name..(GAMEMODE:GetWave()*20)
 	end
 	self.m_PlayerLabel:SetText(name)
 	
