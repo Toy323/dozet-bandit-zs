@@ -40,7 +40,7 @@ Visit the [related wiki pages](https://github.com/AirRice/zs_banditwarfare/wiki)
 
 ### Modified Version Features
  - Skills from NoxZS
-    - Give more unique mechanics
+    - Adds more unique mechanics
     - Alternative version of weapons!(Like for a whirlwind)
     - S T A N D S (Y'e I know this is cringe🤓)
  - Block for melee
