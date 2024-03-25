@@ -1,5 +1,7 @@
 # ZS:BANDIT WARFARE
 
+# IP Of this ZS:BW Version - 95.189.107.222:27016
+
 Mod by  Jooho 'air rice' Lee
 ### Additional credits:
 | Contribution | Author |

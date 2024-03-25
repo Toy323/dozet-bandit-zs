@@ -3184,7 +3184,7 @@ function GM:ActivateSpecialWave(force)
 		timer.Simple(0.5, function() for _, pl in pairs(player.GetAll()) do if pl:IsValid() then pl:SetHealth(1) end end end)
 	end
 	if wave == "old" then
-		timer.Simple(2.5, function() for _, pl in pairs(player.GetAll()) do if pl:IsValid() then pl:ApplySkills({}) end end end)
+		timer.Simple(2.5, function() for _, pl in pairs(player.GetAll()) do if pl:IsValid() then pl:ApplySkills({}) pl:SendLua('MySelf:ApplySkills()') end end end)
 	end
 	if wave == "doa" then
 		local bdoa = table.Random(team.GetPlayers(TEAM_BANDIT))

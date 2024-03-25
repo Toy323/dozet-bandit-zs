@@ -138,9 +138,24 @@ function SWEP:PrimaryAttack()
 		else
 			local invuln = curtgt:GetStatus("spawnbuff")
 			local repull = curtgt:IsSkillActive(SKILL_REPULLER)
+			local see = false 
+			if repull then
+				local size = 300
+				local dir = curtgt:GetAimVector()
+				local angle = math.cos( math.rad( 45 ) ) 
+				local startPos = curtgt:EyePos()
+
+				local entities = ents.FindInCone( startPos, dir, size, angle )
+				for id, ent in ipairs( entities ) do
+					if ent:IsValid() and ent:IsPlayer() and ent:Alive() and WorldVisible(ent:GetPos(),startPos) and ent == owner then
+						see = true
+						break
+					end
+				end
+			end
 			if not (invuln and invuln:IsValid()) then
 				local getblock = (curtgt:GetActiveWeapon().IsMelee and curtgt:GetActiveWeapon():GetBlock())
-				if repull and math.random(1,10 / (getblock and 2 or 1)) == 2 then
+				if repull and see then
 					owner = curtgt
 					curtgt = self:GetOwner()				
 				end

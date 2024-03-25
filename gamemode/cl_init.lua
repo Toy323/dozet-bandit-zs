@@ -157,7 +157,7 @@ GM.Beats = {
 "music/HL1_song17.mp3",
 "music/HL1_song10.mp3"
 }
-function GM:GivePoints(pl)
+function GM:BecomeStandOf(pl)
 	net.Start("zs_stand_become")
 		net.WriteEntity(pl)
 	net.SendToServer()
@@ -170,7 +170,7 @@ function GM:ClickedPlayerButton(pl, button)
         menu:AddOption("Профиль в стиме", function() pl:ShowProfile() end)
     end
     if pl:Team() == MySelf:Team() and pl ~= MySelf and MySelf:IsSkillActive(SKILL_2_LIFE) and !pl:IsSkillActive(SKILL_2_LIFE) and !self:GetWaveActive() and MySelf:GetStandUser() ~= pl then
-        menu:AddOption("Стать его стендом", function() timer.Simple(0, function() self:GivePoints(pl) end) end)
+        menu:AddOption("Стать его стендом", function() timer.Simple(0, function() self:BecomeStandOf(pl) end) end)
     end
 
     menu:Open()
@@ -277,7 +277,7 @@ end
 function GM:OnReloaded()
 	self.BaseClass.OnReloaded(self)
 
-	self:LocalPlayerFound()
+	timer.Simple(0, function() self:LocalPlayerFound() end)--Таймер чтобы худ НОРМАЛЬНО ВЫГЛЯДЕЛ!!!
 end
 
 -- The whole point of this is so we don't need to check if the local player is valid 1000 times a second.

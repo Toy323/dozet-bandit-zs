@@ -369,7 +369,7 @@ GM:AddSkill(SKILL_DEEPFOCUS, translate.Get("skill_deepfocus"), BAD..translate.Ge
 																1.5,			-1,					{}, TREE_GUNTREE)
 GM:AddSkillModifier(SKILL_DEEPFOCUS, SKILLMOD_DAMAGE, -0.11)
 GM:AddSkillModifier(SKILL_DEEPFOCUS, SKILLMOD_MELEE_DAMAGE_MUL, -0.11)
-GM:AddSkill(SKILL_REPULLER, translate.Get("skill_repuller"), GOOD..translate.Get("skill_repuller_d1")..BAD.."-10%"..translate.Get("w_ac"),
+GM:AddSkill(SKILL_REPULLER, translate.Get("skill_repuller"), GOOD..translate.Get("skill_repuller_d1")..BAD.."-15%"..translate.Get("w_ac"),
 																-1,			2,					{SKILL_RELOAD3,SKILL_DAMN_BRO}, TREE_GUNTREE)
 GM:AddSkill(SKILL_R_BULLETS, translate.Get("skill_r_bullets"), GOOD..translate.Get("skill_r_bullets_d1")..BAD.."-35%"..translate.Get("b_damage"),
 																3,			3,					{SKILL_FOCUS3}, TREE_GUNTREE)
@@ -981,7 +981,7 @@ GM:AddSkillModifier(SKILL_GENERATOR, SKILLMOD_HEALTH, -30)
 GM:AddSkillModifier(SKILL_QUALITY, SKILLMOD_MELEE_DAMAGE_MUL, -0.50)
 GM:AddSkillModifier(SKILL_QUALITY, SKILLMOD_AIMSPREAD_MUL, -0.20)
 
-GM:AddSkillModifier(SKILL_REPULLER, SKILLMOD_AIMSPREAD_MUL, 0.10)
+GM:AddSkillModifier(SKILL_REPULLER, SKILLMOD_AIMSPREAD_MUL, 0.15)
 
 
 GM:AddSkillModifier(SKILL_BATTLER1, SKILLMOD_RELOADSPEED_MUL, -0.02)
