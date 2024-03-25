@@ -268,6 +268,10 @@ function meta:DrawCrosshairDot()
 		local med = math.max(0,math.Round(MySelf:GetNWFloat("deepfocus_cd")-CurTime(),1))
 		draw.SimpleText("(E + R)Войти в фокус:"..med,"ZSHUDFontSmallest", localx, y+yadd*BetterScreenScale(), med == 0 and COLOR_GREEN or COLOR_RED, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		yadd = yadd + 20 * screen
+		if med >= 8 then
+			draw.SimpleText("ГЛУБОКИЙ ФОКУС: "..med-8,"ZSHUDFontSmallest", localx, y+yadd*BetterScreenScale(),  COLOR_CYAN, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+			yadd = yadd + 20 * screen
+		end
 	end
 	local mich = MySelf:GetDTEntity(5)
 	if MySelf:IsSkillActive(SKILL_S_CINDERELA_B2) and mich:IsValid() and mich:GetStatus('c_buff') then

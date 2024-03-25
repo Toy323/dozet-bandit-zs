@@ -1426,6 +1426,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.ColdUsed = 0
 	self:LoadVault(pl)
 	pl:ApplySkills()
+	pl:SendLua('MySelf:ApplySkills()')
 	if pl:IsSkillActive(SKILL_S_STAR_PLATINUM) then
 		pl:Give('weapon_zs_fists')
 	end
@@ -2378,6 +2379,7 @@ function GM:KeyPress(pl, key)
 				pl.DeepFocuses = true
 				pl:UpdateFocus(true)
 				pl:Fire( "alpha", 0, 0 )
+				pl:RemoveAllDecals()
 				pl:ResetSpeed()
 				pl:DrawWorldModel( false )
 				pl:DrawShadow( false )
@@ -2920,6 +2922,7 @@ function GM:PlayerSpawn(pl)
 		pl:SetNoTarget(false)
 		pl.SkillUsed = false
 		pl:ApplySkills()
+		pl:SendLua('MySelf:ApplySkills()')
 		if pl:IsSkillActive(SKILL_S_STAR_PLATINUM) then
 			pl:Give('weapon_zs_fists')
 		end
@@ -2969,6 +2972,7 @@ function GM:WaveStarted()
 	local players = player.GetAllActive()
 	for _, pl in pairs(players) do
 		pl:ApplySkills()
+		pl:SendLua('MySelf:ApplySkills()')
 		pl:GodDisable()
 		if not pl:Alive() then
 			local teamspawns = {}

@@ -64,7 +64,7 @@ function SWEP:Think()
 		mul = mul + 1.5
 	end
 	if owner:IsSkillActive(SKILL_FOLGA) then
-		mul = mul + 1.5
+		return
 	end
 	if CLIENT and GAMEMODE:GetWaveActive() and self.LastScan + (self.ScanDelay * mul ) <= CurTime() then
 		self.targets = {}
@@ -109,36 +109,36 @@ if not CLIENT then return end
 local texGradDown = surface.GetTextureID("VGUI/gradient_down")
 function SWEP:DrawHUD()
 	if GAMEMODE:GetWaveActive() then
-	for _, pos in pairs(self.targets) do
-		self:DrawTarget(pos,18,0)
-	end
-	for _, pos in pairs(self.targets1) do
-		for _, ent1 in pairs(ents.FindInSphere(self:GetOwner():GetPos(), 600)) do
-			if ent1 ~= self:GetOwner() and ent1:IsPlayer() then
-				self:DrawLowTgt(pos,18,0)
+		for _, pos in pairs(self.targets) do
+			self:DrawTarget(pos,18,0)
+		end
+		for _, pos in pairs(self.targets1) do
+			for _, ent1 in pairs(ents.FindInSphere(self:GetOwner():GetPos(), 600)) do
+				if ent1 ~= self:GetOwner() and ent1:IsPlayer() then
+					self:DrawLowTgt(pos,18,0)
+				end
 			end
 		end
-	end
-	local mul = 1
-	if self:GetOwner():IsSkillActive(SKILL_AUTOSCAN) then
-		mul = mul + 1.5
-	end
-	local scrW = ScrW()
-	local scrH = ScrH()
-	local width = 200
-	local height = 20
-	local x, y = ScrW() - width - 32, ScrH() - height - 72
-	local ratio = math.Clamp((CurTime() - self.LastScan) / self.ScanDelay / mul,0,1)
-	
-	surface.SetDrawColor(5, 5, 5, 180)
-	surface.DrawRect(x, y, width, height)
+		local mul = 1
+		if self:GetOwner():IsSkillActive(SKILL_AUTOSCAN) then
+			mul = mul + 1.5
+		end
+		local scrW = ScrW()
+		local scrH = ScrH()
+		local width = 200
+		local height = 20
+		local x, y = ScrW() - width - 32, ScrH() - height - 72
+		local ratio = math.Clamp((CurTime() - self.LastScan) / self.ScanDelay / mul,0,1)
+		
+		surface.SetDrawColor(5, 5, 5, 180)
+		surface.DrawRect(x, y, width, height)
 
-	surface.SetDrawColor(255, 0, 0, 180)
-	surface.SetTexture(texGradDown)
-	surface.DrawTexturedRect(x, y, width*ratio, height)
+		surface.SetDrawColor(255, 0, 0, 180)
+		surface.SetTexture(texGradDown)
+		surface.DrawTexturedRect(x, y, width*ratio, height)
 
-	surface.SetDrawColor(255, 0, 0, 180)
-	surface.DrawOutlinedRect(x - 1, y - 1, width + 2, height + 2)
+		surface.SetDrawColor(255, 0, 0, 180)
+		surface.DrawOutlinedRect(x - 1, y - 1, width + 2, height + 2)
 	end
 
 	if self.BaseClass.DrawHUD then

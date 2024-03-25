@@ -524,7 +524,7 @@ GM:AddSkill(SKILL_DANGER_RADIOWAVES, translate.Get("skill_radiodanger"), GOOD..t
 																-9,			-1,					{SKILL_COLD_REFUSION}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_COLD_REFUSION, "Холодный распад", GOOD.."Радар наносит холод врагам.\n"..BAD.."Радар не наносит урона",
 																-9,			-2,					{SKILL_FOLGA}, TREE_BUILDINGTREE)
-GM:AddSkill(SKILL_FOLGA, "Шапочка из фольги", GOOD.."Урон от радиактивной силы отражается противнику.\n"..BAD.."Кулдаун радара +150%.",
+GM:AddSkill(SKILL_FOLGA, "Шапочка из фольги", GOOD.."Урон от радиактивной силы отражается противнику.\n"..BAD.."Не позволяет использовать сканнер и автоскан.",
 																-9,			-3,					{}, TREE_BUILDINGTREE)
 GM:AddSkill(SKILL_MODE_WHIRLWHIND, translate.Get("skill_mode_whirlwind"), GOOD..translate.Get("skill_mode_whirlwind_d1")..BAD..translate.Get("skill_mode_whirlwind_d2"),
 																-6,			-7,					{}, TREE_BUILDINGTREE)

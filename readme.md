@@ -52,3 +52,13 @@ Visit the [related wiki pages](https://github.com/AirRice/zs_banditwarfare/wiki)
  - More weapons!
 
 (Also this gamemode need this content for stable work [content](https://steamcommunity.com/sharedfiles/filedetails/?id=2796212380))
+
+
+
+
+
+
+
+
+
+(мне лень делать перевод на инлиш,так что помогите если хотите☠️)

@@ -152,7 +152,7 @@ function GM:_PostDrawOpaqueRenderables()
 		end
 end
 function GM:DrawNearestEnemy()
-	if !MySelf:IsSkillActive(SKILL_AUTOSCAN) or not self.Auras then return end
+	if !MySelf:IsSkillActive(SKILL_AUTOSCAN) or not self.Auras or MySelf:IsSkillActive(SKILL_FOLGA) then return end
 
 	local eyepos = EyePos()
 	local range, dist, healthfrac, pos, size
