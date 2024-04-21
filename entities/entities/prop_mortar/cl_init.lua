@@ -1,6 +1,8 @@
 include("shared.lua")
+include("cl_animations.lua")
 
 ENT.NextEmit = 0
+
 
 function ENT:Initialize()
 	self.BeamColor = Color(0, 255, 0, 255)
@@ -31,11 +33,20 @@ function ENT:Think()
 		self.ScanningSound:Stop()
 		self.ShootingSound:Stop()
 	end
+	if !self.CreatedModels then
+		if self.WElements then
+			self.ShowBaseModel = true
+			self.WElements = table.FullCopy(self.WElements)
+			self:CreateModels(self.WElements)
+			self.CreatedModels = true
+		end
+	end
 end
 
 function ENT:OnRemove()
 	self.ScanningSound:Stop()
 	self.ShootingSound:Stop()
+	self:RemoveModels()
 end
 
 function ENT:SetObjectHealth(health)
@@ -49,21 +60,23 @@ local surface_DrawRect = surface.DrawRect
 local cam_Start3D2D = cam.Start3D2D
 local cam_End3D2D = cam.End3D2D
 local smokegravity = Vector(0, 0, 200)
-local aScreen = Angle(0, 270, 60)
-local vScreen = Vector(0, -2, 45)
+local aScreen = Angle(-5, 270, 51)
+local vScreen = Vector(0, -2, 5)
 local Colors = {
-Color(156,156,156),
-Color(94,23,23),
-Color(0,94,5),
-Color(0,7,112),
+[3] = Color(156,156,156),
+[4] =Color(94,23,23), [5] =
+Color(0,94,5), [6] =
+Color(0,7,112), [7] =
 Color(218,149,0)
 }
+local fix = Angle(5,0,9)
 function ENT:Draw()
 	self:CalculatePoseAngles()
 	self:SetPoseParameter("aim_yaw", self.PoseYaw)
 	self:SetPoseParameter("aim_pitch", self.PosePitch)
 
-	self:DrawModel()
+	--self:DrawModel()
+	self:RenderModels()
 
 	local healthpercent = self:GetObjectHealth() / self:GetMaxObjectHealth()
 
@@ -127,20 +140,21 @@ function ENT:Draw()
 		draw_SimpleText("УЛУЧШЕНИЙ: "..self:GetUpgrade(), "DefaultFontBold", x, 68, Colors[self:GetUpgrade()], TEXT_ALIGN_CENTER)
 		
 		if ammo > 0 then
-			draw_SimpleText("["..ammo.." / "..self.MaxAmmo.."]", "DefaultFontBold", x, 55, COLOR_WHITE, TEXT_ALIGN_CENTER)
+			draw_SimpleText("["..ammo.." / "..self:GetMaxAmmo().."]", "DefaultFontBold", x, 55, COLOR_WHITE, TEXT_ALIGN_CENTER)
 		elseif flash then
 			draw_SimpleText(translate.Get("empty"), "DefaultFontBold", x, 55, COLOR_RED, TEXT_ALIGN_CENTER)
 		end
 	cam_End3D2D()
 end
-
 local matBeam = Material("trails/laser")
 local matGlow = Material("sprites/glow04_noz")
 local colAlpha, colAlpha2 = Color( 0, 197, 197, 45), Color( 255, 255, 255, 72) 
+local vecAdd = Vector(0,0,15)
+
 function ENT:DrawTranslucent()
 	if self:GetMaterial() ~= "" then return end
 
-	local lightpos = self:LightPos()
+	local lightpos = self:LightPos() + vecAdd
 
 	local ang = self:GetGunAngles()
 	
@@ -153,7 +167,7 @@ function ENT:DrawTranslucent()
 	local manualcontrol = self:GetManualControl()
 	local waveactive = GAMEMODE:GetWaveActive()
 
-	local tr = util.TraceLine({start = lightpos + ang:Forward(), endpos = lightpos + ang:Forward() * 4096, mask = MASK_SHOT, filter = self:GetCachedScanFilter()})
+	local tr = util.TraceLine({start = lightpos + ang:Forward(), endpos = owner:GetEyeTrace().HitPos, mask = MASK_SHOT, filter = self:GetCachedScanFilter()})
 
 	if not hasowner then
 		colBeam.r = 0
@@ -167,7 +181,7 @@ function ENT:DrawTranslucent()
 		colBeam.r = 130
 		colBeam.g = 130
 		colBeam.b = 130
-	elseif (owner:Team() == TEAM_BANDIT or owner:Team()  == TEAM_HUMAN) then
+	elseif (owner:Team() == TEAM_BANDIT or owner:Team()  == TEAM_HUMAN) and MySelf == owner and self:GetManualControl() then
 		local colTeam = team.GetColor(owner:Team())
 		colBeam.r = colTeam.r
 		colBeam.g = colTeam.g
@@ -182,21 +196,5 @@ function ENT:DrawTranslucent()
 	render.SetMaterial(matGlow)
 	render.DrawSprite(lightpos, 4, 4, COLOR_WHITE)
 	render.DrawSprite(lightpos, 16, 16, colBeam)
-	if self:GetUpgrade() < 5 or !WorldVisible(self:GetPos(), MySelf:EyePos()) then return end
-	render.SetColorMaterial()
-	local pos = self:GetUp()*30 + self:GetPos()
-	
-	local radius = math.min(40, 40*(self:GetShieldDamage()/self.MaxShieldCapacity))
-	local wideSteps = 15
-	local tallSteps = 15
-	
-	render.DrawSphere( pos, radius, wideSteps, tallSteps, colAlpha)
-	
-	render.DrawWireframeSphere( pos, radius, wideSteps, tallSteps, colAlpha2 )
-end
-net.Receive("zs_bounty_open", function(length)
-	local tables = net.ReadTable()
-	local ent = net.ReadEntity()
 
-	GAMEMODE:OpenBounty(tables,ent)	
-end)
+end

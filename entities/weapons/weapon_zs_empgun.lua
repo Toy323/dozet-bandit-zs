@@ -134,7 +134,8 @@ function BulletCallback(attacker, tr, dmginfo)
 					ent:SetLocalVelocity( ent:GetVelocity() + tr.Normal*500)
 				end
 			elseif ent.IsBarricadeObject and not ent:IsSameTeam(attacker) and SERVER then
-				ent:TakeDamage(ent:GetObjectHealth(),attacker,dmginfo:GetInflictor())
+				local max = (ent.MaxUpgrades or 5)
+				ent:TakeDamage(ent:GetObjectHealth()*(ent.GetUpgrades and ((max+1)-ent:GetUpgrades())/max or 1),attacker,dmginfo:GetInflictor())
 				--ent:TakeSpecialDamage(self.Primary.Damage*2.5, DMG_DISSOLVE, owner, self)
 			end
 		else

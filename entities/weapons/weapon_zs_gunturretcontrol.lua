@@ -56,7 +56,10 @@ function SWEP:Think()
 	end
 
 	if SERVER then
-		for _, ent in pairs(ents.FindByClass("prop_gunturret")) do
+		local table2 = ents.FindByClass("prop_gunturret")
+		table.Add(table2,ents.FindByClass("prop_mortar"))
+		table.Add(table2,ents.FindByClass("prop_laser_turret"))
+		for _, ent in pairs(table2) do
 			if ent:GetObjectOwner() == self:GetOwner() then
 				return
 			end

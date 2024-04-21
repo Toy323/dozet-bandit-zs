@@ -316,6 +316,12 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_pls_kill_pl")
 	util.AddNetworkString("zs_pl_kill_self")
 	util.AddNetworkString("zs_death")
+
+	util.AddNetworkString("zs_bounty_add")
+	
+	util.AddNetworkString("zs_hah")
+
+	util.AddNetworkString("zs_bounty_open")
 	
 	util.AddNetworkString("bw_fire")
 end
@@ -806,7 +812,7 @@ function GM:Think()
 					pl:Kill()
 					return
 				end
-				pl:AddCold(-1 * (self:GetSpecialWave() == "coldera" and -0.25 or 1))
+				pl:AddCold(-1 * (self:GetSpecialWave() == "coldera" and -0.5 or 1))
 			end
 
 			
@@ -1426,7 +1432,6 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl.ColdUsed = 0
 	self:LoadVault(pl)
 	pl:ApplySkills()
-	pl:SendLua('MySelf:ApplySkills()')
 	if pl:IsSkillActive(SKILL_S_STAR_PLATINUM) then
 		pl:Give('weapon_zs_fists')
 	end
@@ -2922,7 +2927,7 @@ function GM:PlayerSpawn(pl)
 		pl:SetNoTarget(false)
 		pl.SkillUsed = false
 		pl:ApplySkills()
-		pl:SendLua('MySelf:ApplySkills()')
+		pl:SendLua(' if MySelf:IsValid() then MySelf:ApplySkills() end')
 		if pl:IsSkillActive(SKILL_S_STAR_PLATINUM) then
 			pl:Give('weapon_zs_fists')
 		end
@@ -2972,7 +2977,7 @@ function GM:WaveStarted()
 	local players = player.GetAllActive()
 	for _, pl in pairs(players) do
 		pl:ApplySkills()
-		pl:SendLua('MySelf:ApplySkills()')
+		pl:SendLua(' if MySelf:IsValid() then MySelf:ApplySkills() end')
 		pl:GodDisable()
 		if not pl:Alive() then
 			local teamspawns = {}
@@ -3154,6 +3159,8 @@ function GM:WaveEnded()
 	local deployables = ents.FindByClass("prop_drone")
 	table.Add(deployables, ents.FindByClass("prop_manhack*"))
 	table.Add(deployables, ents.FindByClass("prop_gunturret"))
+	table.Add(deployables, ents.FindByClass("prop_laser_turret"))
+	table.Add(deployables, ents.FindByClass("prop_mortar"))
 	table.Add(deployables, ents.FindByClass("prop_detpack"))
 	for _, ent in pairs(deployables) do
 		local owner = ent.GetOwner and ent:GetOwner():IsValid() and ent:GetOwner():IsPlayer() and ent:GetOwner() or ent.GetObjectOwner and ent:GetObjectOwner():IsValid() and ent:GetObjectOwner():IsPlayer() and ent:GetObjectOwner()
@@ -3165,14 +3172,13 @@ function GM:WaveEnded()
 	end
 	timer.Simple(1, function() self:SetCurrentWaveWinner(nil) end)
 end
-
+local specialwaves = {"1hp", "anubis", "bhop", "aos", "doa", "old", 'coldera', "urmteam"}
 function GM:ActivateSpecialWave(force)
 	local wave = ""
 	if force then
 		wave = force or "1hp"
 	end
 	if wave == nil or wave == "" then
-		local specialwaves = {"1hp", "anubis", "bhop", "aos", "doa", "old", 'coldera'}
 		wave = table.Random(specialwaves)
 	end
 	
@@ -3182,17 +3188,17 @@ function GM:ActivateSpecialWave(force)
 	self.SpecialWave = wave
 	if wave == "1hp" then
 		timer.Simple(0.5, function() for _, pl in pairs(player.GetAll()) do if pl:IsValid() then pl:SetHealth(1) end end end)
-	end
-	if wave == "old" then
+	elseif wave == "old" then
 		timer.Simple(2.5, function() for _, pl in pairs(player.GetAll()) do if pl:IsValid() then pl:ApplySkills({}) pl:SendLua('MySelf:ApplySkills()') end end end)
-	end
-	if wave == "doa" then
+	elseif wave == "urmteam" then
+		local randmodel = player.GetAll()[math.random(1,#player.GetAll())]:GetModel()
+		timer.Simple(.5, function() for _, pl in pairs(player.GetAll()) do if pl:IsValid() then pl:SetModel(randmodel) pl:SetColor(COLOR_RED) 	pl:SetNoCollideWithTeammates(false) end end end)
+	elseif wave == "doa" then
 		local bdoa = table.Random(team.GetPlayers(TEAM_BANDIT))
 		local hdoa = table.Random(team.GetPlayers(TEAM_HUMAN))
 		bdoa:SetDOAMan(true)
 		hdoa:SetDOAMan(true)
-	end
-	if wave == "aos" then
+	elseif wave == "aos" then
 		timer.Simple(0.5, function() 
 			for _, pl in pairs(player.GetAll()) do
 				if pl:IsValid() then
@@ -3220,6 +3226,7 @@ function GM:WaveStateChanged(newstate)
 					pl:SetViewOffsetDucked(DEFAULT_VIEW_OFFSET_DUCKED)
 					pl:ResetSpeed()
 					pl:SetDOAMan(false)
+					pl:SendLua('GAMEMODE.SpecialWave = ""')
 				end
 			end)
 		end

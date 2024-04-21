@@ -237,3 +237,81 @@ function MakepOptions()
 	Window:MakePopup()
 
 end
+--turrets
+
+local colBG = Color( 10, 10, 10, 252 )
+local colBGH = Color( 200, 200, 200, 5 )
+local blur = Material( "pp/blurscreen" )
+
+local function TrinketPanelPaint( self, w, h )
+	draw.RoundedBox( 2, 0, 0, w, h, ( self.Depressed or self.On) and Color(80,80,80) or COLOR_RED  )
+
+	draw.RoundedBox( 2, 2, 2, w - 4, h - 4, colBG )
+	if self.On or self.Hovered  then
+		draw.RoundedBox( 2, 2, 2, w - 4, h - 4, colBGH )
+	end
+
+	if self.Item then
+		draw.SimpleText( self.Item[1], "ZSHUDFontTiny", w/2, h/6, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )	
+	end
+
+	return true
+end
+local function ItemPanelDoClick(self)
+	net.Start("zs_bounty_add")
+	net.WriteString(self.Item[3])
+	net.WriteEntity(self.Owner.Ent)
+	net.SendToServer()
+	self.Owner:Close()
+
+end
+local function InventoryAdd( item, category, i, self,custom)
+	local screenscale = BetterScreenScale()
+		local itempan = vgui.Create("DButton", self)
+		itempan:SetText( "" )
+		itempan.Paint = TrinketPanelPaint
+
+		itempan.Owner = self
+		itempan.Item = item
+		itempan.SWEP =  custom 
+		itempan.DoClick = ItemPanelDoClick
+		itempan.Category = category
+		itempan:Center()
+		itempan:SetSize(250 * screenscale,400 * screenscale)
+		itempan:SetPos(300 * screenscale * i - 200 * screenscale,itempan:GetY()-180*screenscale)
+
+		local desc = vgui.Create("DLabel", itempan)
+		desc:SetSize(250 * screenscale,400 * screenscale)
+		desc:SetFont("ZSHUDFontTiny")
+		desc:SetWrap(true)
+
+		desc:SetText(item[2])
+
+		local mdlframe = vgui.Create("DPanel", itempan)
+		mdlframe:SizeToContents()
+		mdlframe:Center()
+		mdlframe:SetPos(400 * screenscale * i,screenscale*0.5)
+		mdlframe:SetMouseInputEnabled( false )
+		mdlframe.Paint = function() end
+
+
+		
+		local kitbl = killicon.Get("weapon_zs_craftables")
+		if kitbl then
+			GAMEMODE:AttachKillicon(kitbl, itempan, mdlframe)
+		end
+
+end
+function GM:OpenBounty(table2, ent)
+	local scr = BetterScreenScale()
+    local panel = vgui.Create("DFrame")
+    panel:SetSize(1000*scr, 500*scr)
+    panel:SetTitle("Выбери улучшение туррели")
+    panel:Center()
+    panel:MakePopup()
+	panel:SetDraggable(false)
+	panel.Ent = ent
+	for i=1,#table2 do
+		InventoryAdd(table2[i],INVCAT_TRINKETS,i,panel)
+	end
+end

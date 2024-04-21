@@ -386,7 +386,7 @@ function GM:_Think()
 	end
 	local myteam = MySelf:Team()
 	self:PlayBeats()
-	if myteam == TEAM_HUMAN or myteam == TEAM_BANDIT then
+	if (myteam == TEAM_HUMAN or myteam == TEAM_BANDIT) and self:GetSpecialWave() ~= "urmteam" then
 		local wep = MySelf:GetActiveWeapon()
 		if wep:IsValid() and wep.GetIronsights and wep:GetIronsights() then
 			self.FOVLerp = math.Approach(self.FOVLerp, wep.IronsightsMultiplier or 0.6, FrameTime() * 4)
@@ -720,7 +720,7 @@ function GM:_PostDrawTranslucentRenderables()
 		self:DrawStarIndicators()
 		self:DrawNearestEnemy()
 	end
-	if self.ShowIndicators then
+	if self.ShowIndicators and self:GetSpecialWave() ~= "urmteam" then
 		local plys = team.GetPlayers(MySelf:Team())
 		local indicator_col = team.GetColor(MySelf:Team())
 		local dir = MySelf:GetForward() * -1
@@ -778,6 +778,8 @@ function GM:CreateFonts()
 	surface.CreateLegacyFont("csd", 42, 500, true, false, "healthsign", false, true)
 	surface.CreateLegacyFont("tahoma", 96, 1000, true, false, "zshintfont", false, true)
 
+	
+	surface.CreateLegacyFont(fontfamily3d, 24, fontweight3D, false, false,  "ZS3D2DFontSmallest", false, true, false, true)
 	surface.CreateLegacyFont(fontfamily3d, 48, fontweight3D, false, false,  "ZS3D2DFontSmall", false, true, false, true)
 	surface.CreateLegacyFont(fontfamily3d, 72, fontweight3D, false, false, "ZS3D2DFont", false, true, false, true)
 	surface.CreateLegacyFont(fontfamily3d, 128, fontweight3D, false, false, "ZS3D2DFontBig", false, true, false, true)
@@ -786,6 +788,7 @@ function GM:CreateFonts()
 	surface.CreateLegacyFont(fontfamily3d, 128, fontweight3D, false, false, "ZS3D2DFontBigBlur", false, false, 16, true)
 	surface.CreateLegacyFont(fontfamily, 40, fontweight3D, false, false,  "ZS3D2DFont2Smaller", false, true, false, true)
 	surface.CreateLegacyFont(fontfamily, 48, fontweight3D, false, false,  "ZS3D2DFont2Small", false, true, false, true)
+	surface.CreateLegacyFont(fontfamily, 48, fontweight3D, false, false,  "ZS3D2DFont2Smallest", false, true, false, true)
 	surface.CreateLegacyFont(fontfamily, 72, fontweight3D, false, false, "ZS3D2DFont2", false, true, false, true)
 	surface.CreateLegacyFont(fontfamily, 128, fontweight3D, false, false, "ZS3D2DFont2Big", false, true, false, true)
 	surface.CreateLegacyFont(fontfamily, 40, fontweight3D, false, false,  "ZS3D2DFont2SmallerBlur", false, false, 16, true)
@@ -1779,6 +1782,7 @@ net.Receive("zs_special_wave", function(length)
 	local special = net.ReadString()
 	GAMEMODE:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", COLOR_RED, translate.Get("sp_"..special), {killicon = "default"})
 	GAMEMODE:CenterNotify({killicon = "default"}, " ", COLOR_RED, translate.Get("sp_d_"..special), {killicon = "default"})
+	GAMEMODE.SpecialWave = special
 end)
 
 net.Receive("zs_wavewonby", function(length)

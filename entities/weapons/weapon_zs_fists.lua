@@ -298,15 +298,21 @@ function SWEP:Holster(wep)
 end
 
 function SWEP:Deploy()
-	local vm = self:GetOwner():GetViewModel()
+	local owner = self:GetOwner()
+	local vm = owner:GetViewModel()
 	vm:SendViewModelMatchingSequence(vm:LookupSequence("fists_draw"))
 
 	self:UpdateNextIdle()
+	if !owner:IsSkillActive(SKILL_S_STAR_PLATINUM) and SERVER then
+		self:Remove()
+		owner:SelectWeapon(table.Random(owner:GetWeapons()))
+		return false
+	end
 
 	if SERVER then
 		self:SetCombo(0)
 	end
-	self:GetOwner():ResetSpeed()
+	owner:ResetSpeed()
 	return true
 end
 

@@ -8,6 +8,17 @@ ENT.NoNails = true
 ENT.IsBarricadeObject = true
 ENT.AlwaysGhostable = true
 
+ENT.MaxUpgrades = 3
+ENT.UpgradeCost = 14
+--ENT.AvailableUpgrades = 2
+
+
+function ENT:GetUpgrade()
+	return self:GetDTInt(12)
+end
+function ENT:SetUpgrade(upg)
+	return self:SetDTInt(12, upg)
+end
 function ENT:SetObjectOwner(owner)
 	self:SetDTEntity(0, owner)
 end
@@ -28,6 +39,9 @@ function ENT:SetObjectHealth(health)
 		end
 	end
 end
+
+ENT.WhatUpgradeGive = { ["Доп.Радиус защиты"] = {20,0,1}
+}
 
 function ENT:GetObjectHealth()
 	return self:GetDTFloat(0)

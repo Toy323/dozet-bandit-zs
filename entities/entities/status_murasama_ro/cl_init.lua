@@ -17,26 +17,7 @@ function ENT:Draw()
 	if not ent:IsValid() then return end
 	
 	local pos = GetRandomBonePos(ent)
-	--[[	for i=1,2 do
-				local emitter = ParticleEmitter(self:GetPos())
-				emitter:SetNearClip(24, 32)
-				local particle = emitter:Add("effects/yellowflare", pos)
-				particle:SetVelocity(ent:GetVelocity())
-				particle:SetDieTime(1.9)
-				particle:SetStartAlpha(255)
-				particle:SetEndAlpha(255)
-				particle:SetStartSize(5)
-				particle:SetEndSize(8)
-				particle:SetColor(201,200,90)
-				particle:SetRoll(math.Rand(180, 360))
-				particle:SetRollDelta(math.Rand(-4, 4))
-				particle:SetGravity(Vector(0, 0, math.Rand(90,240)))
-				particle:SetAirResistance(50)
-				
-				
-				emitter:Finish()
-		end]]
-	--	print(GetRandomBonePos(ent))
+
 		render.SetMaterial(matTrail)
 		for i=1, #self.TrailPositions do
 			if self.TrailPositions[i+1] then

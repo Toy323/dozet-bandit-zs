@@ -30,10 +30,10 @@ SWEP.Primary.NumShots = 1
 SWEP.Primary.Delay = 0.45
 SWEP.Recoil = 0.79
 SWEP.DefaultRecoil = 0.89
-SWEP.Primary.ClipSize = 12
+SWEP.Primary.ClipSize = 7
 SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "357"
-SWEP.Primary.DefaultClip = 24
+SWEP.Primary.DefaultClip = 14
 
 SWEP.Primary.Gesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_CROSSBOW
 SWEP.ReloadGesture = ACT_HL2MP_GESTURE_RELOAD_SHOTGUN

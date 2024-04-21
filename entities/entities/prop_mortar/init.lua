@@ -1,5 +1,7 @@
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
+AddCSLuaFile("cl_animations.lua")
+
 
 include("shared.lua")
 
@@ -10,7 +12,7 @@ ENT.ConeMin = 0.015
 ENT.NextAmmoGive = 0
 
 local function RefreshTurretOwners(pl)
-	for _, ent in pairs(ents.FindByClass("prop_gunturret")) do
+	for _, ent in pairs(ents.FindByClass("prop_mortar")) do
 		if ent:IsValid() and ent:GetObjectOwner() == pl then
 			ent:ClearObjectOwner()
 			ent:ClearTarget()
@@ -21,7 +23,9 @@ hook.Add("PlayerDisconnected", "GunTurret.PlayerDisconnected", RefreshTurretOwne
 hook.Add("PlayerChangedTeam", "GunTurret.PlayerChangedTeam", RefreshTurretOwners)
 
 function ENT:Initialize()
-	self:SetModel("models/Combine_turrets/Floor_turret.mdl")
+	self:SetModel("models/weapons/w_pistol.mdl")
+	self:SetAngles(self:GetAngles()+Angle(5,0,9))
+	self:SetModelScale(5)
 	self:PhysicsInit(SOLID_VPHYSICS)
 
 	self:SetUseType(SIMPLE_USE)
@@ -116,42 +120,44 @@ function ENT:UpdateCone()
 		end
 	end)
 end
-
+local function getvel( dist, ang, mass )
+	ang = math.rad(ang)
+    local g = dist^1.02
+	--print(g)
+	g = g < 400 and 600 or g
+    return (( dist * g )^0.5) / math.abs( math.sin( 2 * ang ) )
+end
 function ENT:FireTurret(src, dir)
 	if self:GetNextFire() <= CurTime() then
 		local curammo = self:GetAmmo()
 		if curammo > 0 then
 			self:UpdateCone()
 			local owner  = self:GetObjectOwner()
-			self:SetNextFire(CurTime() + (owner:IsSkillActive(SKILL_TURRET_BUFF) and 0.06 or 0.12))
+			self:SetNextFire(CurTime() + 2)
 			self:SetAmmo(curammo - 1)
 			self:StartBulletKnockback()
 			self:PlayShootSound()
-			local upgrade = self:GetUpgrade() 
-			if upgrade > 0 then
-				local chance = 100 - upgrade
-				if math.random(chance) <= 5 then
-					local ent = ents.Create('projectile_mp1_grenade')
-					if ent:IsValid() then
-						ent:SetPos(self:GetPos()+Vector(0,0,50)+dir)
-						ent:SetAngles(dir:Angle())
-						ent:SetOwner(owner)
-						ent:Spawn()
-						ent.Damage = 14
-						local phys = ent:GetPhysicsObject()
-						if phys:IsValid() then
-							phys:Wake()
-							phys:SetVelocity(dir *2300)
-						end
-					end
-					return
+			local ent = ents.Create('projectile_mortir')
+			local pos = owner:GetEyeTrace().HitPos 
+			local dir = pos - self:GetPos()
+			if ent:IsValid() then
+				ent:SetPos(self:GetPos())
+				ent:SetAngles(dir:Angle())
+				ent:SetOwner(owner)
+				ent:Spawn()
+				ent.Damage = self.BaseDamageST + 7 * self:GetUpgrade()
+				local phys = ent:GetPhysicsObject()
+				if phys:IsValid() then
+					local dira = dir:Angle()
+					dira.p = 0
+					local dist = self:GetPos():Distance(pos)
+					local angle = dist < 1080 and 55 or 45
+					--print(dist)
+					phys:Wake()
+					phys:ApplyForceCenter((dira + Angle(-angle,0,0)):Forward()* getvel(dist, angle ) )
 				end
+				ent.ShieldFree = true
 			end
-			local da = owner:IsSkillActive(SKILL_TURRET_MAN)
-			local numbers = da and (12 - upgrade) or 1
-			self:FireBullets({Num = 1, Src = src, Dir = dir, Spread = Vector(self:GetCone() * numbers, self:GetCone()*numbers, 0), Tracer = 1, Force = 1, Damage = (self.BaseDamageST +upgrade)  * (da and 2 or 1), Callback = BulletCallback, IgnoreEntity = owner or nil})
-			self:DoBulletKnockback(0.01)
-			self:EndBulletKnockback()
 		else
 			self:SetNextFire(CurTime() + 2)
 			self:EmitSound("npc/turret_floor/die.wav")
@@ -167,9 +173,9 @@ function ENT:Think()
 	self:CalculatePoseAngles()
 
 	local owner = self:GetObjectOwner()
-	if self.NextAmmoGive < CurTime() and self:GetAmmo() < 300 then
-		self.NextAmmoGive = CurTime() + 0.5
+	if self.NextShield < CurTime() then
 		self:SetAmmo(self:GetAmmo()+1)
+		self.NextShield = CurTime() + 10
 	end
 	if owner:IsValid() and self:GetAmmo() > 0 and self:GetMaterial() == "" and GAMEMODE:GetWaveActive() then
 		if self:GetManualControl() then
@@ -230,15 +236,6 @@ function ENT:Use(activator, caller)
 		if not activator:HasWeapon("weapon_zs_gunturretcontrol") then
 			activator:Give("weapon_zs_gunturretcontrol")
 		end
-		return
-	end
-	if self:GetUpgrade() == self.MaxUpgrades and activator == self:GetObjectOwner() then
-		net.Start('zs_bounty_open')
-		net.WriteTable({{'Мортира',"Кидает снаряды в врагов.Поджигает при попадании.\nЭффективно на среднем расстоянии.\nНа больших картах самый сок!","mortar"},
-		{'Плазменная туррель',"Наносит невероятно сильный урон в секунду.\nЭффективно в близком расстоянии.\nПробивается сквозь защиту врага.\nВысокая трата патрон!!!","laser"}
-	})
-		net.WriteEntity(self)
-		net.Send(activator)
 	end
 end
 
@@ -250,7 +247,7 @@ function ENT:OnPackedUp(pl)
 	pl:GiveEmptyWeapon("weapon_zs_gunturret")
 	pl:GiveAmmo(1, "thumper")
 
-	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth(), self:GetAmmo(), self:GetUpgrade())
+	pl:PushPackedItem('prop_gunturret', self:GetObjectHealth(), self:GetAmmo(), self:GetUpgrade(), "mortar")
 
 	self:Remove()
 end
@@ -266,24 +263,3 @@ function ENT:OnTakeDamage(dmginfo)
 		self:SetObjectHealth(self:GetObjectHealth() - dmginfo:GetDamage())
 	end
 end
-ENT.UpgradesUp = {["mortar"] = "prop_mortar",["laser"] = "prop_laser_turret"}
-net.Receive("zs_bounty_add", function(length,pl)
-	local who = net.ReadString()
-	local ent2 = net.ReadEntity()
-	if IsValid(ent2) and ent2.GetUpgrade and ent2:GetUpgrade() == ent2.MaxUpgrades and ent2.UpgradesUp[who]  and pl == ent2:GetObjectOwner() then
-		local ent = ents.Create(ent2.UpgradesUp[who])
-		if ent:IsValid() then
-			ent:SetPos(ent2:GetPos() + Vector(0,0,19))
-			ent:SetAngles(ent2:GetAngles())
-			ent:Spawn()
-	
-			ent:SetObjectOwner(ent2:GetObjectOwner())
-	
-			ent:EmitSound("npc/dog/dog_servo12.wav")
-	
-			ent:GhostAllPlayersInMe(5)
-		end
-				
-		ent2:Remove()
-	end
-end)

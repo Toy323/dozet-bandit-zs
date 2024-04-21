@@ -29,8 +29,9 @@ SWEP.MeleeRange = 60
 SWEP.MeleeSize = 0.875
 if SERVER then
 	function SWEP:OnMeleeHit(hitent, hitflesh, tr)
-		if hitent:IsValid() and  hitent:GetClass() == "prop_gunturret" then
-			hitent:SetAmmo(hitent:GetAmmo() + 40)
+		local laser =  hitent:GetClass() == "prop_laser_turret"
+		if hitent:IsValid() and  (hitent:GetClass() == "prop_gunturret" or laser)  then
+			hitent:SetAmmo(hitent:GetAmmo() + 40*(laser and 3 or 1))
 		end
 		return self.BaseClass.OnMeleeHit(self, hitent, hitflesh, tr)
 	end

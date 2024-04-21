@@ -1,5 +1,7 @@
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
+AddCSLuaFile("cl_animations.lua")
+
 
 include("shared.lua")
 
@@ -9,8 +11,23 @@ ENT.ConeMax = 0.065
 ENT.ConeMin = 0.015
 ENT.NextAmmoGive = 0
 
+ENT.HeatBuildShort = 0.10
+ENT.HeatBuildLong = 0.045
+ENT.HeatVentShort = 0.16
+ENT.HeatVentLong = 0.13
+ENT.HeatDecayShort = 0.1
+ENT.HeatDecayLong = 0.01
+ENT.HeatInitialLong = 0.05
+
+ENT.WalkSpeed = SPEED_SLOWEST * 0.9
+ENT.FireAnimSpeed = 0.24
+ENT.FireSoundPitch = 125
+
+function ENT:StopGluonSounds()
+end
+
 local function RefreshTurretOwners(pl)
-	for _, ent in pairs(ents.FindByClass("prop_gunturret")) do
+	for _, ent in pairs(ents.FindByClass("prop_laser_turret")) do
 		if ent:IsValid() and ent:GetObjectOwner() == pl then
 			ent:ClearObjectOwner()
 			ent:ClearTarget()
@@ -21,7 +38,9 @@ hook.Add("PlayerDisconnected", "GunTurret.PlayerDisconnected", RefreshTurretOwne
 hook.Add("PlayerChangedTeam", "GunTurret.PlayerChangedTeam", RefreshTurretOwners)
 
 function ENT:Initialize()
-	self:SetModel("models/Combine_turrets/Floor_turret.mdl")
+	self:SetModel("models/combine_turrets/floor_turret.mdl")
+	self:SetAngles(self:GetAngles())
+	self:SetModelScale(1)
 	self:PhysicsInit(SOLID_VPHYSICS)
 
 	self:SetUseType(SIMPLE_USE)
@@ -33,10 +52,17 @@ function ENT:Initialize()
 		phys:Wake()
 	end
 
-	self:SetAmmo(self.DefaultAmmo)
-	self:SetMaxObjectHealth(110)
+	self:SetAmmo(0)
+	self:SetMaxObjectHealth(360)
 	self:SetObjectHealth(self:GetMaxObjectHealth())
 	hook.Add("SetupPlayerVisibility", self, self.SetupPlayerVisibility)
+
+
+	timer.Simple(0, function() self:SetPos(self:GetPos() - Vector(0,0,15)) end)
+	local owner = self:GetObjectOwner()
+	local timediff = owner.GluonInactiveTime and CurTime() - owner.GluonInactiveTime or 0
+	self:SetShortHeat(math.Clamp((owner.ShortGluonHeat or 0) - timediff * self.HeatDecayShort, 0, 1))
+	self:SetLongHeat(math.Clamp((owner.LongGluonHeat or 0) - timediff * self.HeatDecayLong, 0, 1))
 end
 
 function ENT:SetObjectHealth(health)
@@ -68,7 +94,7 @@ function ENT:DoBulletKnockback(scale)
 	end
 end
 
-local function BulletCallback(attacker, tr, dmginfo)
+local function BulletCallback2(attacker, tr, dmginfo)
 	local ent = tr.Entity
 	if ent:IsValid() then
 		if ent:IsPlayer() then
@@ -116,49 +142,146 @@ function ENT:UpdateCone()
 		end
 	end)
 end
+function ENT:StartFireSound()
+	self:EmitSound("ambient/machines/teleport1.wav", 75, 210)
+end
+function ENT:SetGunState(state)
+	self:SetDTInt(1, state)
+end
 
+function ENT:GetGunState(state)
+	return self:GetDTInt(1)
+end
+
+function ENT:SetAltUsage(usage)
+	self:SetDTBool(1, usage)
+end
+
+function ENT:GetAltUsage()
+	return self:GetDTBool(1)
+end
+
+function ENT:SetShortHeat(heat)
+	self:SetDTFloat(8, heat)
+end
+
+function ENT:GetShortHeat()
+	return self:GetDTFloat(8)
+end
+
+function ENT:SetLongHeat(heat)
+	self:SetDTFloat(9, heat)
+end
+
+function ENT:GetLongHeat()
+	return self:GetDTFloat(9)
+end
+function ENT:ManageHeat()
+	local owner = self:GetOwner()
+	if owner and owner:IsValid() then
+		local frametime = FrameTime()
+		if self:GetGunState() == 1 then
+			self.FiringSound:PlayEx(1, self.FireSoundPitch + CurTime() % 1)
+			self:SetShortHeat(math.min(self:GetShortHeat() + frametime * self.HeatBuildShort, 1))
+			self:SetLongHeat(math.min(self:GetLongHeat() + frametime * self.HeatBuildLong, 1))
+
+			if CLIENT then owner.GunSway = true end
+		elseif self:GetGunState() == 2 then
+			self.FiringSound:Stop()
+			if CLIENT then
+				owner.GunSway = false
+				self.VentingSound:PlayEx(1, 55 + CurTime() % 1)
+			end
+
+			local frametimeadj = frametime * self:GetReloadSpeedMultiplier()
+
+			self:SetShortHeat(math.max(self:GetShortHeat() - frametimeadj * self.HeatVentShort, 0))
+			self:SetLongHeat(math.max(self:GetLongHeat() - frametimeadj * self.HeatVentLong, 0))
+			self:SetNextFire(CurTime() + 0.25)
+
+			if self:GetLongHeat() == 0 and self:GetShortHeat() < self.HeatBuildShort then
+				self:SetGunState(0)
+				self:EmitSound("npc/scanner/combat_scan3.wav", 65, 90)
+			end
+		else
+			owner.GunSway = false
+			self:StopGluonSounds()
+			self:SetShortHeat(math.max(self:GetShortHeat() - frametime * self.HeatDecayShort, 0))
+			self:SetLongHeat(math.max(self:GetLongHeat() - frametime * self.HeatDecayLong, 0))
+		end
+	else
+		self:StopGluonSounds()
+	end
+end
+ENT.LastCharge = 0
+local function DoRicochet(attacker, hitpos, hitnormal, normal, damage, call)
+	attacker:FireBullets({Num = 1, Src = hitpos, Dir =  2 * hitnormal * hitnormal:Dot(normal * -1) + normal, Spread = Vector(0, 0, 0), Tracer = 1, TracerName = 'tracer_interception', Force = 1, Damage = damage, Callback = call})
+end
+local function DoTrace(attacker, hitpos, hitnormal, normal, damage, call, ent)
+	attacker:FireBullets({Num = 1, Src = hitpos, Dir = normal, Spread = Vector(0, 0, 0), Tracer = 1, TracerName = 'tracer_interception', Force = 1, Damage = damage, Callback = call,IgnoreEntity = ent})
+end
+function  ENT.BulletCallback(attacker, tr, dmginfo)
+	local ent = tr.Entity 
+	local hitpos, hitnormal, normal, dmg= tr.HitPos, tr.HitNormal, tr.Normal, dmginfo:GetDamage()
+	local inf = dmginfo:GetInflictor()
+	if inf and !inf.AntiCrash  then
+		inf.AntiCrash = 0
+	end
+	if inf.AntiCrash > 15 then
+		return
+	end
+	if ent and ent:IsValid() and ent:GetClass() == 'prop_ffemitterfield' and inf.Traced then
+		timer.Simple(0, function() 
+			DoRicochet(attacker, hitpos, hitnormal, normal, dmg,inf.BulletCallback) 
+		end)
+		inf.AntiCrash = inf.AntiCrash + 1
+	elseif ent and ent:IsValid() then
+		inf.AntiCrash = inf.AntiCrash + 1
+		if !inf.Traced then
+			inf.Traced = true
+			if  ent:GetClass() == 'prop_ffemitterfield' then
+				dmg = dmg*0.7
+			end
+		end
+		timer.Simple(0, function() 
+			DoTrace(attacker, hitpos, hitnormal, normal, dmg, inf.BulletCallback, ent) 
+		end)
+	end
+	BulletCallback2(attacker, tr, dmginfo)
+end
+ENT.AntiCrash = 0
 function ENT:FireTurret(src, dir)
 	if self:GetNextFire() <= CurTime() then
 		local curammo = self:GetAmmo()
 		if curammo > 0 then
 			self:UpdateCone()
 			local owner  = self:GetObjectOwner()
-			self:SetNextFire(CurTime() + (owner:IsSkillActive(SKILL_TURRET_BUFF) and 0.06 or 0.12))
-			self:SetAmmo(curammo - 1)
+			local upgrade = self:GetUpgrade()
+			self:SetNextFire(CurTime() + 0.07)
+			self.LastCharge = CurTime() + 2
+			self:SetAmmo(curammo - (1 + upgrade*3))
 			self:StartBulletKnockback()
 			self:PlayShootSound()
-			local upgrade = self:GetUpgrade() 
-			if upgrade > 0 then
-				local chance = 100 - upgrade
-				if math.random(chance) <= 5 then
-					local ent = ents.Create('projectile_mp1_grenade')
-					if ent:IsValid() then
-						ent:SetPos(self:GetPos()+Vector(0,0,50)+dir)
-						ent:SetAngles(dir:Angle())
-						ent:SetOwner(owner)
-						ent:Spawn()
-						ent.Damage = 14
-						local phys = ent:GetPhysicsObject()
-						if phys:IsValid() then
-							phys:Wake()
-							phys:SetVelocity(dir *2300)
-						end
-					end
-					return
-				end
-			end
-			local da = owner:IsSkillActive(SKILL_TURRET_MAN)
-			local numbers = da and (12 - upgrade) or 1
-			self:FireBullets({Num = 1, Src = src, Dir = dir, Spread = Vector(self:GetCone() * numbers, self:GetCone()*numbers, 0), Tracer = 1, Force = 1, Damage = (self.BaseDamageST +upgrade)  * (da and 2 or 1), Callback = BulletCallback, IgnoreEntity = owner or nil})
+			self.Traced = false
+			self:FireBullets({Num = 1, Src = src, Dir = dir, Spread = Vector(0, 0, 0), Tracer = 1,TracerName = 'tracer_interception', Force = 1, Damage = self.BaseDamageST +upgrade*3, Callback = self.BulletCallback, IgnoreEntity = owner or nil})
+			self.AntiCrash = 0
 			self:DoBulletKnockback(0.01)
 			self:EndBulletKnockback()
+			if self:GetGunState() ~= 1 then
+				if IsFirstTimePredicted() then
+					self:StartFireSound()
+				end
+		
+				-- We prevent a bit of tapping fire by doing this.
+				self:SetLongHeat(math.min(self:GetLongHeat() + self.HeatInitialLong, 1))
+				self:SetGunState(1)
+			end
 		else
 			self:SetNextFire(CurTime() + 2)
 			self:EmitSound("npc/turret_floor/die.wav")
 		end
 	end
 end
-ENT.NextShield = 0
 function ENT:Think()
 	if self.Destroyed then
 		self:Remove()
@@ -167,9 +290,9 @@ function ENT:Think()
 	self:CalculatePoseAngles()
 
 	local owner = self:GetObjectOwner()
-	if self.NextAmmoGive < CurTime() and self:GetAmmo() < 300 then
-		self.NextAmmoGive = CurTime() + 0.5
+	if self.LastCharge < CurTime() then
 		self:SetAmmo(self:GetAmmo()+1)
+		self.LastCharge = CurTime() + 0.1
 	end
 	if owner:IsValid() and self:GetAmmo() > 0 and self:GetMaterial() == "" and GAMEMODE:GetWaveActive() then
 		if self:GetManualControl() then
@@ -205,10 +328,15 @@ function ENT:Think()
 	elseif self:IsFiring() then
 		self:SetFiring(false)
 	end
-	if self.NextShield < CurTime() then
-		self.NextShield = CurTime() + 0.1
-		self:SetShieldDamage(math.Clamp(self:GetShieldDamage()+0.25,0,self.MaxShieldCapacity))
+
+	local overheat = self:GetShortHeat() + self:GetLongHeat() >= 1
+	if self:GetGunState() == 1 and CurTime() >= self:GetNextFire() + 0.1 or overheat then
+		self:SetGunState(overheat and 2 or 0)
+		self:SetNextFire(CurTime() + 0.15)
+
 	end
+
+	self:ManageHeat()
 
 	self:NextThink(CurTime())
 	return true
@@ -230,15 +358,6 @@ function ENT:Use(activator, caller)
 		if not activator:HasWeapon("weapon_zs_gunturretcontrol") then
 			activator:Give("weapon_zs_gunturretcontrol")
 		end
-		return
-	end
-	if self:GetUpgrade() == self.MaxUpgrades and activator == self:GetObjectOwner() then
-		net.Start('zs_bounty_open')
-		net.WriteTable({{'Мортира',"Кидает снаряды в врагов.Поджигает при попадании.\nЭффективно на среднем расстоянии.\nНа больших картах самый сок!","mortar"},
-		{'Плазменная туррель',"Наносит невероятно сильный урон в секунду.\nЭффективно в близком расстоянии.\nПробивается сквозь защиту врага.\nВысокая трата патрон!!!","laser"}
-	})
-		net.WriteEntity(self)
-		net.Send(activator)
 	end
 end
 
@@ -250,7 +369,7 @@ function ENT:OnPackedUp(pl)
 	pl:GiveEmptyWeapon("weapon_zs_gunturret")
 	pl:GiveAmmo(1, "thumper")
 
-	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth(), self:GetAmmo(), self:GetUpgrade())
+	pl:PushPackedItem('prop_gunturret', self:GetObjectHealth(), self:GetAmmo(), self:GetUpgrade(), "laser")
 
 	self:Remove()
 end
@@ -260,30 +379,7 @@ function ENT:OnTakeDamage(dmginfo)
 
 	local attacker = dmginfo:GetAttacker()
 	if not (attacker:IsValid() and attacker:IsPlayer() and self:GetObjectOwner():IsPlayer() and attacker:Team() == self:GetObjectOwner():Team()) then
-		self:SetShieldDamage(math.Clamp(self:GetShieldDamage()-dmginfo:GetDamage(),0,self.MaxShieldCapacity))
-		dmginfo:ScaleDamage(self:GetUpgrade() == self.MaxUpgrades and self:GetShieldDamage() > 50 and 0.25 or 1)
 		self:ResetLastBarricadeAttacker(attacker, dmginfo)
 		self:SetObjectHealth(self:GetObjectHealth() - dmginfo:GetDamage())
 	end
 end
-ENT.UpgradesUp = {["mortar"] = "prop_mortar",["laser"] = "prop_laser_turret"}
-net.Receive("zs_bounty_add", function(length,pl)
-	local who = net.ReadString()
-	local ent2 = net.ReadEntity()
-	if IsValid(ent2) and ent2.GetUpgrade and ent2:GetUpgrade() == ent2.MaxUpgrades and ent2.UpgradesUp[who]  and pl == ent2:GetObjectOwner() then
-		local ent = ents.Create(ent2.UpgradesUp[who])
-		if ent:IsValid() then
-			ent:SetPos(ent2:GetPos() + Vector(0,0,19))
-			ent:SetAngles(ent2:GetAngles())
-			ent:Spawn()
-	
-			ent:SetObjectOwner(ent2:GetObjectOwner())
-	
-			ent:EmitSound("npc/dog/dog_servo12.wav")
-	
-			ent:GhostAllPlayersInMe(5)
-		end
-				
-		ent2:Remove()
-	end
-end)

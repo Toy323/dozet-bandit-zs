@@ -294,6 +294,10 @@ GM:AddWeaponPrerequisite(item,"renegade")
 local item = GM:AddPointShopWeapon(5,"silencer_dual", ITEMCAT_GUNS, 390, "weapon_zs_dual_uzi2")
 GM:AddWeaponPrerequisite(item,"silencer")
 
+local item = GM:AddPointShopWeapon(5,"ads", ITEMCAT_GUNS, 360, "weapon_zs_ads")
+GM:AddWeaponPrerequisite(item,"m249")
+GM:AddWeaponPrerequisite(item,"crossbow")
+
 
 GM:AddPointShopWeapon(2,"grenadelauncher", ITEMCAT_GUNS, 120, "weapon_zs_grenadelauncher")
 
@@ -302,7 +306,6 @@ GM:AddPointShopWeapon(2,"grenadelauncher", ITEMCAT_GUNS, 120, "weapon_zs_grenade
 local item = GM:AddPointShopWeapon(0,"crphmr", ITEMCAT_MELEE, 35, "weapon_zs_hammer")
 item.SkillRequirement = SKILL_HANDY3
 local item = GM:AddPointShopWeapon(0,"wrench", ITEMCAT_MELEE, 40, "weapon_zs_wrench")
-item.NoClassicMode = true
 item.NoSampleCollectMode = true
 GM:AddPointShopWeapon(0,"zpplnk", ITEMCAT_MELEE, 10, "weapon_zs_plank")
 GM:AddPointShopWeapon(0,"knife", ITEMCAT_MELEE, 10, "weapon_zs_swissarmyknife")
@@ -346,6 +349,9 @@ GM:AddWeaponPrerequisite(item,"butcher")
 local item = GM:AddPointShopWeapon(3,"megamasher", ITEMCAT_MELEE, 150, "weapon_zs_megamasher")
 GM:AddWeaponPrerequisite(item,"sledgehammer")
 GM:AddWeaponPrerequisite(item,"pipe")
+local item = GM:AddPointShopWeapon(3,"mace", ITEMCAT_MELEE, 140, "weapon_zs_mace")
+GM:AddWeaponPrerequisite(item,"sledgehammer")
+GM:AddWeaponPrerequisite(item,"extbaton")
 local item = GM:AddPointShopWeapon(3,"lowers", ITEMCAT_MELEE, 150, "weapon_zs_lowers")
 GM:AddWeaponPrerequisite(item,"sawhack")
 GM:AddWeaponPrerequisite(item,"longsword")
@@ -356,7 +362,7 @@ local item = GM:AddPointShopWeapon(3,"stunbaton", ITEMCAT_MELEE, 135, "weapon_zs
 GM:AddWeaponPrerequisite(item,"extbaton")
 local item = GM:AddPointShopWeapon(3,"energysword", ITEMCAT_MELEE, 145, "weapon_zs_energysword")
 GM:AddWeaponPrerequisite(item,"longsword")
-local item = GM:AddPointShopWeapon(3,"murasama", ITEMCAT_MELEE, 265, "weapon_zs_murasama")
+local item = GM:AddPointShopWeapon(3,"bloodseeker", ITEMCAT_MELEE, 265, "weapon_zs_bloodseeker")
 GM:AddWeaponPrerequisite(item,"longsword")
 GM:AddWeaponPrerequisite(item,"extbaton")
 local item = GM:AddPointShopWeapon(3,"greataxe", ITEMCAT_MELEE, 140, "weapon_zs_greataxe")
@@ -366,6 +372,9 @@ local item = GM:AddPointShopWeapon(4,"gknife", ITEMCAT_MELEE, 195, "weapon_zs_cl
 GM:AddWeaponPrerequisite(item,"stunbaton")
 GM:AddWeaponPrerequisite(item,"megamasher")
 
+local item = GM:AddPointShopWeapon(4,"murasama", ITEMCAT_MELEE, 195, "weapon_zs_murasama")
+GM:AddWeaponPrerequisite(item,"bloodseeker")
+
 
 --GM:AddPointShopWeapon(nil,"zpfryp", ITEMCAT_MELEE, 31, "weapon_zs_fryingpan")
 --GM:AddPointShopWeapon(nil,"zpcpot", ITEMCAT_MELEE, 32, "weapon_zs_pot")
@@ -374,6 +383,9 @@ GM:AddPointShopWeapon(nil,"barricadekit", ITEMCAT_TOOLS, 125, "weapon_zs_barrica
 local item = GM:AddPointShopWeapon(nil,"empgun", ITEMCAT_TOOLS, 355, "weapon_zs_empgun")
 item.NoSampleCollectMode = true
 GM:AddPointShopWeapon(nil,"hooker", ITEMCAT_TOOLS, 125, "weapon_zs_hookinator_300")
+
+
+GM:AddPointShopWeapon(nil,"palochka_huyalochka", ITEMCAT_TOOLS, 165, "weapon_zs_palka")
 
 GM:AddPointShopWeapon(nil,"whirlwind", ITEMCAT_TOOLS, 70, "weapon_zs_whirlwind")
 local item = GM:AddPointShopWeapon(nil,"backdoor", ITEMCAT_TOOLS, 45, "weapon_zs_backdoor")
@@ -385,7 +397,7 @@ item.NoClassicMode = true
 item.NoSampleCollectMode = true
 
 local item = GM:AddPointShopWeapon(nil,"infturret", ITEMCAT_TOOLS, 60, "weapon_zs_gunturret")
-item.Countables = {"prop_gunturret"}
+item.Countables = {"prop_gunturret","prop_laser_turret","prop_mortar"}
 --item.ControllerWep = "weapon_zs_gunturretcontrol"
 --item.NoClassicMode = true
 
@@ -418,7 +430,7 @@ GM:AddPointShopWeapon(nil,"detpck", ITEMCAT_CONS, 40, "weapon_zs_detpack")
 
 local item = GM:AddPointShopItem(nil,"bodyarmor", "shopitem_bodyarmor_name", "shopitem_bodyarmor_desc",ITEMCAT_OTHER, 25,function(pl) pl:WearBodyArmor() end, function(pl) return (pl.GetBodyArmor and pl:GetBodyArmor() < 100) end,"shopitem_bodyarmor_alreadyhave")
 
-local item = GM:AddPointShopItem(nil,"extraspd", "shopitem_adrenaline_name", "shopitem_adrenaline_desc", ITEMCAT_OTHER, 10,function(pl) pl:ApplyAdrenaline() end, function(pl) return not (pl:GetMaxHealth() < 20 or !GAMEMODE:GetWaveActive()) end,"shopitem_adrenaline_toomuch")
+local item = GM:AddPointShopItem(nil,"extraspd", "shopitem_adrenaline_name", "shopitem_adrenaline_desc", ITEMCAT_OTHER, 10,function(pl) pl:ApplyAdrenaline() end, function(pl) return not (pl:GetMaxHealth() < 20) end,"shopitem_adrenaline_toomuch")
 
 local item = GM:AddPointShopItem(nil,"ammopurchase", "shopitem_ammo_name", "shopitem_ammo_desc", ITEMCAT_OTHER, 20, function(pl) pl:RefillActiveWeapon() end, function(pl) return pl:ActiveWeaponCanBeRefilled() end, "shopitem_ammo_invalid")
 

@@ -104,7 +104,7 @@ SWEP.ShowWorldModel = true
 SWEP.Primary.Sound = Sound("Weapon_UMP45.Single")
 SWEP.Primary.Damage = 12
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Delay = 0.047
+SWEP.Primary.Delay = 0.067
 
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.Automatic = true
@@ -302,13 +302,13 @@ if CLIENT then
     end
 	local texGradDown = surface.GetTextureID("VGUI/gradient_down")
 	local colWhite = Color(220, 220, 220, 230)
+	local colGreen = Color(72,255,0)
 	function SWEP:DrawHUD()
 		if self.BaseClass.DrawHUD then
 			self.BaseClass.DrawHUD(self)
 		end
 		local x, y = ScrW()/2, ScrH()/2
-		color = Color(72,255,0)
-		DrawHollowCircle(x, y, 50*self:GetMagazineChange(), 50*self:GetMagazineChange(), 0, 360, color)
+		DrawHollowCircle(x, y, 50*self:GetMagazineChange(), 50*self:GetMagazineChange(), 0, 360, colGreen)
 	end
 	function SWEP:Draw3DHUD(vm, pos, ang)
 		if self.BaseClass.Draw3DHUD then

@@ -87,18 +87,18 @@ end
 function SWEP:SecondaryAttack()
 	if self:GetNextSecondaryFire() <= CurTime() and not self:GetOwner():IsHolding() and not self:GetIsCharging() then
 		if not self.BlockMode then
-		self:SetNextSecondaryFire(CurTime() + self.ChargeDelay)
-		if not self:GetIsCharging() then
-			self:SetIsCharging(true)
+			self:SetNextSecondaryFire(CurTime() + self.ChargeDelay)
+			if not self:GetIsCharging() then
+				self:SetIsCharging(true)
+			end
+		else
+			self:SetBlock(true)
+			self:SetHoldType("revolver")
+			self:SetWeaponSwingHoldType("revolver")
+			self:SetChargeBlock(true) 
+			self:SetChargePerc(0)
+			self:SetIsCharging(false)
 		end
-	else
-		self:SetBlock(true)
-		self:SetHoldType("revolver")
-		self:SetWeaponSwingHoldType("revolver")
-		self:SetChargeBlock(true) 
-		self:SetChargePerc(0)
-		self:SetIsCharging(false)
-	end
 	end
 end
 

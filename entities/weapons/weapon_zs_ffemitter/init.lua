@@ -68,6 +68,7 @@ function SWEP:PrimaryAttack()
 		local stored = owner:PopPackedItem(ent:GetClass())
 		if stored then
 			ent.m_Health = stored[1]
+			ent:SetUpgrade(stored[2])
 		end
 
 		if self:GetPrimaryAmmoCount() <= 0 then

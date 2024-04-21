@@ -1,20 +1,18 @@
 include("shared.lua")
+include("cl_animations.lua")
 
 ENT.NextEmit = 0
 
+
 function ENT:Initialize()
 	self.BeamColor = Color(0, 255, 0, 255)
+	self:SetModel("models/combine_turrets/floor_turret.mdl")
 
 	self.ScanningSound = CreateSound(self, "npc/turret_wall/turret_loop1.wav")
 	self.ShootingSound = CreateSound(self, "npc/combine_gunship/gunship_weapon_fire_loop6.wav")
 
 	local size = self.SearchDistance + 32
 	self.TimeOfSpawn = CurTime() + 5
-	self:AddCallback("SetUpgrade", function(self)
-		if self:GetUpgrade() >= 4 then
-			self.TimeOfSpawn = CurTime() + 11
-		end
-	end)
 	local nsize = -size
 	self:SetRenderBounds(Vector(nsize, nsize, nsize * 0.25), Vector(size, size, size * 0.25))
 end
@@ -31,11 +29,20 @@ function ENT:Think()
 		self.ScanningSound:Stop()
 		self.ShootingSound:Stop()
 	end
+	if !self.CreatedModels then
+		if self.WElements then
+			self.ShowBaseModel = true
+			self.WElements = table.FullCopy(self.WElements)
+			self:CreateModels(self.WElements)
+			self.CreatedModels = true
+		end
+	end
 end
 
 function ENT:OnRemove()
 	self.ScanningSound:Stop()
 	self.ShootingSound:Stop()
+	self:RemoveModels()
 end
 
 function ENT:SetObjectHealth(health)
@@ -49,21 +56,23 @@ local surface_DrawRect = surface.DrawRect
 local cam_Start3D2D = cam.Start3D2D
 local cam_End3D2D = cam.End3D2D
 local smokegravity = Vector(0, 0, 200)
-local aScreen = Angle(0, 270, 60)
-local vScreen = Vector(0, -2, 45)
+local aScreen = Angle(0, 270, 45)
+local vScreen = Vector(-10, 5, 45)
 local Colors = {
-Color(156,156,156),
-Color(94,23,23),
-Color(0,94,5),
-Color(0,7,112),
+[3] = Color(156,156,156),
+[4] =Color(94,23,23), [5] =
+Color(0,94,5), [6] =
+Color(0,7,112), [7] =
 Color(218,149,0)
 }
+local fix = Angle(5,0,9)
 function ENT:Draw()
 	self:CalculatePoseAngles()
 	self:SetPoseParameter("aim_yaw", self.PoseYaw)
 	self:SetPoseParameter("aim_pitch", self.PosePitch)
 
-	self:DrawModel()
+	--self:DrawModel()
+	self:RenderModels()
 
 	local healthpercent = self:GetObjectHealth() / self:GetMaxObjectHealth()
 
@@ -101,6 +110,11 @@ function ENT:Draw()
 	local flash = math.sin(CurTime() * 15) > 0
 	local wid, hei = 128, 92
 	local x = wid / 2
+--[[	for k,v in pairs(self.WElements) do
+		if string.sub(k,0,#"osnova") ~= "osnova" and k ~= 'turret' then
+			v.bone = "Gun"
+		end
+	end]]
 
 	cam_Start3D2D(self:LocalToWorld(vScreen), self:LocalToWorldAngles(aScreen), 0.075)
 
@@ -127,20 +141,21 @@ function ENT:Draw()
 		draw_SimpleText("УЛУЧШЕНИЙ: "..self:GetUpgrade(), "DefaultFontBold", x, 68, Colors[self:GetUpgrade()], TEXT_ALIGN_CENTER)
 		
 		if ammo > 0 then
-			draw_SimpleText("["..ammo.." / "..self.MaxAmmo.."]", "DefaultFontBold", x, 55, COLOR_WHITE, TEXT_ALIGN_CENTER)
+			draw_SimpleText("["..ammo.." / "..self:GetMaxAmmo().."]", "DefaultFontBold", x, 55, COLOR_WHITE, TEXT_ALIGN_CENTER)
 		elseif flash then
 			draw_SimpleText(translate.Get("empty"), "DefaultFontBold", x, 55, COLOR_RED, TEXT_ALIGN_CENTER)
 		end
 	cam_End3D2D()
 end
-
 local matBeam = Material("trails/laser")
 local matGlow = Material("sprites/glow04_noz")
 local colAlpha, colAlpha2 = Color( 0, 197, 197, 45), Color( 255, 255, 255, 72) 
+local vecAdd = Vector(0,0,15)
+
 function ENT:DrawTranslucent()
 	if self:GetMaterial() ~= "" then return end
 
-	local lightpos = self:LightPos()
+	local lightpos = self:LightPos() + vecAdd
 
 	local ang = self:GetGunAngles()
 	
@@ -154,7 +169,7 @@ function ENT:DrawTranslucent()
 	local waveactive = GAMEMODE:GetWaveActive()
 
 	local tr = util.TraceLine({start = lightpos + ang:Forward(), endpos = lightpos + ang:Forward() * 4096, mask = MASK_SHOT, filter = self:GetCachedScanFilter()})
-
+	local hitpos = tr.HitPos
 	if not hasowner then
 		colBeam.r = 0
 		colBeam.g = 0
@@ -167,36 +182,20 @@ function ENT:DrawTranslucent()
 		colBeam.r = 130
 		colBeam.g = 130
 		colBeam.b = 130
-	elseif (owner:Team() == TEAM_BANDIT or owner:Team()  == TEAM_HUMAN) then
+	elseif (owner:Team() == TEAM_BANDIT or owner:Team()  == TEAM_HUMAN) and MySelf == owner and self:GetManualControl() then
 		local colTeam = team.GetColor(owner:Team())
 		colBeam.r = colTeam.r
 		colBeam.g = colTeam.g
 		colBeam.b = colTeam.b
 		render.SetMaterial(matBeam)
-		render.DrawBeam(lightpos, tr.HitPos, 1, 0, 1, COLOR_WHITE)
-		render.DrawBeam(lightpos, tr.HitPos, 4, 0, 1, colBeam)
+		render.DrawBeam(lightpos, hitpos, 1, 0, 1, COLOR_WHITE)
+		render.DrawBeam(lightpos, hitpos, 4, 0, 1, colBeam)
 		render.SetMaterial(matGlow)
-		render.DrawSprite(tr.HitPos, 2, 2, COLOR_WHITE)
-		render.DrawSprite(tr.HitPos, 8, 8, colBeam)
+		render.DrawSprite(hitpos, 2, 2, COLOR_WHITE)
+		render.DrawSprite(hitpos, 8, 8, colBeam)
 	end
 	render.SetMaterial(matGlow)
 	render.DrawSprite(lightpos, 4, 4, COLOR_WHITE)
 	render.DrawSprite(lightpos, 16, 16, colBeam)
-	if self:GetUpgrade() < 5 or !WorldVisible(self:GetPos(), MySelf:EyePos()) then return end
-	render.SetColorMaterial()
-	local pos = self:GetUp()*30 + self:GetPos()
-	
-	local radius = math.min(40, 40*(self:GetShieldDamage()/self.MaxShieldCapacity))
-	local wideSteps = 15
-	local tallSteps = 15
-	
-	render.DrawSphere( pos, radius, wideSteps, tallSteps, colAlpha)
-	
-	render.DrawWireframeSphere( pos, radius, wideSteps, tallSteps, colAlpha2 )
-end
-net.Receive("zs_bounty_open", function(length)
-	local tables = net.ReadTable()
-	local ent = net.ReadEntity()
 
-	GAMEMODE:OpenBounty(tables,ent)	
-end)
+end

@@ -52,10 +52,16 @@ function SWEP:PrimaryAttack()
 	if not pos or not ang then return end
 
 	self:SetNextPrimaryAttack(CurTime() + self.Primary.Delay)
-
-	local ent = ents.Create("prop_gunturret")
+	local stored = owner:PopPackedItem('prop_gunturret')
+	local class = 'prop_gunturret'
+	if stored and stored[4] == "mortar" then
+		class = 'prop_mortar'
+	elseif stored and stored[4] == "laser" then
+		class = 'prop_laser_turret'
+	end
+	local ent = ents.Create(class)
 	if ent:IsValid() then
-		ent:SetPos(pos)
+		ent:SetPos(pos + (stored and stored[4] == "mortar" and Vector(0,0,19) or Vector(0,0,0)))
 		ent:SetAngles(ang)
 		ent:Spawn()
 
@@ -67,10 +73,10 @@ function SWEP:PrimaryAttack()
 
 		self:TakePrimaryAmmo(1)
 
-		local stored = owner:PopPackedItem(ent:GetClass())
 		if stored then
 			ent:SetObjectHealth(stored[1])
 			ent:SetAmmo(stored[2])
+			ent:SetUpgrade(stored[3])
 		end
 
 		if not owner:HasWeapon("weapon_zs_gunturretcontrol") then

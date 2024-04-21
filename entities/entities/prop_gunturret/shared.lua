@@ -16,6 +16,9 @@ ENT.CanPackUp = true
 
 ENT.IsBarricadeObject = true
 ENT.AlwaysGhostable = true
+ENT.MaxUpgrades = 5
+ENT.UpgradeCost = 7
+ENT.AvailableUpgrades = 2
 
 local NextCache = 0
 local CachedFilter = {}
@@ -39,6 +42,24 @@ end
 function ENT:GetAnglesToPos(pos)
 	return (pos - self:ShootPos()):Angle()
 end
+function ENT:GetUpgrade()
+	return self:GetDTInt(12)
+end
+function ENT:SetUpgrade(upg)
+	return self:SetDTInt(12, upg)
+end
+ENT.MaxShieldCapacity = 250
+function ENT:GetShieldDamage()
+	return self:GetDTFloat(12)
+end
+function ENT:SetShieldDamage(dmg)
+	return self:SetDTFloat(12, dmg)
+end
+ENT.BaseDamageST = 4
+ENT.WhatUpgradeGive = { ["Урон"] = 1,
+["Точность"] = 8.3,
+["Граната с выстрела"] = 1
+}
 
 function ENT:IsValidTarget(target)
 	if target:IsPlayer() then
@@ -80,7 +101,7 @@ function ENT:CalculatePoseAngles()
 		self.PosePitch = math.Approach(self.PosePitch, 15, FrameTime() * 30)
 		return
 	end
-
+	local deltatime = FrameTime()
 	if self:GetManualControl() then
 		local ang = self:GetLocalAnglesToPos(self:GetManualTrace().HitPos)
 		self.PoseYaw = math.Approach(self.PoseYaw, math.Clamp(math.NormalizeAngle(ang.yaw), -60, 60), FrameTime() * 140)
@@ -92,9 +113,9 @@ function ENT:CalculatePoseAngles()
 			self.PoseYaw = math.Approach(self.PoseYaw, math.Clamp(math.NormalizeAngle(ang.yaw), -60, 60), FrameTime() * 140)
 			self.PosePitch = math.Approach(self.PosePitch, math.Clamp(math.NormalizeAngle(ang.pitch), -15, 15), FrameTime() * 100)
 		else
-			local ct = CurTime()
-			self.PoseYaw = math.Approach(self.PoseYaw, math.sin(ct*1.8) * 75, FrameTime() * 60)
-			self.PosePitch = math.Approach(self.PosePitch, math.cos(ct * 3) * 5+5, FrameTime() * 30)
+			local ct = CurTime() * 1.8 + self:EntIndex()*32
+			self.PoseYaw = math.Approach(self.PoseYaw, math.sin(ct) * 75 , deltatime * 60)
+			self.PosePitch = math.Approach(self.PosePitch, math.cos(ct * 1.4) * 10, deltatime * 30)
 		end
 	end
 end
@@ -180,7 +201,7 @@ function ENT:GetGunAngles()
 end
 
 function ENT:SetAmmo(ammo)
-	self:SetDTInt(0, ammo)
+	self:SetDTInt(0, math.min(ammo,self.MaxAmmo))
 end
 
 function ENT:GetAmmo()

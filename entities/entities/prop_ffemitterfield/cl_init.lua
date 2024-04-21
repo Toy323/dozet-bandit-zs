@@ -20,11 +20,11 @@ end
 
 local matGlow = Material("models/spawn_effect2")
 function ENT:DrawTranslucent()
-
+	local upgrades = self:GetOwner() and self:GetOwner().GetUpgrade and self:GetOwner():GetUpgrade() or 0
 	render.SuppressEngineLighting(true)
 	render.ModelMaterialOverride(matGlow)
-	render.SetColorModulation(0.5, 0.6, 1)
-	render.SetBlend(0.05 + math.abs(math.cos(CurTime()*1.5)) ^ 10 * 0.3)
+	render.SetColorModulation(0.5, 0.6-(upgrades*0.2), 1-(upgrades*0.1))
+	render.SetBlend(0.1 + math.abs(math.cos(CurTime()*1.5+upgrades^2)) ^ 10 * (upgrades+1) * 0.3 )
 	self:DrawModel()
 	render.SetBlend(1)
 	render.SetColorModulation(1, 1, 1)

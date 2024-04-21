@@ -40,6 +40,9 @@ function ENT:OnRemove()
 	if self.Field and self.Field:IsValid() then
 		self.Field:Remove()
 	end
+	if self.Field2 and self.Field2:IsValid() then
+		self.Field2:Remove()
+	end
 end
 
 function ENT:OnTakeDamage(dmginfo)
@@ -62,13 +65,33 @@ function ENT:OnPackedUp(pl)
 	pl:GiveEmptyWeapon("weapon_zs_ffemitter")
 	pl:GiveAmmo(1, "slam")
 
-	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth())
+	pl:PushPackedItem(self:GetClass(), self:GetObjectHealth(), self:GetUpgrade())
 
 	self:Remove()
 end
-
+ENT.OldUpgrade = 0
 function ENT:Think()
 	if self.Destroyed then
 		self:Remove()
+	end
+	local upg = self:GetUpgrade()
+	if upg ~= self.OldUpgrade then
+		self:ManipulateBoneScale(0, Vector(1.5-(upg*0.2),1.5-(upg*0.2), 1))
+		self.OldUpgrade = upg
+		self.Field:ManipulateBoneScale(0, Vector(0.8+ upg*0.2,.8 + upg*0.2, 1))
+		if upg == 3 then
+			local ent = ents.Create("prop_ffemitterfield")
+			if ent:IsValid() and (!self.Field2 or !self.Field2:IsValid()) then
+				self.Field2 = ent
+				ent:SetPos(self:GetPos() + Vector(0,0,96) + self:GetUp()*36)
+				ent:SetAngles(self:GetAngles()-Angle(90,0,0))
+				ent:SetOwner(self)
+				ent:Spawn()
+			end
+		else
+			if self.Field2 and self.Field2:IsValid() then
+				self.Field2:Remove()
+			end
+		end
 	end
 end

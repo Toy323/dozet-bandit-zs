@@ -186,6 +186,7 @@ killicon.Add("weapon_zs_ioncannon", "killicon/weapon_zs_ioncannon", color_white)
 
 killicon.Add("weapon_zs_lamp", "killicon/weapon_zs_lamp", color_white)
 killicon.Add("weapon_zs_longsword", "killicon/weapon_zs_longsword", color_white)
+killicon.Add("weapon_zs_bloodseeker", "killicon/weapon_zs_longsword", Color(173,0,0))
 
 killicon.Add("weapon_zs_manhack", "killicon/weapon_zs_manhack", color_white)
 killicon.Add("prop_manhack", "killicon/weapon_zs_manhack", color_white)
@@ -205,6 +206,8 @@ killicon.Add("weapon_zs_palliator", "killicon/weapon_zs_palliator", color_white)
 
 killicon.Add("weapon_zs_podvodny", "killicon/weapon_zs_podvodny", color_white)
 killicon.Add("projectile_bleedbolt", "killicon/weapon_zs_podvodny", color_white)
+
+killicon.Add("weapon_zs_ads", "killicon/weapon_zs_podvodny", COLOR_PURPLE)
 
 killicon.Add("weapon_zs_positron", "killicon/weapon_zs_positron", color_white)
 killicon.Add("weapon_zs_practition", "killicon/weapon_zs_practition", color_white)
@@ -252,7 +255,7 @@ killicon.Add("weapon_zs_energysword", "killicon/weapon_zs_energysword.png", colo
 killicon.Add("weapon_zs_fracture", "killicon/weapon_zs_fracture2", color_white)
 killicon.Add("weapon_zs_scar", "killicon/weapon_zs_scar2", color_white)
 killicon.Add("weapon_zs_onyx", "killicon/weapon_zs_onyx.png",color_white)
-killicon.Add("weapon_zs_fire_nail", "killicon/weapon_zs_ice_nail",Color(205,82,10))
+killicon.Add("weapon_zs_fire_nail", "zombiesurvival/killicons/weapon_zs_ice_nail",Color(205,82,10))
 killicon.Add("weapon_zs_murasama", "killicon/weapon_zs_katana", color_white)
 --killicon.Add("weapon_zs_fryingpan", "killicon/zs_fryingpan", color_white)
 --killicon.Add("weapon_zs_pot", "killicon/zs_pot", color_white)

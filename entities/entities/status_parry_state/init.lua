@@ -10,8 +10,7 @@ function ENT:Think()
 		self:Remove()
 		return
 	end
-	--print(self:GetTime())
-	--print(math.Round(self:GetTime()/0.3/1.6,1))
+
 	self:AddTime(-0.1)
 	self:NextThink(CurTime() + 0.1)
 	return true

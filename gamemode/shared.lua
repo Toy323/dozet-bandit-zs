@@ -294,9 +294,9 @@ end
 function GM:ScalePlayerDamage(pl, hitgroup, dmginfo)
 	local attacker = dmginfo:GetAttacker()
 	local isproj = (dmginfo:GetInflictor() and IsValid(dmginfo:GetInflictor()) and dmginfo:GetInflictor().m_IsProjectile)
-	local attackweapon = dmginfo:GetAttacker():GetActiveWeapon()
+	local attackweapon =  dmginfo:GetAttacker().GetActiveWeapon and dmginfo:GetAttacker():GetActiveWeapon()
 	local headshot = hitgroup == HITGROUP_HEAD
-	if attackweapon.IgnoreDamageScaling then return end
+	if attackweapon and attackweapon.IgnoreDamageScaling then return end
 	if headshot and dmginfo:IsBulletDamage() and SERVER then
 		pl:SetWasHitInHead()
 	end

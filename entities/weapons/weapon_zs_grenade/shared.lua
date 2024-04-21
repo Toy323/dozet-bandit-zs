@@ -44,7 +44,10 @@ function SWEP:CanPrimaryAttack()
 	return true
 end
 
-function SWEP:PrimaryAttack()
+function SWEP:SecondaryAttack()
+	self:PrimaryAttack(true)
+end
+function SWEP:PrimaryAttack(xixi)
 	if not self:CanPrimaryAttack() then return end
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
@@ -61,7 +64,7 @@ function SWEP:PrimaryAttack()
 		local throworigin = owner:EyePos() + eyeforward * 18 + eyeright * 8;
 
 		local tossvel = owner:GetVelocity()
-		tossvel = tossvel + owner:GetAimVector() * 1300;
+		tossvel = (tossvel + owner:GetAimVector() * 1300) * (xixi and 0.4 or 1) 
 
 		local ent = ents.Create("projectile_zsgrenade")
 		if ent:IsValid() then
@@ -81,11 +84,8 @@ function SWEP:PrimaryAttack()
 	end
 end
 
-function SWEP:SecondaryAttack()
-end
-
 function SWEP:CanSecondaryAttack()
-	return false
+	return self:CanPrimaryAttack()
 end
 
 function SWEP:Reload()

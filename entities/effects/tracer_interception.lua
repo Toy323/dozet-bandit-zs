@@ -38,6 +38,11 @@ local beammat = Material("trails/laser")
 local beam1mat = Material("trails/electric")
 function EFFECT:Render()
 	local texcoord = math.Rand(0, 1)
+	local laser = false
+	if !self.WeaponEnt or !self.WeaponEnt:IsValid() then return end
+	if self.WeaponEnt:GetClass() == "prop_laser_turret" or   self.WeaponEnt:GetClass() == "weapon_zs_palka" then
+		laser = true
+	end
 
 	local emitter = ParticleEmitter(self.EndPos)
 	emitter:SetNearClip(24, 32)
@@ -48,7 +53,7 @@ function EFFECT:Render()
 		particle:SetColor(66, 197, 255)
 		particle:SetStartAlpha(255)
 		particle:SetEndAlpha(0)
-		particle:SetStartSize(5)
+		particle:SetStartSize(5*(laser and 10 or 1))
 		particle:SetEndSize(0)
 	end
 	emitter:Finish() emitter = nil collectgarbage("step", 64)
@@ -56,7 +61,7 @@ function EFFECT:Render()
 	local norm = (self.StartPos - self.EndPos)
 	local nlen = norm:Length()
 	render.SetMaterial(beammat)
-	render.DrawBeam(self.StartPos, self.EndPos, 8, texcoord, texcoord + nlen / 128, Color(66, 255, 197, 205 * math.Clamp(self.Delta-0.5,0,0.5)*2))
+	render.DrawBeam(self.StartPos, self.EndPos, 8*(laser and 18 or 1), texcoord, texcoord + nlen / 128, Color(66, 255, 197, 205 * math.Clamp(self.Delta-0.5,0,0.5)*2))
 	render.SetMaterial(beam1mat)
-	render.DrawBeam(self.StartPos, self.EndPos, 4, texcoord, texcoord + nlen / 128, Color(97, 83, 145, 255 * math.Clamp(self.Delta-0.5,0,0.5)*2))
+	render.DrawBeam(self.StartPos, self.EndPos, 4*(laser and 18 or 1), texcoord, texcoord + nlen / 128, Color(97, 83, 145, 255 * math.Clamp(self.Delta-0.5,0,0.5)*2))
 end

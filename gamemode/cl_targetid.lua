@@ -40,6 +40,7 @@ function GM:DrawTargetID(ent, fade)
 end
 
 function GM:HUDDrawTargetID(teamid)
+	if self:GetSpecialWave() == "urmteam" then return end
 	local start = EyePos()
 	trace.start = start
 	trace.endpos = start + EyeAngles():Forward() * 2048

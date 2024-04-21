@@ -179,10 +179,10 @@ local function DoRicochet(attacker, hitpos, hitnormal, normal, damage)
 end
 function SWEP.BulletCallback(attacker, tr, dmginfo)
 	if tr.HitWorld and not tr.HitSky then
-		local hitpos, hitnormal, normal= tr.HitPos, tr.HitNormal, tr.Normal 
+		local hitpos, hitnormal, normal, dmg= tr.HitPos, tr.HitNormal, tr.Normal, dmginfo:GetDamage()/20
 		if SERVER then
 			timer.Simple(0, function() 
-				DoRicochet(attacker, hitpos, hitnormal, normal, dmginfo:GetDamage()/20) 
+				DoRicochet(attacker, hitpos, hitnormal, normal, dmg) 
 			end)
 			for _, ent in pairs(ents.FindInSphere(hitpos, 64)) do
 				if ent and ent:IsValid() then

@@ -140,6 +140,7 @@ end
 
 function meta:ApplyAdrenaline()
 	self.HumanSpeedAdder = (self.HumanSpeedAdder or 0) +5
+	self.AdrenalineNoUse = CurTime() + 8
 	self:ResetSpeed() 
 	if SERVER then 
 		self.HealthDead = (self.HealthDead or 0) + 10
@@ -557,7 +558,7 @@ end
 function meta:ShouldNotCollide(ent)
 	if ent:IsValid() then
 		if ent:IsPlayer() then
-			return self:Team() == ent:Team()
+			return self:Team() == ent:Team() and GAMEMODE:GetSpecialWave() ~= "urmteam"
 		end
 		return (self:Team() == TEAM_HUMAN or self:Team() == TEAM_BANDIT) and ent:GetPhysicsObject():IsValid() and ent:GetPhysicsObject():HasGameFlag(FVPHYSICS_PLAYER_HELD)
 	end

@@ -377,7 +377,28 @@ function util.BlastDamageEx(inflictor, attacker, epicenter, radius, damage, dama
 			local nearest = ent:NearestPoint(epicenter)
 			local ratio = 1
 			if nearest:Distance(epicenter) > radius/2 then
-				ratio = 0.5+0.5*math.Clamp((nearest:Distance(epicenter)-radius/2)/radius*2 ,0,1)
+				ratio = 0.4+0.6*math.Clamp((nearest:Distance(epicenter)-radius/2)/radius*2 ,0,1)
+			end
+			if TrueVisibleFilters(epicenter, nearest, inflictor, ent) then
+				ent:TakeSpecialDamage(ratio * damage, damagetype, attacker, inflictor, nearest)
+			end
+		end
+	end
+end
+function util.BlastDamageEx2(inflictor, attacker, epicenter, radius, damage, damagetype)
+	local filter = inflictor
+	for _, ent in pairs(ents.FindInSphere(epicenter, radius)) do
+		if ent and ent:IsValid() then
+			local nearest = ent:NearestPoint(epicenter)
+			local ratio = 1
+			if nearest:Distance(epicenter) > radius/2 then
+				ratio = 0.4+0.6*math.Clamp((nearest:Distance(epicenter)-radius/2)/radius*2 ,0,1)
+			end
+			if ent:IsPlayer() then
+				local burned = ent:GiveStatus('burn')
+				burned:AddTime(4*ratio)
+				burned.Damager = attacker
+				burned.Damage = 1
 			end
 			if TrueVisibleFilters(epicenter, nearest, inflictor, ent) then
 				ent:TakeSpecialDamage(ratio * damage, damagetype, attacker, inflictor, nearest)

@@ -246,7 +246,38 @@ function SWEP:ShootEffects()
     self:SendWeaponAnim( ACT_VM_SECONDARYATTACK )
     self:GetOwner():SetAnimation( PLAYER_ATTACK1 )
 end
+--[[
+local function DoRicochet(attacker, hitpos, hitnormal, normal, damage, call)
+	attacker:FireBullets({Num = 1, Src = hitpos, Dir =  2 * hitnormal * hitnormal:Dot(normal * -1) + normal, Spread = Vector(0, 0, 0), Tracer = 1, TracerName = 'tracer_interception', Force = 1, Damage = damage, Callback = call})
+end
+local function DoTrace(attacker, hitpos, hitnormal, normal, damage, call, ent)
+	attacker:FireBullets({Num = 1, Src = hitpos, Dir = normal, Spread = Vector(0, 0, 0), Tracer = 1, TracerName = 'tracer_interception', Force = 1, Damage = damage, Callback = call,IgnoreEntity = ent})
+end
+SWEP.AntiCrash = 0
+function SWEP.BulletCallback(attacker, tr, dmginfo)
+	local ent = tr.Entity 
+	local hitpos, hitnormal, normal, dmg= tr.HitPos, tr.HitNormal, tr.Normal, dmginfo:GetDamage()
+	local inf = dmginfo:GetInflictor()
+	if inf and !inf.AntiCrash  then
+		inf.AntiCrash	= 0
+	end
+	if inf.AntiCrash > 15 then
+		return
+	end
+	if ent and ent:IsValid() and ent:GetClass() == 'prop_ffemitterfield' then
+		timer.Simple(0, function() 
+			DoRicochet(attacker, hitpos, hitnormal, normal, dmg,inf.BulletCallback) 
+		end)
+		inf.AntiCrash = inf.AntiCrash + 1
+	elseif ent and ent:IsValid() then
+		timer.Simple(0, function() 
+			DoTrace(attacker, hitpos, hitnormal, normal, dmg, inf.BulletCallback, ent) 
+		end)
+		inf.AntiCrash = inf.AntiCrash + 1
+	end
+end
 
+]]
 if(CLIENT)then
 function SWEP:CalcViewModelView(vm, oldpos, oldang, pos, ang)
 	pos, ang = self.BaseClass.CalcViewModelView(self, vm, oldpos, oldang, pos, ang)
