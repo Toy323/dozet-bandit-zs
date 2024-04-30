@@ -1361,7 +1361,7 @@ function GM:_PostPlayerDraw(pl)
 	cam.IgnoreZ(false)
 	undomodelblend = false
 
-	if pl ~= MySelf and MySelf:Team() == pl:Team() and pl:IsFriend() then
+	if pl ~= MySelf and MySelf:Team() == pl:Team() and pl:IsFriend() and self:GetSpecialWave() ~= "urmteam" then
 		local pos = pl:GetPos() + Vector(0, 0, 2)
 		render.SetMaterial(matFriendRing)
 		render.DrawQuadEasy(pos, Vector(0, 0, 1), 32, 32, colFriend)

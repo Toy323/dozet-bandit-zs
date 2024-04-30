@@ -34,7 +34,7 @@ function ENT:Initialize()
 	end
 
 	self:SetAmmo(self.DefaultAmmo)
-	self:SetMaxObjectHealth(110)
+	self:SetMaxObjectHealth(300)
 	self:SetObjectHealth(self:GetMaxObjectHealth())
 	hook.Add("SetupPlayerVisibility", self, self.SetupPlayerVisibility)
 end

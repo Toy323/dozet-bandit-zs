@@ -2868,6 +2868,7 @@ function GM:PlayerSpawn(pl)
 		pl:SetMaterial("")
 	end
 	pl:UnSpectate()
+	pl:RemoveFlags(FL_ONGROUND) 
 
 	pl.StartSpectating = nil
 	pl.Gibbed = nil

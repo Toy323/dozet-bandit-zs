@@ -137,6 +137,7 @@ LANGUAGE.weapon_h_magic_name						= "'Hamon' Magic of health"
 LANGUAGE.weapon_h_magic_desc						= "Can heal only yourself.\nCan regenerate 1 blood armor on right click\nOn Full blood armor give 5 max health."
 LANGUAGE.wep_classic					= "'Classic' Rifle"
 LANGUAGE.wep_d_classic				= "JUST boom"
+
 LANGUAGE.wep_classixx					= "CLASSIXXXXX"
 LANGUAGE.wep_d_classixx					= "Shit fly into face."
 LANGUAGE.weapon_blitzrifle_name						= "'Blitz' Assault Rifle"

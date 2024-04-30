@@ -62,7 +62,7 @@ GM.AmmoResupply["pulse"] = 30
 GM.AmmoResupply["gaussenergy"] = 3
 --GM.AmmoResupply["gravity"] = 1 -- EMP Charge.
 GM.AmmoResupply["sniperround"] = 1
---GM.AmmoResupply["grenlauncher"] = 1
+GM.AmmoResupply["grenlauncher"] = 1
 
 ------------
 -- Points --
@@ -77,9 +77,13 @@ GM:AddPointShopWeapon(0,"doublebarrel", ITEMCAT_GUNS, 15, "weapon_zs_doublebarre
 GM:AddPointShopWeapon(0,"jabbr", ITEMCAT_GUNS, 20, "weapon_zs_injector")
 GM:AddPointShopWeapon(0,"nailgun", ITEMCAT_GUNS, 50, "weapon_zs_nailgun").SkillRequirement = SKILL_HANDY3
 GM:AddPointShopWeapon(0,"biopistol", ITEMCAT_GUNS, 10, "weapon_zs_bioticpistol")
+GM:AddPointShopWeapon(0,"mini_launcher", ITEMCAT_GUNS, 25, "weapon_zs_minilauncher")
 
 local item = GM:AddPointShopWeapon(1,"deagle", ITEMCAT_GUNS, 65, "weapon_zs_deagle")
 GM:AddWeaponPrerequisite(item,"btlax")
+
+local item = GM:AddPointShopWeapon(1,"mediumlauncher", ITEMCAT_GUNS, 85, "weapon_zs_mediumlauncher")
+GM:AddWeaponPrerequisite(item,"mini_launcher")
 
 local item = GM:AddPointShopWeapon(1,"owens", ITEMCAT_GUNS, 65, "weapon_zs_owens")
 GM:AddWeaponPrerequisite(item,"btlax")
@@ -125,6 +129,10 @@ GM:AddWeaponPrerequisite(item,"deagle")
 
 local item = GM:AddPointShopWeapon(2,"dual_deagle", ITEMCAT_GUNS, 140, "weapon_zs_dual_deagle")
 GM:AddWeaponPrerequisite(item,"deagle")
+
+local item = GM:AddPointShopWeapon(2,"rpg", ITEMCAT_GUNS, 185, "weapon_zs_rpg")
+GM:AddWeaponPrerequisite(item,"mediumlauncher")
+
 
 local item = GM:AddPointShopWeapon(2,"glock3", ITEMCAT_GUNS, 135, "weapon_zs_glock3")
 GM:AddWeaponPrerequisite(item,"owens")
@@ -298,6 +306,10 @@ local item = GM:AddPointShopWeapon(5,"ads", ITEMCAT_GUNS, 360, "weapon_zs_ads")
 GM:AddWeaponPrerequisite(item,"m249")
 GM:AddWeaponPrerequisite(item,"crossbow")
 
+local item = GM:AddPointShopWeapon(5,"tesla", ITEMCAT_GUNS, 270, "weapon_zs_tesla_rifle")
+GM:AddWeaponPrerequisite(item,"slugrifle")
+GM:AddWeaponPrerequisite(item,"positron")
+
 
 GM:AddPointShopWeapon(2,"grenadelauncher", ITEMCAT_GUNS, 120, "weapon_zs_grenadelauncher")
 
@@ -374,6 +386,12 @@ GM:AddWeaponPrerequisite(item,"megamasher")
 
 local item = GM:AddPointShopWeapon(4,"murasama", ITEMCAT_MELEE, 195, "weapon_zs_murasama")
 GM:AddWeaponPrerequisite(item,"bloodseeker")
+
+
+local item = GM:AddPointShopWeapon(4,"fire_spear", ITEMCAT_MELEE, 215, "weapon_zs_fire_spear")
+GM:AddWeaponPrerequisite(item,"bloodseeker")
+GM:AddWeaponPrerequisite(item,"fire_nail")
+
 
 
 --GM:AddPointShopWeapon(nil,"zpfryp", ITEMCAT_MELEE, 31, "weapon_zs_fryingpan")
