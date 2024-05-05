@@ -181,3 +181,25 @@ function SWEP:PostDrawViewModel(vm)
 		end
 	end
 end
+
+function SWEP:IsScoped()
+	return self:GetIronsights() and self.fIronTime and self.fIronTime + 0.25 <= CurTime()
+end
+	SWEP.IronsightsMultiplier = 0.25
+
+	function SWEP:GetViewModelPosition(pos, ang)
+		if GAMEMODE.DisableScopes then return end
+
+		if self:IsScoped() then
+			return pos + ang:Up() * 256, ang
+		end
+
+		return self.BaseClass.GetViewModelPosition(self, pos, ang)
+	end
+
+	function SWEP:DrawHUDBackground()
+		if GAMEMODE.DisableScopes then return end
+		if not self:IsScoped() then return end
+
+		self:DrawFuturisticScope()
+	end

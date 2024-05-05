@@ -87,7 +87,7 @@ end
 
 
 function ENT:Attack(proj)
-	if (!proj.Twister or proj.Twister == nil or !IsValid(proj.Twister)) and proj:IsValid() then
+	if (!proj.Twister or proj.Twister == nil or !IsValid(proj.Twister)) and proj:IsValid() and proj:GetClass() ~= 'projectile_emi_rl' then
 		self:EmitSound("weapons/stunstick/alyx_stunner"..math.random(2)..".wav",75,130,1)
 		self:EmitSound("weapons/flaregun/fire.wav",75,150,0.75,CHAN_AUTO+20)
 		proj.Twister = self

@@ -326,3 +326,59 @@ end
 function meta:HideViewModel()
 	self.GetViewModelPosition = NULLViewModelPosition
 end
+local texGradientU = Material("vgui/gradient-u")
+local texGradientD = Material("vgui/gradient-d")
+local texGradientR = Material("vgui/gradient-r")
+local surface_DrawTexturedRect = surface.DrawTexturedRect
+local surface_SetDrawColor = surface.SetDrawColor
+local surface_DrawRect = surface.DrawRect
+function meta:DrawFuturisticScope()
+	local scrw, scrh = ScrW(), ScrH()
+	local size = math.min(scrw, scrh)
+	local hw,hh = scrw * 0.5, scrh * 0.5
+	local screenscale = BetterScreenScale()
+	local gradsize = math.ceil(size * 0.14)
+	local line = 38 * screenscale
+
+	for i=0,6 do
+		local rectsize = math.floor(screenscale * 44) + i * math.floor(130 * screenscale)
+		local hrectsize = rectsize * 0.5
+		surface_SetDrawColor(0,145,255,math.max(35,25 + i * 30)/2)
+		surface.DrawOutlinedRect(hw-hrectsize,hh-hrectsize,rectsize,rectsize)
+	end
+	if scrw > size then
+		local extra = (scrw - size) * 0.5
+		for i=0,12 do
+			surface_SetDrawColor(0,145,255, math.max(10,255 - i * 21.25)/2)
+			surface.DrawLine(hw,i*line,hw,i*line+line)
+			surface.DrawLine(hw,scrh-i*line,hw,scrh-i*line-line)
+			surface.DrawLine(i*line+extra,hh,i*line+line+extra,hh)
+			surface.DrawLine(scrw-i*line-extra,hh,scrw-i*line-line-extra,hh)
+		end
+		surface_SetDrawColor(0, 0, 0, 255)
+		surface_DrawRect(0, 0, extra, scrh)
+		surface_DrawRect(scrw - extra, 0, extra, scrh)
+	end
+	if scrh > size then
+		local extra = (scrh - size) * 0.5
+		for i=0,12 do
+			surface_SetDrawColor(0,145,255, math.max(10,255 - i * 21.25)/2)
+			surface.DrawLine(hw,i*line+extra,hw,i*line+line+extra)
+			surface.DrawLine(hw,scrh-i*line-extra,hw,scrh-i*line-line-extra)
+			surface.DrawLine(i*line,hh,i*line+line,hh)
+			surface.DrawLine(scrw-i*line,hh,scrw-i*line-line,hh)
+		end
+		surface_SetDrawColor(0, 0, 0, 255)
+		surface_DrawRect(0, 0, scrw, extra)
+		surface_DrawRect(0, scrh - extra, scrw, extra)
+	end
+
+	surface.SetMaterial(texGradientU)
+	surface_SetDrawColor(0,0,0,255)
+	surface_DrawTexturedRect((scrw - size) * 0.5, (scrh - size) * 0.5, size, gradsize)
+	surface.SetMaterial(texGradientD)
+	surface_DrawTexturedRect((scrw - size) * 0.5, scrh - (scrh - size) * 0.5 - gradsize, size, gradsize)
+	surface.SetMaterial(texGradientR)
+	surface_DrawTexturedRect(scrw - (scrw - size) * 0.5 - gradsize, (scrh - size) * 0.5, gradsize, size)
+	surface.DrawTexturedRectRotated((scrw - size) * 0.5 + gradsize / 2, (scrh - size) * 0.5 + size / 2, gradsize, size, 180)
+end

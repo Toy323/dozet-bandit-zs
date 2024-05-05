@@ -32,18 +32,18 @@ function EFFECT:Init(effectdata)
 		particle:SetEndLength(90)
 		particle:SetVelocity(VectorRand():GetNormal() * 220)
 	end
-	local ringstart = pos + normal * -3
+	local ringstart = pos + Vector(0,0,1) * -3--
 	for i=1, 10 do
-		particle = emitter2:Add("effects/select_ring", ringstart - Vector(0,0,21) + Vector(0,0,3) * i%5  )
-		particle:SetDieTime(0.1 + i%5 * 0.1)
+		particle = emitter2:Add("effects/select_ring", ringstart - Vector(0,0,21) + Vector(0,0,3) * (i%5)  )--(i%5)
+		particle:SetDieTime(0.1 + (i%5) * 0.1)
 		particle:SetColor(222, 22, 22)
 		particle:SetStartAlpha(185)
 		particle:SetEndAlpha(0)
 		particle:SetStartSize(0)
 		particle:SetEndSize(110)
 		particle:SetAngles(normal:Angle())
-		particle = emitter2:Add("effects/select_ring", ringstart - Vector(0,0,21)  + Vector(0,0,7) * i%5 )
-		particle:SetDieTime(0.2 + i%5 * 0.1)
+		particle = emitter2:Add("effects/select_ring", ringstart - Vector(0,0,21)  + Vector(0,0,7) * (i%5) )
+		particle:SetDieTime(0.2 + (i%5) * 0.1)
 		particle:SetColor(192, 22, 22)
 		particle:SetStartAlpha(185)
 		particle:SetEndAlpha(0)

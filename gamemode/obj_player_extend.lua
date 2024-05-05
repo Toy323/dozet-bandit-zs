@@ -195,10 +195,17 @@ function meta:GetBleedDamage()
 	return self.Bleed and self.Bleed:IsValid() and self.Bleed:GetDamage() or 0
 end
 
-function meta:HealHealth(toheal,healer, wep)
+function meta:HealHealth(toheal,healer, wep, ignorebio)
 	if GAMEMODE:GetSpecialWave() == "1hp" then return end
 	local oldhealth = self:Health()
 	local newhealth = math.min(self:GetMaxHealth(),oldhealth + toheal)
+	if self:IsSkillActive(SKILL_SUPER_BIO) and !ignorebio then
+		print(math.Clamp(toheal/4,1,10))
+		for i=1,math.Round(math.Clamp(toheal/4,1,10)) do
+			timer.Simple(4/i, function() self:HealHealth(math.Round(toheal/4), healer, wep, true) end)
+		end
+		return
+	end
 	self:SetHealth(newhealth)
 	if SERVER and toheal >= 5 then
 		self:PurgeStatusEffects()

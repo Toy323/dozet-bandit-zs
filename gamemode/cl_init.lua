@@ -932,8 +932,11 @@ end
 local texGradientDown = surface.GetTextureID("vgui/gradient_down")
 local texGradientRight = surface.GetTextureID("vgui/gradient-r")]]
 --local color_black = color_black
+
+
 local texCircle = surface.GetTextureID("effects/select_ring")
 local defaultcolor =  Color(255, 255, 255, 255)
+
 function GM:_HUDPaintBackground()
 	local wep = MySelf:GetActiveWeapon()
 	if wep:IsValid() and wep.DrawHUDBackground then

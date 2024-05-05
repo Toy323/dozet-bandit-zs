@@ -6,7 +6,7 @@ include("shared.lua")
 function ENT:Think()
 	local owner = self:GetOwner()
 
-	if self:GetTime() <= 0 or not owner:Alive() or (owner:Team() == self.Damager:Team() and owner ~= self.Damager) then
+	if self:GetTime() <= 0 or not owner:Alive() or (owner:Team() == self.Damager:Team() and owner ~= self.Damager) or owner:IsSkillActive(SKILL_SUPER_BIO) then
 		self:Remove()
 		return
 	end

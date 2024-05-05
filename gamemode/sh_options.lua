@@ -166,6 +166,7 @@ GM:AddWeaponPrerequisite(item,"shredder")
 local item = GM:AddPointShopWeapon(2,"abakan", ITEMCAT_GUNS, 125, "weapon_zs_abakan")
 GM:AddWeaponPrerequisite(item,"kalash")
 
+
 local item = GM:AddPointShopWeapon(3,"sprayer_dual", ITEMCAT_GUNS, 155, "weapon_zs_dual_uzi")
 GM:AddWeaponPrerequisite(item,"sprayer")
 GM:AddWeaponPrerequisite(item,"dual_deagle")
@@ -184,6 +185,8 @@ GM:AddWeaponPrerequisite(item,"kalash")
 local item = GM:AddPointShopWeapon(2,"podvodny", ITEMCAT_GUNS, 145, "weapon_zs_podvodny")
 GM:AddWeaponPrerequisite(item,"inquisition")
 
+local item = GM:AddPointShopWeapon(3,"rpg_m8", ITEMCAT_GUNS, 225, "weapon_zs_commando")
+GM:AddWeaponPrerequisite(item,"rpg")
 
 
 local item = GM:AddPointShopWeapon(3,"immortal", ITEMCAT_GUNS, 200, "weapon_zs_immortal")
@@ -264,6 +267,9 @@ GM:AddWeaponPrerequisite(item,"renegade")
 
 local item = GM:AddPointShopWeapon(4,"palliator", ITEMCAT_GUNS, 290, "weapon_zs_palliator")
 GM:AddWeaponPrerequisite(item,"medicrifle")
+
+local item = GM:AddPointShopWeapon(4,"rpg_m8", ITEMCAT_GUNS, 195, "weapon_zs_cl_1488")
+GM:AddWeaponPrerequisite(item,"rpg_m8")
 
 local item = GM:AddPointShopWeapon(4,"blightcaster", ITEMCAT_GUNS, 280, "weapon_zs_blightcaster")
 GM:AddWeaponPrerequisite(item,"biorifle")

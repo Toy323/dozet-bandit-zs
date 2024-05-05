@@ -50,39 +50,32 @@ function ENT:Explode(hitpos, hitnormal, hitent, boom)
 	self.Exploded = true
 	local jump = false
 	local owner = self:GetOwner()
-	local used = false
 	if owner:IsValid() then
 		local source = self
 		for k,v in pairs(ents.FindInSphere(self:GetPos(),120)) do
-			if v == owner then jump = true owner:SetVelocity(v:GetVelocity()+Vector(0,0,310)) break end
-			if v:IsPlayer() and v ~= owner and v:Team() == TEAM_UNDEAD then
-				v:SetVelocity(v:GetVelocity()+Vector(0,0,330))
-				v:AddLegDamage(55)
-				if !v:OnGround() then
-					v:TakeDamage((self.ProjDamage or 29)*1.2,owner,self)
-				end
-				used = true
-			end
+			if v == owner then jump = true owner:SetVelocity(v:GetVelocity()+Vector(0,0,310)) v:AddLegDamage(55) break end
 		end
 
 		if !jump then
-			util.BlastDamagePlayer(source, owner, hitpos, 81 * (hitent and hitent:OnGround() and 1 or 1.3), (self.ProjDamage or 29) * (hitent and hitent:OnGround() and 1 or 1.2), DMG_ALWAYSGIB, 0.95)
-			if self.FireITH and math.random(1,3) == 1 then
-				for k,v in pairs(ents.FindInSphere(hitpos, 108)) do
-					if v and v:IsValid() and v:IsPlayer() and v:Alive() and v:Team() ~= owner:Team() then
-						local burned = v:GiveStatus('burn')
-						burned:AddTime(2)
-						burned.Damager = owner
-						burned.Damage = 5
+			util.BlastDamagePlayer(source, owner, hitpos, 81, (self.ProjDamage or 29), DMG_ALWAYSGIB, 0.95)
+			for k,v in pairs(ents.FindInSphere(hitpos, 108)) do
+				if v and v:IsValid() and !v:IsPlayer() then
+					if v.FireTurret then
+						v:SetNextFire(CurTime() + 7)
+					elseif v:GetClass() == "prop_ffemitterfield" then
+						v:Remove()
 					end
 				end
 			end
-			if (hitent and hitent:IsPlayer() and !hitent:OnGround() or boom) then
+			if boom then
 				--net.Start("zs_update_style") net.WriteTable({time = CurTime()+4+(math.random(10,20)*0.2),text = "AIRBOOM!",score = 90,color = Color(196,196,196)}) net.Send(owner) 
-				local edata = EffectData()
-				edata:SetOrigin(self:GetPos())
-				edata:SetNormal(Vector(0,0,5))
-				util.Effect("explosion_airboom",edata)
+				local ent = ents.Create("prop_electricfield")
+				if ent:IsValid() then
+					ent:SetPos(hitpos)
+					ent:SetOwner(owner)
+					ent:Spawn()
+					ent:SetModelScale(3, 3)
+				end
 			end
 		end
 	end

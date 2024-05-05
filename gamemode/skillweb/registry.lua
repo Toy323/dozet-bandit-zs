@@ -203,6 +203,7 @@ SKILL_TURRET_MAN = 93
 SKILL_WHEE_WHEE = 94
 SKILL_COLD_REFUSION = 95
 SKILL_FOLGA = 96
+SKILL_SUPER_BIO = 97
 
 
 SKILLMOD_HEALTH = 1
@@ -411,8 +412,11 @@ GM:AddSkill(SKILL_ADRENALINE_HP, "Усиленная регенерация", GO
 GM:AddSkill(SKILL_TANKIST, "Идeальный ход", GOOD.."Вы нe получаeтe урон в блокe.\n".."Вы мeдлeнны в блокe.",
 																-0,			3,					{SKILL_BAD_HP}, TREE_HEALTHTREE)
 GM:AddSkill(SKILL_PARRY_SLOW, "Тайны мастерства", GOOD.."Парирование длится на 3 тика больше.\n1 тик = 0.1 секунды\n"..BAD.."Задержка блока +0.7 секунды.",
-																-0,			4,					{SKILL_TANKIST}, TREE_HEALTHTREE)
-															
+																-0,			4.5,					{SKILL_TANKIST}, TREE_HEALTHTREE)
+																
+GM:AddSkill(SKILL_SUPER_BIO, "Сыворотка \"Эгида\"", GOOD.."Яд от мед.пушек не наносит вам ущерба и немного повышается скорость ходьбы(+11).\n"..BAD.."Вместо моментального лечения,он постепенный и уменьшен на 60%.",
+																-2,			5.5,					{SKILL_ULTRADEFENCE}, TREE_HEALTHTREE)
+GM:AddSkillModifier(SKILL_SUPER_BIO, SKILLMOD_SPEED, 11)
 GM:AddSkill(SKILL_ULTRADEFENCE, translate.Get("skill_ultradefence"), GOOD..translate.Get("skill_ultradefence_d1")..BAD.."-70"..translate.Get("speed"),
 																-2,			4,					{SKILL_STOIC5}, TREE_HEALTHTREE)
 GM:AddSkill(SKILL_RAGDOG, translate.Get("skill_ragdoller"), GOOD..translate.Get("skill_ragdoller_d1")..BAD..translate.Get("skill_ragdoller_d2"),

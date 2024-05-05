@@ -4,8 +4,8 @@ ENT.NextEmit = 0.1
 local matFlesh = Material("effects/fire_cloud2")
 
 local function GetMuzzlePos( wep, attachment )
-	if !wep.VElements or !wep.VElements['barrel2'] then return wep:GetOwner() end
-	return wep.VElements['barrel2'].modelEnt 
+	if !wep.VElements or !(wep.VElements['barrel2'] or wep.VElements['lazer']) then return wep:GetOwner() end
+	return wep.VElements['barrel2'] and wep.VElements['barrel2'].modelEnt or wep.VElements['lazer'].modelEnt 
 end
 
 function ENT:Draw()
