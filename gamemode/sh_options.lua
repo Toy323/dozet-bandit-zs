@@ -268,7 +268,7 @@ GM:AddWeaponPrerequisite(item,"renegade")
 local item = GM:AddPointShopWeapon(4,"palliator", ITEMCAT_GUNS, 290, "weapon_zs_palliator")
 GM:AddWeaponPrerequisite(item,"medicrifle")
 
-local item = GM:AddPointShopWeapon(4,"rpg_m8", ITEMCAT_GUNS, 195, "weapon_zs_cl_1488")
+local item = GM:AddPointShopWeapon(4,"rpg_modified", ITEMCAT_GUNS, 195, "weapon_zs_cl_1488")
 GM:AddWeaponPrerequisite(item,"rpg_m8")
 
 local item = GM:AddPointShopWeapon(4,"blightcaster", ITEMCAT_GUNS, 280, "weapon_zs_blightcaster")

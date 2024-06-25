@@ -17,11 +17,11 @@ function ENT:Think()
 		self:Remove()
 	end
 	if self.NoIceThrower and self.NextFire < CurTime() then
-		self.NextFire = CurTime() + 0.3
+		self.NextFire = CurTime() + 0.1
 		local owner = self:GetOwner()
-		local size = 200
+		local size = 300
 		local dir = owner:GetAimVector()
-		local angle = math.cos( math.rad( 25 ) ) -- 30 degrees
+		local angle = math.cos( math.rad( 45 ) ) -- 30 degrees
 		local startPos = owner:EyePos()
 
 		local entities = ents.FindInCone( startPos, dir, size, angle )

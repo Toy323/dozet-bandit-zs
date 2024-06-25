@@ -90,12 +90,12 @@ SWEP.ReloadSound = Sound("buttons/lever7.wav")
 SWEP.Primary.Sound = Sound("weapons/grenade_launcher1.wav", 70, 90)
 SWEP.Primary.Damage = 60
 SWEP.Primary.NumShots = 0
-SWEP.Primary.Delay = 0.1
+SWEP.Primary.Delay = 0.45
 SWEP.Primary.Automatic = false
 
 SWEP.Primary.ClipSize = 4
 SWEP.Primary.Ammo = "grenlauncher"
-GAMEMODE:SetupDefaultClip(SWEP.Primary)
+SWEP.Primary.DefaultClip = 4
 
 SWEP.ConeMax = 0
 SWEP.ConeMin = 0

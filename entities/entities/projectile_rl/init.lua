@@ -9,11 +9,13 @@ function ENT:Initialize()
 	self:SetSolid(SOLID_VPHYSICS)
 	self:SetModelScale(0.2, 0)
 	self:DrawShadow(false)
+	self:SetCollisionGroup(COLLISION_GROUP_PROJECTILE)
 
 	self.Bounces = 0
 	self.ExplodeTime = CurTime() + self.LifeTime
 	self.Grace = CurTime() + 0.1
 	self.Core = true
+	self.NoWhirlWhind = false
 end
 
 function ENT:Think()

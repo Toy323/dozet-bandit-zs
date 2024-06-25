@@ -146,7 +146,7 @@ function meta:ApplyAdrenaline()
 		self.HealthDead = (self.HealthDead or 0) + 10
 		self:SetMaxHealth(self.HealthForADR-self.HealthDead)
 		if self:IsSkillActive(SKILL_ADRENALINE_HP) and  GAMEMODE:GetSpecialWave() ~= "1hp"  then
-			self:SetHealth(math.min(self:GetMaxHealth() * 0.3 + self:Health(), self:GetMaxHealth()))
+			self:SetHealth(math.min(self:GetMaxHealth() * 0.1 + self:Health(), self:GetMaxHealth()))
 		else
 			self:SetBloodArmor(self:GetBloodArmor() + 15)
 		end

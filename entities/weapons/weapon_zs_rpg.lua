@@ -73,7 +73,7 @@ SWEP.ShowViewModel = false
 
 SWEP.ReloadSound = Sound("buttons/lever7.wav")
 SWEP.Primary.Sound = Sound("weapons/grenade_launcher1.wav", 70, 90)
-SWEP.Primary.Damage = 125
+SWEP.Primary.Damage = 67
 SWEP.Primary.NumShots = 0
 SWEP.Primary.Delay = 0.5
 SWEP.Primary.Automatic = false
