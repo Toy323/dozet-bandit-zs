@@ -168,10 +168,9 @@ function meta:ShakeUser()
 	return table.Random(d)
 end
 function meta:ApplySkills(override)
-	if GAMEMODE.ZombieEscape or GAMEMODE.ClassicMode then return end -- Skills not used on these modes
 	local allskills = GAMEMODE.Skills
-	local desired = override or self:Alive() and self:GetDesiredActiveSkills() or {}
-	local current_active = self:GetActiveSkills()
+	local desired = {}
+	local current_active = {}
 	local desired_assoc = table.ToAssoc(desired)
 
 
@@ -207,16 +206,6 @@ function meta:ApplySkills(override)
 
 	-- Store and sync with client.
 	self:SetActiveSkills(desired_assoc, not self.PlayerReady)
-	--self.SkillUsed = true
-	if self:IsSkillActive(SKILL_2_LIFE) then
-		local standu = self:ShakeUser()
-
-		if standu:IsValid() and SERVER and (!self:GetStandUser() or !self:GetStandUser():IsValid() or self:GetStandUser():Team() ~= self:Team()) then
-			self:SetStandUser(standu)
-			self:GetStandUser():CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", team.GetColor(self:Team()), translate.ClientGet(self:GetStandUser(),"ur_stand"), self,{killicon = "default"})
-			self:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", team.GetColor(self:GetStandUser():Team()), translate.ClientGet(self,"ur_user"), self:GetStandUser(),{killicon = "default"})
-		end
-	end
 end
 
 -- For trinkets, these apply after your skills, and they need to work differently so they can't be used to "update" your skills midgame.

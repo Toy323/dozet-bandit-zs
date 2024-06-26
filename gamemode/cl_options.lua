@@ -30,6 +30,8 @@ end)
 CreateClientConVar("zsb_spectator", "0", true, true)
 cvars.AddChangeCallback("zsb_spectator", function(cvar, oldvalue, newvalue)
 	GAMEMODE.SpectatorMode = tonumber(newvalue) == 1
+	net.Start('zs_fix_spec')
+	net.SendToServer()
 end)
 CreateClientConVar("zsb_canhear", "0", true, true)
 GM.BeatsVolume = math.Clamp(CreateClientConVar("zsb_beatsvolume", 80, true, false):GetInt(), 0, 100) / 100

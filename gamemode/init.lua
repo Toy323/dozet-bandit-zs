@@ -252,6 +252,10 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_waveend")
 	util.AddNetworkString("zs_suddendeath")
 
+	util.AddNetworkString("zs_fix_spec")
+
+	
+
 	util.AddNetworkString("zs_skills_active")
 	util.AddNetworkString("zs_skills_unlocked")
 	util.AddNetworkString("zs_skills_desired")
@@ -3261,4 +3265,7 @@ net.Receive("zs_stand_become", function(length, pl)
 			pl.NextUserChange = CurTime() + 5
 		end
 	end
+end)
+net.Receive("zs_fix_spec", function(length, pl)
+	pl:SetPoints(0)
 end)

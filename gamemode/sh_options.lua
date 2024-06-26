@@ -409,7 +409,7 @@ item.NoSampleCollectMode = true
 GM:AddPointShopWeapon(nil,"hooker", ITEMCAT_TOOLS, 125, "weapon_zs_hookinator_300")
 
 
-GM:AddPointShopWeapon(nil,"palochka_huyalochka", ITEMCAT_TOOLS, 165, "weapon_zs_palka")
+--GM:AddPointShopWeapon(nil,"palochka_huyalochka", ITEMCAT_TOOLS, 165, "weapon_zs_palka")
 
 GM:AddPointShopWeapon(nil,"whirlwind", ITEMCAT_TOOLS, 70, "weapon_zs_whirlwind")
 local item = GM:AddPointShopWeapon(nil,"backdoor", ITEMCAT_TOOLS, 45, "weapon_zs_backdoor")

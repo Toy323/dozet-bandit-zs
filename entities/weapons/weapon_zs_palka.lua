@@ -90,7 +90,7 @@ end
 function SWEP:GetMagicID(name)
 	return self.Magics[name]
 end
-if 1 then
+if false then
 	local function DoRicochet(attacker, hitpos, hitnormal, normal, damage, call)
 		attacker:FireBullets({Num = 1, Src = hitpos, Dir =  2 * hitnormal * hitnormal:Dot(normal * -1) + normal, Spread = Vector(0, 0, 0), Tracer = 1, TracerName = 'tracer_interception', Force = 1, Damage = damage, Callback = call})
 	end
