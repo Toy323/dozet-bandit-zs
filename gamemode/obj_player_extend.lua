@@ -157,7 +157,7 @@ end
 
 function meta:WearBodyArmor()
 	self:ResetSpeed() 
-	self:SetBodyArmor((self:GetBodyArmor() or 0)+100 - self:GetBloodArmor())
+	self:SetBodyArmor(100 - self:GetBloodArmor())
 	self:EmitSound("npc/combine_soldier/gear"..math.random(6)..".wav")
 	return true
 end
