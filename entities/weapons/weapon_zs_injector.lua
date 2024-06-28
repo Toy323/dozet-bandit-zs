@@ -137,12 +137,10 @@ function SWEP:PrimaryAttack()
 			curtgt:HealHealth(self.Primary.Damage,owner,self)
 		else
 			local invuln = curtgt:GetStatus("spawnbuff")
-			local repull = curtgt:IsSkillActive(SKILL_REPULLER)
 			local see = false 
-			if repull then
-				local size = 300
+				local size = 500
 				local dir = curtgt:GetAimVector()
-				local angle = math.cos( math.rad( 45 ) ) 
+				local angle = math.cos( math.rad( 115 ) ) 
 				local startPos = curtgt:EyePos()
 
 				local entities = ents.FindInCone( startPos, dir, size, angle )
@@ -152,23 +150,17 @@ function SWEP:PrimaryAttack()
 						break
 					end
 				end
-			end
 			if not (invuln and invuln:IsValid()) then
 				local getblock = (curtgt:GetActiveWeapon().IsMelee and curtgt:GetActiveWeapon():GetBlock())
-				if repull and see then
-					owner = curtgt
-					curtgt = self:GetOwner()				
-				end
 				local tox = curtgt:GetStatus("tox")
 
-				local ultra = owner:IsSkillActive(SKILL_INJECTOR)
-				local time = (ultra and 4 or  self.ToxDuration) * (getblock and 0.3 or 1)
+				local time =  self.ToxDuration * (getblock and 0.3 or 1)
 				if (tox and tox:IsValid()) then
 					tox:AddTime(time)
 					tox:SetOwner(curtgt)
-					tox.Damage = (ultra and 0.1 or self.ToxicDamage)
+					tox.Damage = self.ToxicDamage
 					tox.Damager = owner
-					tox.TimeInterval = (ultra and 2 or self.ToxicTick)
+					tox.TimeInterval = self.ToxicTick
 				else
 					stat = curtgt:GiveStatus("tox")
 					stat:SetTime(time)
@@ -178,7 +170,9 @@ function SWEP:PrimaryAttack()
 					stat.TimeInterval = (ultra and 1 or self.ToxicTick)
 				end
 				curtgt:AddLegDamage(dmg*2)
-				curtgt:GiveStatus("knockdown", (ultra and (owner:GetFocusD() and 2.5 or 5) or  (owner:GetFocusD() and 1 or 2)) * (getblock and 0.3 or 1))
+				if !see then
+					curtgt:GiveStatus("knockdown", 2 * (getblock and 0.3 or 1))
+				end
 			end
 		end
 	end	
@@ -260,7 +254,27 @@ if CLIENT then
 			local sameteam = (ent:Team() == MySelf:Team())
 			local x1,y1,x2,y2 = self:GetEntScreenCoords(ent)
 			surface.SetDrawColor(sameteam and COLOR_DARKGREEN or COLOR_DARKRED)
+			if !sameteam then
+
+				local see = false
+				local size = 500
+				local dir = ent:GetAimVector()
+				local angle = math.cos( math.rad( 115 ) ) 
+				local startPos = ent:EyePos()
+	
+				local entities = ents.FindInCone( startPos, dir, size, angle )
+				for id, ent2 in ipairs( entities ) do
+					if ent2:IsValid() and WorldVisible(ent2:GetPos(),startPos) and ent2 == self then
+						see = true
+						break
+					end
+				end
+				if !see then
+					surface.SetDrawColor(COLOR_DARKGREEN)
+				end
+			end
 			surface.DrawOutlinedRect(x1, y1, x2-x1, y2-y1, 6)
+
 		end
 		if self.BaseClass.DrawHUD then
 			self.BaseClass.DrawHUD(self)

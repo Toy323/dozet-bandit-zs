@@ -17,7 +17,7 @@ ENT.CanPackUp = true
 ENT.IsBarricadeObject = true
 ENT.AlwaysGhostable = true
 ENT.MaxUpgrades = 5
-ENT.UpgradeCost = 7
+ENT.UpgradeCost = 5
 ENT.AvailableUpgrades = 2
 
 local NextCache = 0

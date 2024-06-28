@@ -145,7 +145,7 @@ function ENT:FireTurret(src, dir)
 				ent:SetAngles(dir:Angle())
 				ent:SetOwner(owner)
 				ent:Spawn()
-				ent.Damage = self.BaseDamageST + 7 * self:GetUpgrade()
+				ent.Damage = self.BaseDamageST + 12 * self:GetUpgrade()
 				local phys = ent:GetPhysicsObject()
 				if phys:IsValid() then
 					local dira = dir:Angle()
@@ -175,7 +175,7 @@ function ENT:Think()
 	local owner = self:GetObjectOwner()
 	if self.NextShield < CurTime() then
 		self:SetAmmo(self:GetAmmo()+1)
-		self.NextShield = CurTime() + 10
+		self.NextShield = CurTime() + 4.5
 	end
 	if owner:IsValid() and self:GetAmmo() > 0 and self:GetMaterial() == "" and GAMEMODE:GetWaveActive() then
 		if self:GetManualControl() then

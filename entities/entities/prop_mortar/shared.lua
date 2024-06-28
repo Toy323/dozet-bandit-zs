@@ -17,7 +17,7 @@ ENT.CanPackUp = true
 ENT.IsBarricadeObject = true
 ENT.AlwaysGhostable = true
 ENT.MaxUpgrades = 7
-ENT.UpgradeCost = 9
+ENT.UpgradeCost = 8
 
 local NextCache = 0
 local CachedFilter = {}
@@ -58,7 +58,7 @@ function ENT:SetShieldDamage(dmg)
 	return self:SetDTFloat(12, dmg)
 end
 ENT.BaseDamageST = 85
-ENT.WhatUpgradeGive = { ["Урон"] = 7,
+ENT.WhatUpgradeGive = { ["Урон"] = 12,
 ["Макс.патрон"] = {1,5},
 }
 

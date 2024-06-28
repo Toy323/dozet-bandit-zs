@@ -259,7 +259,7 @@ function ENT:FireTurret(src, dir)
 			local upgrade = self:GetUpgrade()
 			self:SetNextFire(CurTime() + 0.07)
 			self.LastCharge = CurTime() + 2
-			self:SetAmmo(curammo - (1 + upgrade*3))
+			self:SetAmmo(curammo - (1 + upgrade*1.5))
 			self:StartBulletKnockback()
 			self:PlayShootSound()
 			self.Traced = false
