@@ -809,6 +809,9 @@ function GM:Think()
 				pl.StaminaUsed = time + 0.015 * pl:GetStamina()/40
 				pl:AddStamina(1)
 			end
+			if pl:Team() == TEAM_SPECTATOR then
+				pl:Kill()--lol
+			end
 
 			if pl.ColdUsed < time then
 				pl.ColdUsed = time + 0.76
@@ -1241,6 +1244,7 @@ end
 function GM:EndRound(winner)
 	if self.RoundEnded then return end
 	self:SaveAllVaults()
+	self.WeaponSaveLol = {}
 	self.RoundEnded = true
 	self.RoundEndedTime = CurTime()
 	ROUNDWINNER = winner
@@ -1361,7 +1365,7 @@ function GM:PlayerInitialSpawn(pl)
 	self:InitializeVault(pl)
 	gamemode.Call("PlayerInitialSpawnRound", pl)
 end
-
+GM.WeaponSaveLol = {}
 function GM:PlayerInitialSpawnRound(pl)
 	--pl:RemoveSuit()
 	if pl:KeyDown(IN_WALK) then
@@ -1489,7 +1493,7 @@ function GM:PlayerInitialSpawnRound(pl)
 		self.CurrentMapLoadedPlayers = self.CurrentMapLoadedPlayers + 1;
 	end
 
-	pl.ClassicModeInsuredWeps = {}
+	pl.ClassicModeInsuredWeps = self.WeaponSaveLol[pl:SteamID64()] or {}
 	pl.ClassicModeNextInsureWeps = {}
 	pl.ClassicModeRemoveInsureWeps = {}
 	pl:SendLua("GAMEMODE.ClassicModeInsuredWeps = {}")
@@ -2965,6 +2969,7 @@ function GM:PlayerSpawn(pl)
 						end
 					end
 				end
+				self.WeaponSaveLol[pl:SteamID64()] = pl.ClassicModeInsuredWeps
 			else
 				pl:UpdateWeaponLoadouts()
 				if not self.SuddenDeath then

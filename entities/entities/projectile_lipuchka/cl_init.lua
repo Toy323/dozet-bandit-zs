@@ -19,18 +19,17 @@ function ENT:Initialize()
 end
 
 function ENT:Draw()
+	local base32 = self:GetDTInt(12)
 
-
-	render.SetBlend(0.65)
+	render.SetBlend(0.65 - (base32 > 12 and 0.2 or 0))
 	self:DrawModel()
 	render.SetBlend(1)
 	local a = math.abs(math.sin(CurTime())) ^ 3
 	local hscale = 0.2 + a * 0.04
 	local floormodel = 	self.FloorModel
 	local fmvalid = floormodel:IsValid()
-
 	if fmvalid then
-		local base = 0.08 * self:GetDTInt(12)
+		local base = 0.08 * base32
 		floormodel:ManipulateBoneScale(0, Vector(hscale * 2 + base , hscale * 2 + base, hscale * 2 + base))
 	end
 

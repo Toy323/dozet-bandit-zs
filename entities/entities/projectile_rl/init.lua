@@ -16,6 +16,7 @@ function ENT:Initialize()
 	self.Grace = CurTime() + 0.1
 	self.Core = true
 	self.NoWhirlWhind = false
+	self.fTicks = 0
 end
 
 function ENT:Think()
@@ -25,7 +26,14 @@ function ENT:Think()
 	local owner = self:GetOwner() 
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then
-		phys:SetVelocityInstantaneous(phys:GetVelocity()*1.05+Vector(0,0,12))
+		self.fTicks = self.fTicks + 1
+		local mul = 1.1
+		local vec = Vector(0,0,52)
+		if self.fTicks > 3 then
+			mul = 1.02
+			vec = Vector(0,0,12)
+		end
+		phys:SetVelocityInstantaneous(phys:GetVelocity()*mul+vec)
 	end
 	if self.PhysicsData then
 		if self.Bounces <= 0 or self.PhysicsData.HitEntity:IsPlayer() or self.PhysicsData.HitEntity.ZombieConstruction then

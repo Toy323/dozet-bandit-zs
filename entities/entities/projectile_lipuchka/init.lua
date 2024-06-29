@@ -7,7 +7,7 @@ function ENT:Initialize()
 	self.DeathTime = CurTime() + 30
 
 	self:SetModel("models/props/cs_italy/orange.mdl")
-	self:PhysicsInitSphere(1)
+	self:PhysicsInitSphere(4)
 	self:SetSolid(SOLID_VPHYSICS)
 	self:SetCollisionGroup(COLLISION_GROUP_PROJECTILE)
 	self:SetColor(Color(0, 255, 0, 255))
@@ -82,9 +82,9 @@ function ENT:PhysicsCollide(data, phys)
 					effectdata:SetOrigin(pos)
 					effectdata:SetNormal(Vector(0,0,1))
 				util.Effect("spithit", effectdata)
-				v.DeathTime = v.DeathTime + 2 * v:GetDTInt(12)
+				v.DeathTime = v.DeathTime + 5 * (v:GetDTInt(12)+add)
 				if v:GetDTInt(12) > 17 then
-					for i=1,8 do
+					for i=1,math.Round((v:GetDTInt(12)+add)/2) do
 						local ent = ents.Create("projectile_lipuchka")
 						if ent:IsValid() then
 							ent:SetPos(pos+Vector(0,0,20))
@@ -95,7 +95,7 @@ function ENT:PhysicsCollide(data, phys)
 		
 							local phys = ent:GetPhysicsObject()
 							if phys:IsValid() then
-								phys:SetVelocityInstantaneous(VectorRand(-200,300))
+								phys:SetVelocityInstantaneous(VectorRand(-260,260))
 							end
 						end
 					end
