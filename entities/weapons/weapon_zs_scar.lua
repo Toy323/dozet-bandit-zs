@@ -96,8 +96,8 @@ SWEP.Primary.Ammo = "ar2"
 SWEP.Primary.Gesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_AR2
 SWEP.ReloadGesture = ACT_HL2MP_GESTURE_RELOAD_AR2
 
-SWEP.ConeMax = .35
-SWEP.ConeMin = .14
+SWEP.ConeMax = .25
+SWEP.ConeMin = .11
 SWEP.Recoil = 0.4
 SWEP.Primary.DefaultClip = 30
 --GAMEMODE:SetupDefaultClip(SWEP.Primary)

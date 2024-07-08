@@ -16,18 +16,26 @@ if CLIENT then
 	}
 end
 
-SWEP.Base = "weapon_zs_basemelee"
+SWEP.MeleeDamage = 80
+SWEP.MeleeRange = 55
+SWEP.MeleeSize = 1.5
+SWEP.MeleeKnockBack = 32
+if USE_NEW_MELEE_BASE then
+	SWEP.Base = "weapon_zs_basemelee_new"	
+	
+	SWEP.MeleeDamage = 17
+	SWEP.Attacks_Per_Swung = 5
+	SWEP.OverPosition =  {12,1,21}
+	SWEP.Additionalism =  {-3,-1.8,-8}
+else
+	SWEP.Base = "weapon_zs_basemelee"
+end
 
 SWEP.ViewModel = "models/weapons/c_stunstick.mdl"
 SWEP.WorldModel = "models/props/cs_militia/axe.mdl"
 SWEP.UseHands = true
 
 SWEP.HoldType = "melee2"
-
-SWEP.MeleeDamage = 80
-SWEP.MeleeRange = 55
-SWEP.MeleeSize = 1.5
-SWEP.MeleeKnockBack = 32
 
 SWEP.Stamina = 33
 
@@ -52,3 +60,4 @@ end
 function SWEP:PlayHitFleshSound()
 	self:EmitSound("physics/body/body_medium_break"..math.random(2, 4)..".wav")
 end
+

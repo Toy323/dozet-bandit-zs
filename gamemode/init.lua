@@ -1500,7 +1500,7 @@ function GM:PlayerInitialSpawnRound(pl)
 	pl:SendLua("GAMEMODE.ClassicModePurchasedThisWave = {}")
 	pl:ResetLoadout()
 	if not self:IsRoundModeUnassigned() then
-		if self:IsClassicMode() then
+		if self:IsClassicMode() and !self.WeaponSaveLol[pl:SteamID64()] then
 			table.ForceInsert(pl.ClassicModeInsuredWeps,pl:GetWeapon2())
 			table.ForceInsert(pl.ClassicModeInsuredWeps,pl:GetWeaponMelee())
 		end
@@ -3182,7 +3182,7 @@ function GM:WaveEnded()
 	end
 	timer.Simple(1, function() self:SetCurrentWaveWinner(nil) end)
 end
-local specialwaves = {"1hp", "anubis", "bhop", "aos", "doa", "old", 'coldera', "urmteam"}
+local specialwaves = {"1hp", "anubis", "bhop", "aos", "doa", "old", 'coldera', "urmteam", "palka"}
 function GM:ActivateSpecialWave(force)
 	local wave = ""
 	if force then
@@ -3219,6 +3219,17 @@ function GM:ActivateSpecialWave(force)
 				end
 			end
 		end)
+	elseif wave == "palka" then
+		timer.Simple(0.5, function() 
+			for _, pl in pairs(player.GetAll()) do
+				if pl:IsValid() then
+					pl:Give('weapon_zs_palka')
+				end
+			end
+		end)
+		gamemode.Call("SetWaveStart", CurTime()+60)
+		GAMEMODE:SetWave(GAMEMODE:GetWave()-1)
+		SetGlobalBool("waveactive", false)
 	end
 end
 function GM:WaveStateChanged(newstate)
@@ -3237,6 +3248,7 @@ function GM:WaveStateChanged(newstate)
 					pl:ResetSpeed()
 					pl:SetDOAMan(false)
 					pl:SendLua('GAMEMODE.SpecialWave = ""')
+					pl:StripWeapon('weapon_zs_palka')
 				end
 			end)
 		end

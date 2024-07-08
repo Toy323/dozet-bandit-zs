@@ -15,7 +15,7 @@ GM.Credits = {
 	{"credit_dozet_community", "https://github.com/Toy323/dozet-bandit-zs", "credit_dozet_community_desc"},
 	{"credit_github", "", "credit_github_desc"}
 }
-
+USE_NEW_MELEE_BASE = true
 include("nixthelag.lua")
 include("buffthefps.lua")
 GM.SpecialWave = ""

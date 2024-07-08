@@ -90,7 +90,7 @@ end
 function SWEP:GetMagicID(name)
 	return self.Magics[name]
 end
-if false then
+if 1 then
 	local function DoRicochet(attacker, hitpos, hitnormal, normal, damage, call)
 		attacker:FireBullets({Num = 1, Src = hitpos, Dir =  2 * hitnormal * hitnormal:Dot(normal * -1) + normal, Spread = Vector(0, 0, 0), Tracer = 1, TracerName = 'tracer_interception', Force = 1, Damage = damage, Callback = call})
 	end
@@ -124,6 +124,11 @@ local OffensiveColor = Color(107,0,0)
 local StrategicColor = Color(0,83,185)
 local MovementColor = Color(158,255,228)
 local DefensiveColor = Color(55,196,0)
+local ULTIMATEColor = Color(145,22,207)
+local function Call_Func(self, func, ...)
+	if self.NextUseFalse then self.NextUseFalse = false return false end
+	return func(...)
+end
 AddMagic(SWEP, {"Копирщик",
 function(self, pl, count, pos) 
 	local max = self.MaxRunes
@@ -131,7 +136,7 @@ function(self, pl, count, pos)
 	--print(self.Ochered[(count+1%max)+1])
 	if hah and !hah.NoUse then
 		for i=1,2 do
-			hah[2](self,pl,count, pos)
+			Call_Func(self, hah[2],self,pl,count, pos)
 		end
 	end
 end, "Копирует следующее заклинание 2 раза(если последний,то копирует первое заклинание),не копирует себя.", StrategicColor, NoUse = true})
@@ -160,7 +165,7 @@ function(self, pl) self.NextHeal = self.NextHeal + 1 if self.NextHeal > 4 then s
 AddMagic(SWEP, {"Шаидухизм",
 function(self, pl, time, pos)
 	if self["antiboom"] > CurTime() then return end
-	timer.Simple(0, function() if self and self:IsValid() then self["antiboom"] = CurTime() + 10 pl:SendLua('MySelf:GetActiveWeapon()["antiboom"] = CurTime() + 10') end end)
+	timer.Simple(0, function() if self and self:IsValid() then self["antiboom"] = CurTime() + 5 pl:SendLua('MySelf:GetActiveWeapon()["antiboom"] = CurTime() + 5') end end)
 	util.BlastDamage2(self, pl, pos, 156, 67)
 	pl:EmitSound("c4.explode")
 	local effectdata = EffectData()
@@ -207,7 +212,7 @@ function(self, pl, time, pos)
 	end
 end, "Бросьте мед.дротик.", OffensiveColor}, "heaker")
 
-AddMagic(SWEP, {"Враговиз",
+--[[AddMagic(SWEP, {"Враговиз",
 function(self, pl, time, pos)
 	self.ProjectileCreate = function(self, ent)
 		ent._Think = ent.Think
@@ -243,7 +248,7 @@ function(self, pl, time, pos)
 			ent:_Think()
 		end
 	end
-end, "Следующий снаряд имеет самонаводку.", StrategicColor})
+end, "Следующий снаряд имеет самонаводку.", StrategicColor})]]
 AddMagic(SWEP, {"Двойка",
 function(self2, pl, count, pos)
 	self2.ProjectileCreate = function(self, ent)
@@ -254,7 +259,7 @@ function(self2, pl, count, pos)
 			local hah = self:GetMagicID(self.Ochered[((count+1)%max)+1])
 			if hah and !hah.NoUse  then
 				for i=1,2 do
-					hah[2](self,pl,count, ent:GetPos())
+					Call_Func(self, hah[2],self,pl,count, ent:GetPos())
 				end
 			end
 			ent:_OnRemove()
@@ -270,7 +275,7 @@ function(self2, pl, count, pos)
 			local hah = self.Magics[math.random(1,#self.Magics)]
 			--print(hah[1])
 			if hah and !hah.NoUse then
-				hah[2](self,pl,count, ent:GetPos())
+				Call_Func(self, hah[2],self,pl,count, ent:GetPos())
 			end
 			ent:_OnRemove()
 		end
@@ -345,7 +350,7 @@ function(self, pl, count, pos)
 	local hah = self:GetMagicID(self.Ochered[((count+1)%max)+1])
 	if hah and !hah.NoUse  then
 		for i=1,2 do
-			hah[2](self,pl,count, pos + pl:GetAngles():Forward()*200)
+			Call_Func(self, hah[2],self,pl,count, pos + pl:GetAngles():Forward()*200)
 		end
 	end
 end, "Использует следующее заклинание на 200 юнитов впереди 2 раза.", StrategicColor, NoUse = true})
@@ -411,7 +416,7 @@ function(self, pl, count, pos)
 		local max = self.MaxRunes or 3
 		local hah = self:GetMagicID(self.Ochered[((count+1)%max)+1])
 		if hah and !hah.NoUse then
-			ent = hah[2](self,pl,count, position)
+			ent = Call_Func(self, hah[2],self,pl,count, position)
 			if ent and ent:IsValid() then
 			 	local phys = ent:GetPhysicsObject()
 				if phys:IsValid() then
@@ -480,7 +485,7 @@ function(self, pl, time, pos)
 		local max = self.MaxRunes
 		local hah = self:GetMagicID(self.Ochered[((time+1)%max)+1])
 		if hah then
-			hah[2](self,pl,time, ah)
+			Call_Func(self, hah[2],self,pl,time, ah)
 		end
 	end)
 end, "Да бля,постой!!!\nИспользует следующее заклинание через 1.5 секунду(НА ТОМ ЖЕ МЕСТЕ ГДЕ ВЫ СТОЯЛИ ПРИ ИСПОЛЬЗОВАНИИ)", StrategicColor})
@@ -493,7 +498,7 @@ function(self, pl, time, pos)
 		local max = self.MaxRunes
 		local hah = self:GetMagicID(self.Ochered[((time+1)%max)+1])
 		if hah then
-			hah[2](self,pl,time, ah)
+			Call_Func(self, hah[2],self,pl,time, ah)
 		end
 	end)
 end, "Остановись нахуй и стой смирно!!!\nИспользует следующее заклинание через 4 секунды(НА ТОМ ЖЕ МЕСТЕ ГДЕ ВЫ СТОЯЛИ ПРИ ИСПОЛЬЗОВАНИИ)", StrategicColor})
@@ -501,7 +506,7 @@ end, "Остановись нахуй и стой смирно!!!\nИсполь�
 AddMagic(SWEP, {"Скакунок",
 function(self, owner, time, pos)
 	if self["skuf"] > CurTime() then return end
-	timer.Simple(0, function() if self and self:IsValid() then self["skuf"] = CurTime() + 0.5 owner:SendLua('MySelf:GetActiveWeapon()["skuf"] = CurTime() + 0.5') end end)
+	timer.Simple(0, function() if self and self:IsValid() then self["skuf"] = CurTime() + 1.3 owner:SendLua('MySelf:GetActiveWeapon()["skuf"] = CurTime() + 1.3') end end)
 	owner:DoAttackEvent()
 
 	local aimvec = owner:GetAimVector()
@@ -557,6 +562,108 @@ function(self, owner, time, pos)
 		end
     end
 end, "Кидает гранату которая взрывается при прикосновение.", OffensiveColor}, "skuf2")
+
+AddMagic(SWEP, {"Вдохновил",
+function(self, pl, time, pos)
+	if self["puke3"] > CurTime() then return end
+	timer.Simple(0, function() if self and self:IsValid() then self["puke3"] = CurTime() + 0.1 pl:SendLua('MySelf:GetActiveWeapon()["puke3"] = CurTime() + 0.1') end end)
+	for k,v in pairs(ents.FindInSphere(pos, 251)) do
+		if v and IsValid(v) and v ~= pl and (v.Team and v:Team() ~= pl:Team() or !v.Team) then
+			local targetpos = v:LocalToWorld(v:OBBCenter())
+			local direction = (targetpos - pos):GetNormal()
+			v:SetVelocity(-direction*420)
+			local phys = v.GetPhysicsObject and v:GetPhysicsObject() or NULL 
+			v:SetPhysicsAttacker(pl)
+			if phys and phys:IsValid() then
+				phys:SetVelocityInstantaneous(-direction*320)
+			end
+		end
+	end
+end, "Притягивает всё вокруг к себе.", ULTIMATEColor}, "puke3")
+
+AddMagic(SWEP, {"Апчхи",
+function(self, pl, time, pos)
+	if self["chix"] > CurTime() then return end
+	timer.Simple(0, function() if self and self:IsValid() then self["chix"] = CurTime() + 1.3 pl:SendLua('MySelf:GetActiveWeapon()["chix"] = CurTime() + 1.3') end end)
+	for k,v in pairs(ents.FindInSphere(pos, 251)) do
+		if v and IsValid(v) and v ~= pl and (v.Team and v:Team() ~= pl:Team() or !v.Team) then
+			local targetpos = v:LocalToWorld(v:OBBCenter())
+			local direction = (targetpos - pos):GetNormal()
+			v:SetVelocity(direction*2720)
+			local phys = v.GetPhysicsObject and v:GetPhysicsObject() or NULL 
+			if phys and phys:IsValid() then
+				phys:SetVelocityInstantaneous(direction*2320)
+			end
+		end
+	end
+end, "Очень сильно толкает.", OffensiveColor}, "chix")
+
+AddMagic(SWEP, {"Сосулькус",
+function(self, owner, time, pos)
+	if self["sosulka"] > CurTime() then return end
+	timer.Simple(0, function() if self and self:IsValid() then self["sosulka"] = CurTime() + 5 owner:SendLua('MySelf:GetActiveWeapon()["sosulka"] = CurTime() + 5') end end)
+	owner:DoAttackEvent()
+
+	local aimvec = owner:GetAimVector()
+	if SERVER then
+		local ent = ents.Create("projectile_sosulka")
+		if ent:IsValid() then
+			ent:SetPos(pos)
+			ent:SetAngles(aimvec:Angle())
+			ent:SetOwner(owner)
+			ent:Spawn()
+			ent.Damage = 16
+			if self.ProjectileCreate then
+				self:ProjectileCreate(ent)
+				self.ProjectileCreate = function()
+				end
+			end
+			local phys = ent:GetPhysicsObject()
+			
+			if phys:IsValid() then
+				phys:Wake()
+				phys:SetVelocity(aimvec *1200)
+			end
+			return ent
+		end
+    end
+end, "Кидает сосульку.", OffensiveColor}, "sosulka")
+
+
+AddMagic(SWEP, {"Айбля",
+function(self, pl, time, pos)
+	if !self or !self:IsValid() then return end
+	local max = self.MaxRunes
+	local hah = self:GetMagicID(self.Ochered[((time+1)%max)+1])
+	if hah and !hah.NoUse then
+		Call_Func(self, hah[2],self,pl,time, pos + Vector(0,0,156))
+	end
+end, "Использует следующее заклинание выше вашей головы.", StrategicColor, NoUse = true})
+
+
+AddMagic(SWEP, {"Яйцомороз",
+function(self, pl, time, pos)
+	if self["xolod"] > CurTime() then return end
+	timer.Simple(0, function() if self and self:IsValid() then self["xolod"] = CurTime() + 0.6 pl:SendLua('MySelf:GetActiveWeapon()["xolod"] = CurTime() + 0.6') end end)
+	for k,v in pairs(ents.FindInSphere(pos, 221)) do
+		if v and IsValid(v) and v:IsPlayer() and !(v == pl and pl:GetShootPos() == pos)  and v:Team() ~= pl:Team() then
+			v:AddCold(1)
+		end
+	end
+end, "Морозит яйца ваших врагов.", OffensiveColor, NoUse = true}, "xolod")
+
+AddMagic(SWEP, {"Лазерит",
+function(self, pl, time, pos)
+	if self["lasur3"] > CurTime() then return end
+	timer.Simple(0, function() if self and self:IsValid() then self["lasur3"] = CurTime() + 1.4 pl:SendLua('MySelf:GetActiveWeapon()["lasur"] = CurTime() + 1.4')end end)
+	pl:FireBullets({Num = 1, Src = pos, Dir = pl:GetAimVector(), Spread = Vector(.05, .05, 0), Tracer = 1, TracerName = 'tracer_interception', Force = 1, Damage = 12, Callback = self.BulletCallback})
+
+end, "Вы будете стрелять магией с уроном 12.\nНамного точный.", OffensiveColor}, "lasur3")
+
+AddMagic(SWEP, {"Запретито",
+function(self, pl, time, pos)
+	timer.Simple(0, function() self.NextUseFalse = true end)
+end, "Запрещает использования следующего заклинания.", StrategicColor})
 
 
 local colBG = Color( 10, 10, 10, 252 )
@@ -637,6 +744,9 @@ local function InventoryAdd(self, item, i)
 		if i > 19 then
 			y = y + 100*screenscale
 		end
+		if i > 29 then
+			y = y + 100*screenscale
+		end
 		itempan:SetPos(100 * screenscale * ((i%10)+1) - 90 * screenscale,y)
 
 		itempan:SetTooltip(item[3] or "")
@@ -653,7 +763,7 @@ end
 local function CreateOkno(self, wep)
 	local scr = BetterScreenScale()
     local panel = vgui.Create("DFrame")
-    panel:SetSize(1000*scr, 500*scr)
+    panel:SetSize(1020*scr, 500*scr)
     panel:SetTitle("Выбери заклинание посоху.")
     panel:Center()
     panel:MakePopup()
@@ -673,7 +783,7 @@ function SWEP:PrimaryAttack()
 	for i=1,self.MaxRunes do
 		local id = self:GetMagicID(self.Ochered[i])
 		if id and owner:IsValid() then
-			id[2](self, owner, i, owner:GetShootPos())
+			Call_Func(self, id[2],self, owner, i, owner:GetShootPos())
 		end
 	end
 end

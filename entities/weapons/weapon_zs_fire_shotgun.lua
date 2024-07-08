@@ -60,15 +60,15 @@ SWEP.Primary.Sound = Sound("weapons/shotgun/shotgun_dbl_fire.wav")
 SWEP.Primary.Recoil = 5
 SWEP.Primary.Damage = 5
 SWEP.Primary.NumShots = 7
-SWEP.Primary.Delay = 0.2
+SWEP.Primary.Delay = 0.28
 
 SWEP.Primary.ClipSize = 10
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = "buckshot"
 SWEP.Primary.DefaultClip = 20
 
-SWEP.ConeMax = 0.13
-SWEP.ConeMin = 0.07
+SWEP.ConeMax = 0.16
+SWEP.ConeMin = 0.09
 SWEP.Recoil = 3.2
 SWEP.WalkSpeed = SPEED_SLOWEST
 SWEP.MovingConeOffset = 0.08
