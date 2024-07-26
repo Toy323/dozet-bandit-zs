@@ -1088,7 +1088,15 @@ function GM:PlayerBindPress(pl, bind, wasin)
 	if bind == "gmod_undo" or bind == "undo" then
 		RunConsoleCommand("+zoom")
 		timer.CreateEx("ReleaseZoom", 1, 1, RunConsoleCommand, "-zoom")
-	end
+	elseif bind == "+menu" then
+		local wep =  pl:GetActiveWeapon()
+		if wep and wep.HaveAbility and !pl:KeyDown(IN_SPEED) then
+        	net.Start("zs_ability_weapon")
+			net.WriteEntity(wep)
+			net.SendToServer()
+			return
+		end
+    end
 end
 
 function GM:_ShouldDrawLocalPlayer(pl)
@@ -1473,7 +1481,7 @@ function GM:OnSpawnMenuOpen()
 	if (MySelf:Team() == TEAM_HUMAN or MySelf:Team() == TEAM_BANDIT) and not self:IsRoundModeUnassigned() then
 		if not self:IsClassicMode() then
 			gamemode.Call("HumanMenu")
-		elseif MySelf:Alive() then
+		elseif MySelf:Alive() and !MySelf:GetActiveWeapon().HaveAbility then
 			self:OpenPointsShop(WEAPONLOADOUT_NULL)
 		end
 	end

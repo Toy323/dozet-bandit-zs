@@ -51,7 +51,7 @@ end
 function SWEP:OnMeleeHit(hitent, hitflesh, tr)
 	if hitent:IsValid() and hitent:IsPlayer() and not self.m_BackStabbing and math.abs(hitent:GetForward():Angle().yaw - self:GetOwner():GetForward():Angle().yaw) <= 100 then
 		self.m_BackStabbing = true
-		self.MeleeDamage = self.MeleeDamage * 4
+		self.MeleeDamage = self.MeleeDamage * 2.2
 	end
 end
 
@@ -59,7 +59,7 @@ function SWEP:PostOnMeleeHit(hitent, hitflesh, tr)
 	if self.m_BackStabbing then
 		self.m_BackStabbing = false
 
-		self.MeleeDamage = self.MeleeDamage / 4
+		self.MeleeDamage = self.MeleeDamage / 2.2
 	end
 end
 

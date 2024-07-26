@@ -320,6 +320,7 @@ function SWEP:Holster()
 end
 
 function SWEP:TakeAmmo()
+	if self:GetDTBool(12) then return end
 	self:TakePrimaryAmmo(self.RequiredClip)
 end
 
@@ -367,27 +368,6 @@ function GenericBulletCallback(attacker, tr, dmginfo)
 			attacker.ShotsHit = attacker.ShotsHit + 1
 		end
 		if ent:IsPlayer() then
-			if attacker:IsSkillActive(SKILL_R_BULLETS) and ent:Team() ~= attacker:Team() then
-				local d = tr.Hit and tr.HitGroup == HITGROUP_HEAD
-				local power = (dmginfo:GetDamage() / 16) / (attacker:GetActiveWeapon() and attacker:GetActiveWeapon().Primary.NumShots or 1)
-				local conf = ent:GiveStatus("confusion",(d and power * 5 or power))
-			end
-			if attacker:IsSkillActive(SKILL_BIG_BOOM) and ent:GetActiveWeapon() and SERVER then
-				local pl = ent
-				timer.Create(ent:Nick().." Explode Ammo",1.2,1, function()
-					pl:GodEnable()
-					util.BlastDamage2(dmginfo:GetInflictor(), attacker, pl:GetPos(), 45, (pl:Health() or 1) * 0.1 + dmginfo:GetDamage())
-					pl:GodDisable()
-					pl:EmitSound("c4.explode")
-					local effectdata = EffectData()
-						effectdata:SetOrigin(pl:GetPos())
-					util.Effect("Explosion", effectdata)
-					if SERVER then
-						pl:TakeDamage((pl:Health() or 1) * 0.1, attacker,dmginfo:GetInflictor() )
-						pl:SetBloodArmor(pl:GetBloodArmor()*0.5)
-					end
-				 end)
-			end
 			if attacker:IsPlayer() and ent:Team() ~= attacker:Team() and tempknockback then
 				tempknockback[ent] = ent:GetVelocity()
 			end
@@ -681,22 +661,6 @@ function SWEP:ShootCSBullets(owner, dmg, numbul, cone, hit_own_team)
 end
 
 SWEP.BulletCallback = GenericBulletCallback
-local function DoRicochet(attacker, hitpos, hitnormal, normal, damage)
-	attacker.RicochetBullet = true
-	attacker:FireBullets({Num = 1, Src = hitpos, Dir = hitnormal, Spread = Vector(0.25, 0.25, 0), Tracer = 1, TracerName = "rico_trace", Force = damage * 0.15, Damage = damage, Callback = GenericBulletCallback})
-	attacker.RicochetBullet = nil
-end
-function SWEP.BulletCallback(attacker, tr, dmginfo)
-	if tr.HitWorld and not tr.HitSky then
-		local hitpos, hitnormal, normal, dmg = tr.HitPos, tr.HitNormal, tr.Normal, dmginfo:GetDamage()/2
-		if SERVER and attacker:IsSkillActive(SKILL_BOUNCER) then
-			timer.Simple(0, function() 
-				DoRicochet(attacker, hitpos, hitnormal, normal, dmg) 
-			end)
-		end
-	end
-	GenericBulletCallback(attacker, tr, dmginfo)
-end
 function SWEP:ShootBullets(dmg, numbul, cone)
 	
 	self:SetConeAndFire()
@@ -715,24 +679,13 @@ function SWEP:ShootBullets(dmg, numbul, cone)
 		owner.LastShotWeapon = self:GetClass()
 	end
 	self:DoSelfKnockBack(1)
-	if owner:IsSkillActive(SKILL_CONC_DMG) then
-		if SERVER then
-			self:GetOwner():ViewPunch(Angle(math.Rand(-(dmg * numbul), 0), math.Rand(-(dmg * numbul), (dmg * numbul)), 0))
-		else
-			local curAng = self:GetOwner():EyeAngles()
-			curAng.pitch = curAng.pitch - math.Rand((dmg * numbul), 0)
-			curAng.yaw = curAng.yaw + math.Rand(-(dmg * numbul), (dmg * numbul))
-			curAng.Roll = 0
-			self:GetOwner():SetEyeAngles(curAng)
-		end
-	end
 	if GAMEMODE.ClientSideHitscan and !owner:IsBot() then
 		self:ShootCSBullets(owner, dmg, numbul, cone)
 	else
 		self:StartBulletKnockback()
 		if IsFirstTimePredicted() then
 			owner:FireBullets({Num = numbul, Src = owner:GetShootPos(), Dir = owner:GetAimVector(), Spread = Vector(cone, cone, 0), Tracer = 1, TracerName = self.TracerName, Force = dmg * 0.1, Damage = dmg, Callback = self.BulletCallback})
-			self:ShootCSBullets(owner, dmg, numbul, cone)
+			--self:ShootCSBullets(owner, dmg, numbul, cone)
 		end
 		self:DoBulletKnockback(self.Primary.KnockbackScale * 0.05)
 		self:EndBulletKnockback()

@@ -133,6 +133,9 @@ GM:AddWeaponPrerequisite(item,"deagle")
 local item = GM:AddPointShopWeapon(2,"rpg", ITEMCAT_GUNS, 185, "weapon_zs_rpg")
 GM:AddWeaponPrerequisite(item,"mediumlauncher")
 
+local item = GM:AddPointShopWeapon(2,"bochka", ITEMCAT_GUNS, 95, "weapon_zs_hx25")
+GM:AddWeaponPrerequisite(item,"mediumlauncher")
+
 
 local item = GM:AddPointShopWeapon(2,"glock3", ITEMCAT_GUNS, 135, "weapon_zs_glock3")
 GM:AddWeaponPrerequisite(item,"owens")
@@ -187,6 +190,9 @@ GM:AddWeaponPrerequisite(item,"inquisition")
 
 local item = GM:AddPointShopWeapon(3,"rpg_m8", ITEMCAT_GUNS, 225, "weapon_zs_commando")
 GM:AddWeaponPrerequisite(item,"rpg")
+GM:AddWeaponPrerequisite(item,"bochka")
+
+
 
 
 local item = GM:AddPointShopWeapon(3,"immortal", ITEMCAT_GUNS, 200, "weapon_zs_immortal")
@@ -265,6 +271,11 @@ local item = GM:AddPointShopWeapon(4,"positron", ITEMCAT_GUNS, 320, "weapon_zs_p
 GM:AddWeaponPrerequisite(item,"pulserifle")
 GM:AddWeaponPrerequisite(item,"renegade")
 
+local item = GM:AddPointShopWeapon(4,"stranger", ITEMCAT_GUNS, 260, "weapon_zs_tesla_buff")
+GM:AddWeaponPrerequisite(item,"pulserifle")
+GM:AddWeaponPrerequisite(item,"renegade")
+
+
 local item = GM:AddPointShopWeapon(4,"palliator", ITEMCAT_GUNS, 290, "weapon_zs_palliator")
 GM:AddWeaponPrerequisite(item,"medicrifle")
 
@@ -315,6 +326,7 @@ GM:AddWeaponPrerequisite(item,"crossbow")
 local item = GM:AddPointShopWeapon(5,"tesla", ITEMCAT_GUNS, 270, "weapon_zs_tesla_rifle")
 GM:AddWeaponPrerequisite(item,"slugrifle")
 GM:AddWeaponPrerequisite(item,"positron")
+GM:AddWeaponPrerequisite(item,"stranger")
 
 
 GM:AddPointShopWeapon(2,"grenadelauncher", ITEMCAT_GUNS, 120, "weapon_zs_grenadelauncher")
@@ -363,6 +375,8 @@ local item = GM:AddPointShopWeapon(2,"sawhack", ITEMCAT_MELEE, 80, "weapon_zs_sa
 GM:AddWeaponPrerequisite(item,"axe")
 local item = GM:AddPointShopWeapon(2,"longsword", ITEMCAT_MELEE, 85, "weapon_zs_longsword")
 GM:AddWeaponPrerequisite(item,"butcher")
+local item = GM:AddPointShopWeapon(2,"father_axe", ITEMCAT_MELEE, 82, "weapon_zs_axe_ded")
+GM:AddWeaponPrerequisite(item,"axe")
 
 local item = GM:AddPointShopWeapon(3,"megamasher", ITEMCAT_MELEE, 150, "weapon_zs_megamasher")
 GM:AddWeaponPrerequisite(item,"sledgehammer")
@@ -385,6 +399,7 @@ GM:AddWeaponPrerequisite(item,"longsword")
 GM:AddWeaponPrerequisite(item,"extbaton")
 local item = GM:AddPointShopWeapon(3,"greataxe", ITEMCAT_MELEE, 140, "weapon_zs_greataxe")
 GM:AddWeaponPrerequisite(item,"sawhack")
+GM:AddWeaponPrerequisite(item,"father_axe")
 
 local item = GM:AddPointShopWeapon(4,"gknife", ITEMCAT_MELEE, 195, "weapon_zs_cloak_knife")
 GM:AddWeaponPrerequisite(item,"stunbaton")

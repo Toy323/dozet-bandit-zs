@@ -262,25 +262,26 @@ function SWEP.BulletCallback(attacker, tr, dmginfo)
 		local wep = attacker:GetActiveWeapon()
 		if ent and ent:IsValid() and ent:IsPlayer() then
 			if wep:GetMagazine()%3 == 1 then
-				ent:AddBodyArmor(-dmginfo:GetDamage()*0.3)
+				ent:AddBodyArmor(-dmginfo:GetDamage()*0.5)
 			elseif wep:GetMagazine()%3 == 2 then
 				local arm = ent:GetBodyArmor() > 0
 				if ent:GetBodyArmor() and arm and attacker:Team() ~= ent:Team() then
-					local ratio = 0.75
+					local ratio = 0.4
 					if not (ent:WasHitInHead()) then
-						ratio = ratio * 0.5
+						ratio = ratio * 0.3
 						dmginfo:ScaleDamage(0.5)
 					end
 					ent:AddBodyArmor(dmginfo:GetDamage()*-ratio)
 				end
+				if arm then return end
 				local bleed = ent:GetStatus("bleed")
 				if bleed and bleed:IsValid() then
-					bleed:AddDamage(7 * (arm and 1 or 1.3))
+					bleed:AddDamage(7)
 					bleed.Damager = attacker
 				else
 					local stat = ent:GiveStatus("bleed")
 					if stat and stat:IsValid() then
-						stat:SetDamage(7 * (arm and 1 or 1.3))
+						stat:SetDamage(7)
 						stat.Damager = attacker
 					end
 				end

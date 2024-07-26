@@ -148,7 +148,7 @@ function meta:ApplyAdrenaline()
 		if self:IsSkillActive(SKILL_ADRENALINE_HP) and  GAMEMODE:GetSpecialWave() ~= "1hp"  then
 			self:SetHealth(math.min(self:GetMaxHealth() * 0.1 + self:Health(), self:GetMaxHealth()))
 		else
-			self:SetBloodArmor(self:GetBloodArmor() + 15)
+			self:SetBloodArmor(math.min(100,self:GetBloodArmor() + 15))
 		end
 	end
 	self:EmitSound("player/suit_sprint.wav")	

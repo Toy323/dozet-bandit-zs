@@ -77,9 +77,9 @@ function SWEP:Holster()
 	return self:GetRotateAttack() < CurTime() 
 end
 SWEP._SoundNext = 0
-function SWEP:SecondaryAttack()
-	if not self:CanPrimaryAttack() then return end
-	self:SetNextSecondaryFire(CurTime() + 8)
+function SWEP:HaveAbility()
+	if self:GetRotateAttack() + 6 > CurTime() then return end
+	self:SetNextSecondaryFire(CurTime() + 6)
 	self:SetRotateAttack(CurTime() + 4)
 	self._OldD = self.SwingHoldType
 	self:SetHoldType("revolver")
@@ -98,7 +98,7 @@ function SWEP:Think()
 	self.BaseClass.Think(self)
 	local owner = self:GetOwner()
 	if self:GetRotateAttack() > CurTime() then
-		owner:SetEyeAngles(Angle(0,CurTime()*720,0))
+		owner:SetEyeAngles(Angle(0,CurTime()*610,0))
 		if self._SoundNext < CurTime() then
 			self._SoundNext = CurTime() + 0.4
 			self:EmitSound('physics/metal/sawblade_stick'..math.random(1, 3)..'.wav', nil,math.Rand(65,90))

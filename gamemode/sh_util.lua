@@ -969,3 +969,33 @@ function util.CreatePulseImpactEffect(hitpos, hitnormal)
 	pulseeffect:SetNormal(hitnormal)
 	util.Effect("cball_bounce", pulseeffect)
 end
+
+--Спасибо молочку и ноацессу
+local GetAll = player.GetAll
+local WorldSpaceAABB = FindMetaTable("Entity").WorldSpaceAABB
+local IsBoxIntersectingSphere = util.IsBoxIntersectingSphere
+
+function player.FindInSphere( origin, radius )
+
+    local ret = {}
+    local count = 1
+    local players = GetAll()
+
+    for i = 1, #players do
+
+        local pl = players[i]
+        local min, max = WorldSpaceAABB( pl )
+
+        if IsBoxIntersectingSphere( min, max, origin, radius ) then
+
+            ret[count] = pl
+            count = count + 1
+
+        end
+
+    end
+
+    return ret
+
+end
+

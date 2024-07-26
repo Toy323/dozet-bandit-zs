@@ -326,6 +326,9 @@ function GM:AddNetworkStrings()
 	util.AddNetworkString("zs_hah")
 
 	util.AddNetworkString("zs_bounty_open")
+
+	
+	util.AddNetworkString("zs_ability_weapon")
 	
 	util.AddNetworkString("bw_fire")
 end
@@ -3285,4 +3288,10 @@ net.Receive("zs_stand_become", function(length, pl)
 end)
 net.Receive("zs_fix_spec", function(length, pl)
 	pl:SetPoints(0)
+end)
+net.Receive("zs_ability_weapon", function(len, sender)
+	local ent = net.ReadEntity()
+	if ent and ent:IsValid() and ent.HaveAbility and ent == sender:GetActiveWeapon() then
+		ent:HaveAbility()
+	end
 end)
