@@ -1,10 +1,5 @@
 
 GM:SetSkillModifierFunction(SKILLMOD_HEALTH, function(pl, amount)
-	pl.HealthForADR = math.Clamp(amount + 100, -99, 1000.0)
-	local current = pl:GetMaxHealth()
-	local new = 100 + math.Clamp(amount, -99, 1000)
-	pl:SetMaxHealth(new)
-	pl:SetHealth(math.Clamp(pl:Health() / current * new,1,pl:GetMaxHealth()))
 end)
 
 GM:SetSkillModifierFunction(SKILLMOD_FOODRECOVERY_MUL, function(pl, amount)

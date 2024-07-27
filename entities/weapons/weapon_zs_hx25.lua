@@ -78,8 +78,8 @@ SWEP.Base = "weapon_zs_base"
 SWEP.UseHands = true
 
 SWEP.ReloadSound = Sound("Weapon_AWP.ClipOut")
-SWEP.Primary.Damage = 35
-SWEP.Primary.NumShots = 1
+SWEP.Primary.Damage = 9
+SWEP.Primary.NumShots = 7
 SWEP.Primary.Delay = 0.3
 SWEP.ReloadDelay = SWEP.Primary.Delay
 SWEP.ReloadSpeed = 0.8
@@ -92,8 +92,8 @@ SWEP.Primary.KnockbackScale = 0.1
 SWEP.Primary.Gesture = ACT_HL2MP_GESTURE_RANGE_ATTACK_CROSSBOW
 SWEP.ReloadGesture = ACT_HL2MP_GESTURE_RELOAD_SHOTGUN
 
-SWEP.ConeMax = 0.008
-SWEP.ConeMin = 0.002
+SWEP.ConeMax = 0.15
+SWEP.ConeMin = 0.05
 SWEP.Recoil = 1.33
 SWEP.DefaultRecoil = 2.23
 SWEP.MovingConeOffset = 0.14
@@ -108,23 +108,31 @@ SWEP.WalkSpeed = SPEED_SLOWEST
 SWEP.TracerName = "Tracer"
 
 SWEP.Primary.Sound = ")weapons/ar2/ar2_altfire.wav"
-local function bruh(attacker, tr, dmginfo)
-	if SERVER then
-		local pos = tr.HitPos
 
-		local effectdata = EffectData()
-			effectdata:SetOrigin(pos)
-		util.Effect("chemzombieexplode", effectdata, true, true)
-		for k,v in pairs(player.FindInSphere( pos, 87 )) do
-			if v:Team() ~= attacker:Team() or attacker == v then
-				v:TakeDamage(math.max(dmginfo:GetDamage()*0.25,2), attacker, attacker:GetActiveWeapon())
+function SWEP:PrimaryAttack()
+	if self:CanPrimaryAttack() then
+		donextframe(self.SetNextPrimaryFire, self, CurTime() + 0.05)
+		self:EmitSound(self.Primary.Sound, 140, nil, nil, CHAN_AUTO)
+		timer.Simple(0.17, function() 
+			if !self or !self:IsValid() then return end
+			if math.random(1,12) ~= 12 then 
+				self.BaseClass.PrimaryAttack(self) 
+			else
+				if CLIENT then return end
+				self:TakeAmmo()
+				local owner = self:GetOwner()
+				local pos = owner:WorldSpaceCenter()
+				local effectdata = EffectData()
+					effectdata:SetOrigin(pos)
+					effectdata:SetMagnitude(1)
+				util.Effect("chemzombieexplode", effectdata, true, true)
+				for k,v in pairs(player.FindInSphere( pos, 127 )) do
+					if v:Team() ~= owner:Team() or owner == v then
+						v:TakeDamage(65, owner, self)
+					end
+				end
 			end
-		end
-		if math.random(1,6) ~= 2 then
-			local self = attacker:GetActiveWeapon()
-			local dmg = dmginfo:GetDamage()
-			timer.Simple(0, function() attacker:FireBullets({Num = 1, Src = pos+Vector(0,0,1), Dir = (tr.StartPos - tr.HitPos):GetNormal(), Spread = Vector(1, 1, 1), Tracer = 1, TracerName = "Tracer", Force = 7 * 0.1, Damage = dmg*0.7, Callback = self.BulletCallback}) end)
-		end
+		end)
 	end
 end
 
@@ -135,16 +143,12 @@ function SWEP.BulletCallback(attacker, tr, dmginfo)
 
 		local effectdata = EffectData()
 			effectdata:SetOrigin(pos)
+			effectdata:SetMagnitude(0.4)
 		util.Effect("chemzombieexplode", effectdata, true, true)
-		for k,v in pairs(player.FindInSphere( pos, 87 )) do
-			if v:Team() ~= attacker:Team() or attacker == v then
-				v:TakeDamage(math.max(dmginfo:GetDamage()*0.25,2), attacker, attacker:GetActiveWeapon())
+		for k,v in pairs(player.FindInSphere( pos, 57 )) do
+			if (v:Team() ~= attacker:Team() or attacker == v) and tr.Entity ~= v then
+				v:TakeDamage(5, attacker, attacker:GetActiveWeapon())
 			end
-		end
-		if math.random(1,5) ~= 2 or dmginfo:GetDamage() == 35 then
-			local self = attacker:GetActiveWeapon()
-			local dmg = dmginfo:GetDamage()
-			timer.Simple(0, function() attacker:FireBullets({Num = 1, Src = pos, Dir = (tr.StartPos - tr.HitPos):GetNormal(), Spread = Vector(1, 1, 1), Tracer = 1, TracerName = "Tracer", Force = 7 * 0.1, Damage = dmg*0.7, Callback = bruh}) end)
 		end
 	end
 end

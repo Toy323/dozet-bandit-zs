@@ -999,3 +999,7 @@ function player.FindInSphere( origin, radius )
 
 end
 
+function donextframe(func, myself, ...)
+	local a, b, c, d, h = ...
+	timer.Simple(0, function() func(myself, a,b,c,d,h) end)
+end

@@ -139,17 +139,14 @@ function meta:Dismember(dismembermenttype)
 end
 
 function meta:ApplyAdrenaline()
-	self.HumanSpeedAdder = (self.HumanSpeedAdder or 0) +5
+	self.HumanSpeedAdder = (self.HumanSpeedAdder or 0) +10
 	self.AdrenalineNoUse = CurTime() + 8
 	self:ResetSpeed() 
 	if SERVER then 
 		self.HealthDead = (self.HealthDead or 0) + 10
-		self:SetMaxHealth(self.HealthForADR-self.HealthDead)
-		if self:IsSkillActive(SKILL_ADRENALINE_HP) and  GAMEMODE:GetSpecialWave() ~= "1hp"  then
-			self:SetHealth(math.min(self:GetMaxHealth() * 0.1 + self:Health(), self:GetMaxHealth()))
-		else
-			self:SetBloodArmor(math.min(100,self:GetBloodArmor() + 15))
-		end
+		self:SetMaxHealth(100-self.HealthDead)
+		self:SetHealth(math.min(self:GetMaxHealth() * 0.1 + self:Health(), self:GetMaxHealth()))
+		self:SetBloodArmor(math.min(100,self:GetBloodArmor() + 12))
 	end
 	self:EmitSound("player/suit_sprint.wav")	
 	return true

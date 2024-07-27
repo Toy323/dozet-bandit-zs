@@ -2938,13 +2938,11 @@ function GM:PlayerSpawn(pl)
 		
 		pl:SetNoTarget(false)
 		pl.SkillUsed = false
-		pl:ApplySkills()
-		pl:SendLua(' if MySelf:IsValid() then MySelf:ApplySkills() end')
 		if pl:IsSkillActive(SKILL_S_STAR_PLATINUM) then
 			pl:Give('weapon_zs_fists')
 		end
 		local current = pl:GetMaxHealth()
-		local new = 100 + math.Clamp(pl.HealthForADR - 100, -99, 1000)
+		local new = math.max(1,100-(self.HealthDead or 0))
 		pl:SetMaxHealth(new)
 		pl:SetHealth(math.max(1, pl:Health() / current * new))
 
