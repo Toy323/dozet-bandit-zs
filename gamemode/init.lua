@@ -2669,7 +2669,7 @@ function GM:DoPlayerDeath(pl, attacker, dmginfo)
 	pl:Freeze(false)
 	pl:SetBloodArmor(0)
 
-	local headshot = pl:WasHitInHead() and not inflictor.IgnoreDamageScaling 
+	local headshot = pl:WasHitInHead() and not inflictor.IgnoreDamageScaling or inflictor.AlwaysHitsHead
 	if suicide then attacker = pl:GetLastAttacker() or attacker end
 	pl:SetLastAttacker()
 	

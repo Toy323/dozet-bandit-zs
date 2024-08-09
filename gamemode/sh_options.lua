@@ -387,6 +387,8 @@ GM:AddWeaponPrerequisite(item,"extbaton")
 local item = GM:AddPointShopWeapon(3,"lowers", ITEMCAT_MELEE, 150, "weapon_zs_lowers")
 GM:AddWeaponPrerequisite(item,"sawhack")
 GM:AddWeaponPrerequisite(item,"longsword")
+local item = GM:AddPointShopWeapon(3,"scashdashasd", ITEMCAT_MELEE, 180, "weapon_zs_schaihander")
+GM:AddWeaponPrerequisite(item,"longsword")
 local item = GM:AddPointShopWeapon(3,"fire_nail", ITEMCAT_MELEE, 150, "weapon_zs_fire_nail")
 GM:AddWeaponPrerequisite(item,"longsword")
 GM:AddWeaponPrerequisite(item,"extbaton")
@@ -407,6 +409,7 @@ GM:AddWeaponPrerequisite(item,"megamasher")
 
 local item = GM:AddPointShopWeapon(4,"murasama", ITEMCAT_MELEE, 195, "weapon_zs_murasama")
 GM:AddWeaponPrerequisite(item,"bloodseeker")
+GM:AddWeaponPrerequisite(item,"scashdashasd")
 
 
 local item = GM:AddPointShopWeapon(4,"fire_spear", ITEMCAT_MELEE, 215, "weapon_zs_fire_spear")

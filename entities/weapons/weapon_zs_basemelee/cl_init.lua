@@ -89,7 +89,10 @@ function SWEP:GetViewModelPosition(pos, ang)
 		ang:RotateAroundAxis(ang:Right(), -30 * ghostlerp)
 	end
 	if ghostlerp1 > 0 then
-		pos = pos - 3.5 * ghostlerp1 * ang:Up()
+		pos = pos - (self.RotBLOCK or 3.5) * ghostlerp1 * ang:Up()
+		if self.RotBLOCK_Left then
+			pos = pos - (self.RotBLOCK_Left or 3.5) * ghostlerp1 * ang:Right()
+		end
 		ang:RotateAroundAxis(ang:Right(), 20 * ghostlerp1)
 		ang:RotateAroundAxis(ang:Forward(), 20 * ghostlerp1)
 	end
