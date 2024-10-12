@@ -20,7 +20,7 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 	local attacker = dmginfo:GetAttacker()
 	local own = self:GetOwner()
 	if ent ~= own then return end
-	if (attacker:IsValid() and attacker:IsPlayer() and own:IsPlayer() and attacker:Team() == own:Team()) then return end
+	if (attacker:IsValid() and attacker:IsPlayer() and own:IsPlayer() and attacker:Team() == own:Team()) or math.abs(own:GetForward():Angle().yaw - attacker:GetForward():Angle().yaw) <= 120 then return end
 	if dmginfo:GetDamagePosition() then
 		self:SetDTVector(12,dmginfo:GetDamagePosition() )
 	end
