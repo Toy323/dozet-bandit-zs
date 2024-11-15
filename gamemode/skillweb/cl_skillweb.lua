@@ -752,7 +752,7 @@ function PANEL:GenerateParticles()
 		particle[1] = Vector(math.Rand(-500, -600), math.Rand(-10020, 10020), math.Rand(-10020, 10020))
 		particle[2] = math.Rand(0, 360)
 		particle[3] = math.Rand(-1, 5)
-		particle[4] = math.Rand(6002, 4002)
+		particle[4] = math.Rand(2002, 4002)
 		particle[5] = math.Rand(122,255)
 		particles[i] = particle
 	end

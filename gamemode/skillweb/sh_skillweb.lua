@@ -168,46 +168,51 @@ function meta:ShakeUser()
 	return table.Random(d)
 end
 function meta:ApplySkills(override)
-	local allskills = GAMEMODE.Skills
-	local desired = {}
-	local current_active = {}
-	local desired_assoc = table.ToAssoc(desired)
+    local allskills = GAMEMODE.Skills
+    local desired = override or self:Alive() and self:GetDesiredActiveSkills() or {}
+    local current_active = self:GetActiveSkills()
+    local desired_assoc = table.ToAssoc(desired)
+
+    if not override then
+        for skillid in pairs(desired_assoc) do
+            if not self:IsSkillUnlocked(skillid) or allskills[skillid] and allskills[skillid].Disabled then
+                desired_assoc[skillid] = nil
+            end
+        end
+    end
+
+    self:ApplyAssocModifiers(desired_assoc)
 
 
-	-- Do we even have these skills unlocked?
-	if not override then
-		for skillid in pairs(desired_assoc) do
-			if not self:IsSkillUnlocked(skillid) or allskills[skillid] and allskills[skillid].Disabled then
-				desired_assoc[skillid] = nil
-			end
-		end
-	end
+    local funcs
+    local gm_functions = GAMEMODE.SkillFunctions
+    for skillid in pairs(allskills) do
 
-	self:ApplyAssocModifiers(desired_assoc)
+        funcs = gm_functions[skillid]
+        if funcs then
+            if current_active[skillid] and not desired_assoc[skillid] then -- On but we want it off.
+                for _, func in pairs(funcs) do
+                    func(self, false)
+                end
+            elseif desired_assoc[skillid] and not current_active[skillid] then -- Off but we want it on.
+                for _, func in pairs(funcs) do
+                    func(self, true)
+                end
+            end 
+        end
+    end
 
-	-- All skill function states can easily be kept track of.
-	local funcs
-	local gm_functions = GAMEMODE.SkillFunctions
-	for skillid in pairs(allskills) do
 
-		funcs = gm_functions[skillid]
-		if funcs then
-			if current_active[skillid] and not desired_assoc[skillid] then -- On but we want it off.
-				for _, func in pairs(funcs) do
-					func(self, false)
-				end
-			elseif desired_assoc[skillid] and not current_active[skillid] then -- Off but we want it on.
-				for _, func in pairs(funcs) do
-					func(self, true)
-				end
-			end -- Otherwise it's already in the state we want.
-		end
-	end
-
-	-- Store and sync with client.
-	self:SetActiveSkills(desired_assoc, not self.PlayerReady)
+    self:SetActiveSkills(desired_assoc, not self.PlayerReady)
+    if self:IsSkillActive(SKILL_2_LIFE) then
+        local standu = self:ShakeUser()
+        if standu:IsValid() and SERVER and (!self:GetStandUser() or !self:GetStandUser():IsValid() or self:GetStandUser():Team() ~= self:Team()) then
+            self:SetStandUser(standu)
+            self:GetStandUser():CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", team.GetColor(self:Team()), translate.ClientGet(self:GetStandUser(),"ur_stand"), self,{killicon = "default"})
+            self:CenterNotify({killicon = "default"}, {font = "ZSHUDFont"}, " ", team.GetColor(self:GetStandUser():Team()), translate.ClientGet(self,"ur_user"), self:GetStandUser(),{killicon = "default"})
+        end
+    end
 end
-
 -- For trinkets, these apply after your skills, and they need to work differently so they can't be used to "update" your skills midgame.
 function meta:ApplyTrinkets(override)
 	if GAMEMODE.ZombieEscape or GAMEMODE.ClassicMode then return end -- Skills not used on these modes

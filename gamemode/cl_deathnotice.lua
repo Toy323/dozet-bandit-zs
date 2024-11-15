@@ -166,6 +166,8 @@ killicon.Add("weapon_zs_dronecontrol", "killicon/weapon_zs_drone3.png", color_wh
 
 killicon.Add("weapon_zs_empgun", "killicon/weapon_zs_empgun", color_white)
 
+killicon.Add("weapon_zs_gunblade", "zombiesurvival/killicons/weapon_zs_gunblade", color_white)
+
 killicon.Add("weapon_zs_ffemitter", "killicon/weapon_zs_ffemitter", color_white)
 killicon.Add("prop_ffemitter", "killicon/weapon_zs_ffemitter", color_white)
 killicon.Add("prop_ffemitterfield", "killicon/weapon_zs_ffemitter", color_white)

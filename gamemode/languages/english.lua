@@ -263,6 +263,8 @@ LANGUAGE.weapon_palliator_desc						= "This weapon emits medical energy in the f
 LANGUAGE.weapon_palliator_attacking_x				= "ATTACKING %s"
 LANGUAGE.weapon_palliator_healing_x					= "HEALING %s"
 
+LANGUAGE.weapon_gunblade_name							= "Gunblade"
+LANGUAGE.weapon_gunblade_desc							= "Strange gun, but that gun no need a bullets for shot.\nQ for shot(bullet deal 75 damage and 105 in headshot).\n"
 LANGUAGE.weapon_plankmelee_name						= "Plank"
 LANGUAGE.weapon_plankmelee_desc						= "A very simple melee weapon consisting of a single plank. Can be swung quickly."
 LANGUAGE.weapon_plank2melee_name						= "Plank nailed"
