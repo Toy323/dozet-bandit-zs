@@ -30,6 +30,9 @@ function ENT:EntityTakeDamage(ent, dmginfo)
 		mul = mul * -1
 	end
 	local olddamage = dmginfo:GetDamage()
+	if own:GetActiveWeapon().OnParry then
+		own:GetActiveWeapon():OnParry(inflictor, attacker, dmginfo, mul)
+	end
 	dmginfo:SetDamage(olddamage*mul) 
 	own:AddStamina(math.Clamp(40/gd,0,100))
 	local inflictor = dmginfo:GetInflictor()

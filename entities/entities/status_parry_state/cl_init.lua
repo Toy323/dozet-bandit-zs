@@ -35,11 +35,11 @@ function ENT:Draw()
 		particle:SetColor(201,200,90)
 		particle:SetRoll(math.Rand(180, 360))
 		particle:SetRollDelta(math.Rand(-4, 4))
-		particle:SetGravity(Vector(0, 0, 90))
-		particle:SetAirResistance(50)
+		particle:SetGravity(Vector(0, 0, 10990))
+		particle:SetAirResistance(5000)
 		
 		
-		emitter:Finish()
+		emitter:Finish() emitter = nil collectgarbage("step", 64)
 	end
 	pos = self:GetDTVector(12)
 	--print(pos) 
@@ -59,5 +59,5 @@ function ENT:Draw()
 	particle:SetGravity(Vector(0, 0, 0))
 	particle:SetAirResistance(0)
 	
-	emitter:Finish()
+	emitter:Finish() emitter = nil collectgarbage("step", 64)
 end

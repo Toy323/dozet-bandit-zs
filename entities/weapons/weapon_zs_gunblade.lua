@@ -145,17 +145,23 @@ function SWEP:ShootBullets(dmg, numbul, cone)
 end
 SWEP.BumBah = Sound("Weapon_Hunter.Single")
 function SWEP:HaveAbility()
-	if self:GetDTFloat(13) < CurTime() then
-		timer.Simple(0.6, function() 
+	if self:GetDTFloat(13) < CurTime() and !self:IsSwinging() and !self:GetBlock() and self:GetDTFloat(12) < CurTime() then
+		timer.Simple(0.9, function() 
 			if IsValid(self) then
-				self:ShootBullets(70, 1, math.random(0.02,0.1)) 
-				self:EmitSound(self.BumBah)
+				if !self:IsSwinging() and !self:GetBlock()  then
+					self:ShootBullets(70, 1, math.random(0.02,0.1)) 
+					self:EmitSound(self.BumBah)
 
-				self:GetOwner():ViewPunch(Angle(math.Rand(-20 * 2, 0), math.Rand(-1, 20), 0))
+					self:GetOwner():ViewPunch(Angle(math.Rand(-20 * 2, 0), math.Rand(-1, 20), 0))
+					self:SetDTFloat(13, CurTime() + 12)
+				end
+				self:SetWeaponHoldType(self.HoldType)
+				self:SetWeaponSwingHoldType(self.SwingHoldType)
 			end
 		end)
-		self:SetDTFloat(13, CurTime() + 12) 
-		self:SetDTFloat(12, CurTime() + 1.6) 
+		self:SetDTFloat(12, CurTime() + 1.6)
+		self:SetWeaponHoldType("pistol")
+		self:SetWeaponSwingHoldType("pistol")
 	end
 end
 if CLIENT then
@@ -235,6 +241,7 @@ if CLIENT then
 			particle:SetAirResistance(500)
 			particle:SetGravity( -Vector( 0, 0, -math.Rand( 180, 210 ) ) + VectorRand() * 1.5 )
 		end
+		emitter:Finish() emitter = nil collectgarbage("step", 64)
 	
 	end
 	function SWEP:PreDrawViewModel(vm)
