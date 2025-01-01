@@ -330,6 +330,11 @@ GM:AddWeaponPrerequisite(item,"slugrifle")
 GM:AddWeaponPrerequisite(item,"positron")
 GM:AddWeaponPrerequisite(item,"stranger")
 
+local item = GM:AddPointShopWeapon(5,"radray", ITEMCAT_GUNS, 220, "weapon_zs_nuclear_laser")
+GM:AddWeaponPrerequisite(item,"classic")
+GM:AddWeaponPrerequisite(item,"stranger")
+GM:AddWeaponPrerequisite(item,"ventilator")
+
 
 GM:AddPointShopWeapon(2,"grenadelauncher", ITEMCAT_GUNS, 120, "weapon_zs_grenadelauncher")
 
